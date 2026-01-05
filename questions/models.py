@@ -4,7 +4,7 @@ from django.db import models
 from live_sessions.models import LiveSession
 
 # Create your models here.
-
+# TODO:- timing 변수 빼야함
 class Question(models.Model):
     class Category(models.TextChoices):
         CONCEPT = "CONCEPT", "개념"
