@@ -16,7 +16,7 @@ class Question(models.Model):
         BREAK = "BREAK", "쉬는 시간에"
         LATER = "LATER", "끝나고"
 
-    LiveLiveSession = models.ForeignKey(LiveSession, on_delete=models.CASCADE)
+    liveSession = models.ForeignKey(LiveSession, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
