@@ -1,25 +1,27 @@
-/* [전체 레이아웃] */
+/* [전체 레이아웃 - 다크 모드] */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-    background-color: #F5F5F5;
-    color: #333;
+    background-color: #111111; /* 아주 어두운 검정 배경 */
+    color: #FFFFFF; /* 기본 텍스트 흰색 */
 }
 
 /* [헤더 & 탭바] */
 .header-container_ny {
-    background-color: white;
-    padding-top: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    background-color: #111111;
+    padding-top: 40px;
+    border-bottom: 1px solid #333; /* 하단 구분선 추가 */
 }
 
 .page-title_ny {
     max-width: 1200px;
-    margin: 0 auto 20px;
+    margin: 0 auto 30px;
     padding: 0 20px;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 28px;
+    font-weight: 800; /* 더 굵게 */
+    color: #65E01D;
+    letter-spacing: -0.5px;
 }
 
 .tab-menu_ny {
@@ -27,31 +29,28 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-    gap: 10px;
+    gap: 15px;
 }
 
 .tab-item_ny {
     flex: 1;
     text-align: center;
-    padding: 15px 0;
-    background-color: #9C27B0;
-    color: white;
+    padding: 12px 0;
+    background-color: transparent; /* 배경 투명 */
+    color: #888; /* 비활성 텍스트 회색 */
     text-decoration: none;
-    font-weight: 500;
-    opacity: 0.7;
+    font-weight: 600;
     transition: 0.3s;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-bottom: 2px solid transparent; /* 밑줄 효과 준비 */
 }
 
 .tab-item_ny:hover {
-    opacity: 1;
+    color: #FFF;
 }
 
 .tab-item_ny.active_ny {
-    opacity: 1;
-    background-color: #7B1FA2;
-    font-weight: bold;
+    color: #65E01D; /* 활성화 시 형광 연두 텍스트 */
+    border-bottom: 2px solid #65E01D; /* 형광 밑줄 */
 }
 
 /* [메인 컨텐츠 - 2단 그리드] */
@@ -60,39 +59,43 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     max-width: 1200px;
-    margin: 30px auto;
+    margin: 40px auto;
     padding: 0 20px;
-    height: calc(100vh - 150px);
+    height: calc(100vh - 200px);
 }
 
 /* [왼쪽: 질문 리스트] */
 .question-list_ny {
     overflow-y: auto;
-    padding-right: 10px;
+    padding-right: 15px;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* 스크롤바 숨기기 (선택사항) */
+/* 스크롤바 커스텀 (다크 모드용) */
 .question-list_ny::-webkit-scrollbar {
     width: 8px;
 }
 .question-list_ny::-webkit-scrollbar-thumb {
-    background-color: #ddd;
+    background-color: #444;
     border-radius: 4px;
+}
+.question-list_ny::-webkit-scrollbar-track {
+    background-color: #222;
 }
 
 .question-card_ny {
-    background: white;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    transition: transform 0.2s;
+    background: #1E1E1E; /* 카드 배경: 짙은 회색 */
+    border: 1px solid #333; /* 테두리 추가 */
+    border-radius: 12px;
+    padding: 25px;
+    transition: transform 0.2s, border-color 0.2s;
 }
 
 .question-card_ny:hover {
     transform: translateY(-3px);
+    border-color: #65E01D; /* 호버 시 형광 테두리 */
 }
 
 .card-header_ny {
@@ -103,69 +106,82 @@ body {
 }
 
 .badge_ny {
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px; /* 둥근 뱃지 */
+    font-size: 11px;
     font-weight: bold;
+    background: transparent;
+    border: 1px solid;
 }
 
-.badge-concept_ny { background-color: #E3F2FD; color: #1565C0; border: 1px solid #BBDEFB; }
-.badge-error_ny { background-color: #FFEBEE; color: #C62828; border: 1px solid #FFCDD2; }
-.badge-etc_ny { background-color: #F3E5F5; color: #7B1FA2; border: 1px solid #E1BEE7; }
+/* 뱃지 색상도 네온 스타일로 변경 */
+.badge-concept_ny { color: #55DDFF; border-color: #55DDFF; } /* 하늘색 */
+.badge-error_ny { color: #FF6B6B; border-color: #FF6B6B; } /* 붉은색 */
+.badge-etc_ny { color: #BBB; border-color: #BBB; } /* 회색 */
 
 .card-content_ny {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     line-height: 1.5;
+    color: #EEE;
 }
 
 .card-footer_ny {
     display: flex;
     justify-content: space-between;
-    font-size: 12px;
-    color: #888;
-    border-top: 1px solid #eee;
-    padding-top: 10px;
+    font-size: 13px;
+    color: #777;
+    border-top: 1px solid #333;
+    padding-top: 15px;
 }
 
 /* [오른쪽: 질문 작성 폼] */
 .write-section_ny {
-    background: white;
-    border-radius: 15px;
+    background: #1E1E1E;
+    border: 1px solid #333;
+    border-radius: 12px;
     padding: 30px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     height: fit-content;
     overflow-y: auto;
     max-height: 100%;
 }
 
 .form-title_ny {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 20px;
-    color: #4A148C;
+    margin-bottom: 25px;
+    color: #65E01D; /* 형광 연두 */
 }
 
 .form-group_ny {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .form-group_ny label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-weight: 600;
     font-size: 14px;
+    color: #CCC;
 }
 
-/* forms.py 클래스 매핑 */
+/* 입력창 스타일 (다크 모드) */
 .input-title_ny, .input-category_ny, .input-content_ny {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
+    padding: 14px;
+    background-color: #2C2C2C; /* 입력창 배경 더 밝게 */
+    border: 1px solid #444;
     border-radius: 8px;
     box-sizing: border-box;
-    font-size: 14px;
+    font-size: 15px;
+    color: #FFF; /* 입력 텍스트 흰색 */
+    transition: border-color 0.2s;
+}
+
+.input-title_ny:focus, .input-category_ny:focus, .input-content_ny:focus {
+    outline: none;
+    border-color: #65E01D; /* 포커스 시 형광색 */
 }
 
 .input-content_ny {
@@ -176,24 +192,27 @@ body {
 .input-image_ny {
     width: 100%;
     padding: 10px;
-    background: #f9f9f9;
+    background: #2C2C2C;
+    border: 1px solid #444;
     border-radius: 8px;
+    color: #CCC;
 }
 
 .submit-btn_ny {
     width: 100%;
-    padding: 15px;
-    background-color: #7B1FA2;
-    color: white;
+    padding: 16px;
+    background-color: #65E01D; /* 형광 연두 버튼 */
+    color: #111; /* 텍스트는 검정으로 대비 */
     border: none;
     border-radius: 8px;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 800;
     cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.2s;
+    margin-top: 15px;
+    transition: 0.2s;
 }
 
 .submit-btn_ny:hover {
-    background-color: #4A148C;
+    background-color: #52C015; /* 살짝 어두운 연두 */
+    transform: translateY(-2px);
 }
