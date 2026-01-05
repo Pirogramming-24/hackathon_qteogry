@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q&A Service</title>
+    
+    <link rel="stylesheet" href="{% static 'questions/css/main_ny.css' %}">
+</head>
+<body>
+
+    <div class="header-container_ny">
+        <h1 class="page-title_ny">[1일차] Django 실습</h1>
+        
+        <nav class="tab-menu_ny">
+            <a href="?sort=all" class="tab-item_ny {% if sort_mode == 'all' %}active_ny{% endif %}">모든 질문</a>
+            <a href="?sort=concept" class="tab-item_ny {% if sort_mode == 'concept' %}active_ny{% endif %}">개념 질문만</a>
+            <a href="?sort=likes" class="tab-item_ny {% if sort_mode == 'likes' %}active_ny{% endif %}">공감 순으로</a>
+            <a href="?sort=my" class="tab-item_ny {% if sort_mode == 'my' %}active_ny{% endif %}">내 질문</a>
+        </nav>
+    </div>
+
+    <main class="main-container_ny">
+        
+        <section class="question-list_ny">
+            {% for question in questions %}
+            <div class="question-card_ny">
+                <div class="card-header_ny">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <div style="width: 30px; height: 30px; background: #ddd; border-radius: 50%;"></div>
+                        <span style="font-weight: bold;">{{ question.user.username }}</span>
+                    </div>
+                    <span class="badge_ny 
+                        {% if question.category == 'CONCEPT' %}badge-concept_ny
+                        {% elif question.category == 'ERROR' %}badge-error_ny
+                        {% else %}badge-etc_ny{% endif %}">
+                        {{ question.get_category_display }}
+                    </span>
+                </div>
+
+                <div class="card-content_ny">
+                    {{ question.title }}
+                </div>
+
+                <div class="card-footer_ny">
+                    <span>{{ question.created_at|date:"Y.m.d" }}</span>
+                    <span>저도 궁금해요 ❤️ {{ question.likes.count }}</span>
+                </div>
+            </div>
+            {% empty %}
+                <p style="text-align: center; color: #888; margin-top: 50px;">
+                    아직 등록된 질문이 없습니다.
+                </p>
+            {% endfor %}
+        </section>
+
+        <section class="write-section_ny">
+            <div class="form-title_ny">질문 작성하기</div>
+            
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="form-group_ny">
+                    <label for="{{ form.category.id_for_label }}">질문 종류</label>
+                    {{ form.category }}
+                </div>
+
+                <div class="form-group_ny">
+                    <label for="{{ form.title.id_for_label }}">제목</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="form-group_ny">
+                    <label for="{{ form.content.id_for_label }}">내용</label>
+                    {{ form.content }}
+                </div>
+                
+                 <div class="form-group_ny">
+                    <label>이미지 첨부</label>
+                    {{ form.image }}
+                </div>
+
+                <!-- <div class="form-group_ny">
+                    <label>답변 희망 시간</label>
+                    {{ form.timing }}
+                </div> -->
+
+                <button type="submit" class="submit-btn_ny">질문 등록하기</button>
+            </form>
+        </section>
+
+    </main>
+
+    <script src="{% static 'questions/js/main_ny.js' %}"></script>
+</body>
+</html>

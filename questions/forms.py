@@ -4,7 +4,7 @@ from .models import Question
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['category', 'title', 'content', 'image', 'timing']
+        fields = ['category', 'title', 'content', 'image']
         
         widgets = {
             'category': forms.Select(attrs={
@@ -23,9 +23,9 @@ class QuestionForm(forms.ModelForm):
             'image': forms.FileInput(attrs={
                 'class': 'input-image_ny'
             }),
-            'timing': forms.RadioSelect(attrs={
-                'class': 'input-timing_ny'
-            }),
+            # 'timing': forms.RadioSelect(attrs={
+            #     'class': 'input-timing_ny'
+            # }),
         }
         
         labels = {
@@ -33,5 +33,5 @@ class QuestionForm(forms.ModelForm):
             'title': '제목',
             'content': '내용',
             'image': '이미지 첨부',
-            'timing': '답변 희망 시간',
+            # 'timing': '답변 희망 시간',
         }
