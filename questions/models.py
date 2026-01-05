@@ -58,3 +58,19 @@ class UnderstandingCheck(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     is_current = models.BooleanField(default=False)
+
+
+class UnderstandingResponse(models.Model):
+    check = models.ForeignKey(
+        UnderstandingCheck,
+        on_delete=models.CASCADE,
+        related_name="responses"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("check", "user")
