@@ -1,22 +1,22 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <title>세션 목록</title>
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'live_sessions/live_sessions_ny.css' %}">
+  <link rel="stylesheet" href="{% static 'live_sessions/live_sessions.css' %}">
 </head>
 
 <body>
-  <div class="page-wrapper_ny">
+  <div class="page-wrapper">
 
     <!-- ===== HEADER ===== -->
-    <div class="page-header_ny">
-      <div class="page-header-left_ny">
-        <div class="page-title_ny">세션 목록</div>
+    <div class="page-header">
+      <div class="page-header-left">
+        <div class="page-title">세션 목록</div>
 
         {% if selected_generation %}
-          <div class="page-subtitle_ny">
+          <div class="page-subtitle">
             현재 선택된 기수:
             <strong>{{ selected_generation.name }}</strong>
           </div>
@@ -25,7 +25,7 @@
 
       {% if is_session_owner %}
       <div class="admin-actions">
-        <a class="btn btn--outline"
+        <a class="btn btn-outline"
            href="{% url 'live_sessions:generation_create' %}">
           + 기수 추가
         </a>
@@ -45,41 +45,36 @@
       {% endif %}
     </div>
 
-
     <!-- ===== GENERATION TOGGLE ===== -->
-    <div class="generation-bar_ny">
-      <div class="generation-list_ny">
+    <div class="generation-bar">
+      <div class="generation-list">
         {% for gen in generations %}
           <a
             href="{% url 'live_sessions:session_list' %}?generation={{ gen.id }}"
-            class="generation-chip
-              {% if selected_generation and gen.id == selected_generation.id %}
-                active
-              {% endif %}"
+            class="generation-chip{% if selected_generation and gen.id == selected_generation.id %} active{% endif %}"
           >
             {{ gen.name }}
           </a>
         {% empty %}
-          <span class="empty-text_ny">
+          <span class="empty-text">
             아직 생성된 기수가 없습니다.
           </span>
         {% endfor %}
       </div>
     </div>
 
-
     <!-- ===== MAIN CONTENT ===== -->
-    <div class="content-row_ny">
+    <div class="content-row">
 
       <!-- LEFT: ACTIVE -->
       <div>
-        <div class="section-title_ny">
+        <div class="section-title">
           진행 예정 / 진행 중 세션
         </div>
 
         {% if active_sessions %}
           {% for s in active_sessions %}
-            <a href="/questions/{{ s.id }}" class="session-link"> 
+            <a href="{% url 'questions:question_main' s.id %}" class="session-link">
               <div class="session-card">
                 <div class="title">{{ s.title }}</div>
                 <div class="meta">
@@ -92,30 +87,29 @@
             </a>
           {% endfor %}
         {% else %}
-          <div class="empty-box_ny">
+          <div class="empty-box">
             예정된 세션이 없습니다.
           </div>
         {% endif %}
       </div>
 
-
       <!-- RIGHT: ARCHIVE -->
       <div>
-        <div class="section-title_ny">
+        <div class="section-title">
           아카이브 세션
         </div>
 
         {% if archived_sessions %}
           {% for s in archived_sessions %}
-            <div class="session-card_ny">
-              <div class="title_ny">{{ s.title }}</div>
-              <div class="meta_ny">
+            <div class="session-card">
+              <div class="title">{{ s.title }}</div>
+              <div class="meta">
                 {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
               </div>
             </div>
           {% endfor %}
         {% else %}
-          <div class="empty-box_ny">
+          <div class="empty-box">
             아카이브된 세션이 없습니다.
           </div>
         {% endif %}
