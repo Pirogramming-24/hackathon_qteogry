@@ -3,137 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>세션 목록</title>
-
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont;
-      margin: 0;
-      padding: 0;
-      background: #f5f5f5;
-    }
-
-    .page {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
-    }
-
-    /* ----- HEADER ----- */
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
-
-    .page-header-left {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .page-title {
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .admin-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: 1px solid #2f80ed;
-      background: #2f80ed;
-      color: #fff;
-      padding: 6px 12px;
-      font-size: 13px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .btn--outline {
-      background: #fff;
-      color: #2f80ed;
-    }
-
-    /* ----- GENERATION BAR ----- */
-    .generation-bar {
-      margin: 8px 0 16px;
-    }
-
-    .generation-list {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .generation-chip {
-      padding: 6px 12px;
-      font-size: 14px;
-      border-radius: 999px;
-      border: 1px solid #ddd;
-      background: white;
-      cursor: pointer;
-      text-decoration: none;
-      color: #333;
-    }
-
-    .generation-chip.active {
-      background: #2f80ed;
-      color: #fff;
-      border-color: #2f80ed;
-    }
-
-    /* ----- CONTENT LAYOUT ----- */
-    .content-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    .section-title {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    /* ----- SESSION CARD ----- */
-    .session-card {
-      border-radius: 20px;
-      padding: 12px 16px;
-      background: white;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      margin-bottom: 12px;
-    }
-
-    .session-card .title {
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .session-card .meta {
-      font-size: 12px;
-      color: #777;
-    }
-
-    .empty-box {
-      padding: 12px;
-      border-radius: 12px;
-      background: white;
-      border: 1px solid #eee;
-      color: #999;
-      font-size: 13px;
-    }
-
-    .session-link {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-
-  </style>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'live_sessions/live_sessions_ny.css' %}">
+  
 </head>
 
 <body>
@@ -209,9 +82,9 @@
         {% if active_sessions %}
           {% for s in active_sessions %}
             <a href="/questions/{{ s.id }}" class="session-link"> 
-              <div class="session-card">
-                <div class="title">{{ s.title }}</div>
-                <div class="meta">
+              <div class="session-card_ny">
+                <div class="title_ny">{{ s.title }}</div>
+                <div class="meta_ny">
                   {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
                   {% if s.created_by %}
                     · 세션자: {{ s.created_by.username }}
