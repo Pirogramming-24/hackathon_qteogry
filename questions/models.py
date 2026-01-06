@@ -11,7 +11,7 @@ class Question(models.Model):
         ERROR = "ERROR", "오류"
         ETC = "ETC", "기타"
 
-    LiveLiveSession = models.ForeignKey(LiveSession, on_delete=models.CASCADE)
+    LiveSession = models.ForeignKey(LiveSession, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
@@ -61,7 +61,7 @@ class UnderstandingCheck(models.Model):
 
 
 class UnderstandingResponse(models.Model):
-    check = models.ForeignKey(
+    understanding_check = models.ForeignKey(
         UnderstandingCheck,
         on_delete=models.CASCADE,
         related_name="responses"
@@ -73,4 +73,4 @@ class UnderstandingResponse(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("check", "user")
+        unique_together = ("understanding_check", "user")

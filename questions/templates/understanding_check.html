@@ -19,14 +19,34 @@
   <br>
 
   <div class="check-progress-hs">
-    {{ response_count }} / {{ total_count }}
-  </div>
+    <span id="count-text">
+      {{ response_count }} / {{ total_count }}
+    </span>
 
-  <br>
+    <div class="progress-bar-bg">
+      <div
+        id="progress-bar"
+        class="progress-bar-fill"
+        style="width: {{ response_count|floatformat:0 }}%;"
+      ></div>
+    </div>
+  </div>
 
   <div class="check-yes-hs">
-    <button type="button">네</button>
+    <button
+      type="button"
+      id="yes-btn"
+      data-id="{{ understanding_check.id }}"
+      data-url="{% url 'questions:understanding_check_respond' %}"
+      data-csrf="{{ csrf_token }}"
+    >
+      네
+    </button>
+
   </div>
+
+
+  <br>
 
 </div>
 {% endif %}
