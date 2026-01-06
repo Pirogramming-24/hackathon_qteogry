@@ -5,25 +5,28 @@
 
   <div class="uch-modal-container-hs">
 
-    <!-- 우측 상단 닫기 버튼 -->
     <div class="uch-modal-header-hs">
       <h3>새로운 이해도 Check</h3>
       <a href="javascript:history.back()" class="uch-modal-close-hs">✕</a>
     </div>
 
-    <!-- 이해도 체크 생성 폼 -->
     <form method="post">
       {% csrf_token %}
+      
+      {% if form.errors %}
+          <div style="color: #FF6B6B; margin-bottom: 10px; font-size: 0.9em;">
+              ⚠️ 입력 정보를 확인해주세요.
+          </div>
+      {% endif %}
 
       <div class="form-group">
-        <label for="uch-content-hs">이해도 체크 문구</label>
-        <input
-          type="text"
-          id="content"
-          name="content"
-          placeholder="예) 여기까지 이해되시나요?"
-          required
-        >
+        <label for="id_content">이해도 체크 문구</label>
+        {{ form.content }}
+      </div>
+
+      <div class="form-group" style="margin-top: 15px;">
+        <label for="id_target_response_count">목표 인원 설정</label>
+        {{ form.target_response_count }}
       </div>
 
       <div class="uch-form-actions-hs">

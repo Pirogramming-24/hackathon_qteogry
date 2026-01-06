@@ -1,102 +1,154 @@
-/* 전체 바 */
+/* =========================================
+   [우측 상단: 이해도 체크바 - 와이드형 (가로 50% 이상)]
+   ========================================= */
+
+/* 전체 컨테이너 박스 */
 .understanding-check-bar-hs {
-    background: rgb(167, 167, 167);
-    border: 2px 0 2px 2px solid #39ff14;
-    color: #39ff14;
-    padding: 50px;
-    border-radius: 12px 0 0 12px;
-
-    width: 100%;
-    background-color: #585858; /* 거의 블랙 */
-
-    display: flex;
-    flex-direction: column;
-    align-self: flex-end;
-
-    gap: 8px;
-    padding: 14px;
-
-    box-shadow: 0 0 18px ;
+    /* [핵심] 너비를 부모의 50~60% 정도로 길게 설정 */
+    flex: 1;             /* 남은 공간 차지 */
+    min-width: 500px;    /* 너무 작아지지 않도록 최소 폭 설정 */
+    max-width: 700px;    /* 너무 커지지 않도록 최대 폭 설정 */
+    height: auto;
+    
+    /* 디자인 */
+    background-color: #1E1E1E; 
+    border: 1px solid #333;
+    border-left: 4px solid #65E01D;
+    border-radius: 8px;
+    
+    /* 내부 레이아웃: 넓은 2행 그리드 */
+    display: grid;
+    grid-template-columns: 1fr 100px; /* 왼쪽(내용+바): 가변 / 오른쪽(링크+버튼): 고정 */
+    grid-template-rows: auto auto;    /* 2줄 */
+    gap: 8px 20px;                    /* 세로 간격 8px, 가로 간격 20px */
+    
+    padding: 12px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
+/* 1. 질문 내용 (좌측 상단) */
+.check-content-hs {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    
+    font-size: 15px;
+    font-weight: bold;
+    color: #EEE;
+    
+    /* 말줄임 처리 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+}
 
-/* 상단 버튼 영역 */
+/* 2. 업로드 링크 (우측 상단) */
 .check-action-hs {
-    align-self: flex-end;
-    background: #79e200; /* 네온 그린 */
-    border-radius: 999px;
-    padding: 6px 14px;
-    margin: 6px 6px 0 6px;
-    box-shadow: 0 0 10px rgba(121, 226, 0, 0.6);
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .check-upload-btn-hs {
-    color: #000;
+    color: #777;
+    font-size: 11px;
     text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
+    white-space: nowrap;
 }
 
-
-/* 이해도 문구 */
-.check-content-hs {
-    font-size: 18px;
-    color: #f5f5f5;
-    padding: 10px 8px;
+.check-upload-btn-hs:hover {
+    color: #65E01D;
+    text-decoration: underline;
 }
 
-
-/* 응답 비율 */
+/* 3. 진행률 바 + 숫자 영역 (좌측 하단) - [반응형 핵심] */
 .check-progress-hs {
-    width: 100%;
-    padding: 6px 0;
-    text-align: center;
-    color: #cfcfcf;
-    font-size: 14px;
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%; /* 부모 너비 꽉 채우기 */
 }
 
+/* 숫자 (0/0) */
+.check-progress-hs span {
+    font-size: 12px;
+    color: #AAA;
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+/* 바 배경 (화면 줄어들면 얘가 줄어듦) */
 .progress-bar-bg {
-    width: 100%;
-    height: 16px;
-    background-color: #1a1a1a;
-    border-radius: 999px;
+    flex-grow: 1; /* 남은 공간을 꽉 채우도록 설정 */
+    flex-shrink: 1; /* 공간 부족하면 줄어들도록 설정 */
+    height: 8px;
+    background-color: #333;
+    border-radius: 4px;
     overflow: hidden;
+    min-width: 50px; /* 최소한의 길이는 유지 */
 }
 
 .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(
-        90deg,
-        #79e200,
-        #b6ff2d
-    );
-    width: 0;
-    transition: width 0.3s ease;
-    box-shadow: 0 0 10px rgba(121, 226, 0, 0.7);
+    background: linear-gradient(90deg, #65E01D, #aeff6d);
+    border-radius: 4px;
+    transition: width 0.5s ease;
 }
 
-
-/* 네 버튼 */
-.check-yes-hs {
-    text-align: left;
-    margin-top: 6px;
-}
-
-.check-yes-hs button {
-    width: 60px;
-    height: 36px;
-    background-color: #79e200;
-    color: #000;
-    font-size: 14px;
-    font-weight: 700;
-    border: none;
-    border-radius: 8px;
+/* 4. '네' 버튼 (우측 하단) */
+.check-yes-btn {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    
+    width: 100%;
+    height: 30px;
+    
+    background-color: transparent; /* 배경 투명 */
+    border: 1px solid #65E01D;
+    border-radius: 6px;
+    
+    color: #65E01D;
+    font-size: 13px;
+    font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(121, 226, 0, 0.6);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: all 0.2s ease;
 }
 
-.check-yes-hs button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0 14px rgba(121, 226, 0, 0.9);
+.check-yes-btn:hover {
+    background-color: #65E01D;
+    color: #111;
+}
+
+#yes-btn {
+    width: 100%;           /* 가로 꽉 채우기 */
+    height: 32px;          /* 높이 설정 */
+    margin-top: 5px;       /* 위쪽 여백 */
+    
+    background-color: transparent; /* 배경 투명 */
+    border: 1px solid #65E01D;     /* 테두리: 형광 연두 */
+    border-radius: 6px;            /* 둥근 모서리 */
+    
+    color: #65E01D;        /* 글자색: 형광 연두 */
+    font-size: 13px;
+    font-weight: 800;      /* 굵은 폰트 */
+    cursor: pointer;       /* 마우스 손가락 모양 */
+    transition: all 0.2s ease; /* 부드러운 애니메이션 */
+}
+
+/* 마우스 올렸을 때 (Hover) */
+#yes-btn:hover {
+    background-color: #65E01D;     /* 배경 채우기 */
+    color: #111;                   /* 글자색 검정으로 (가독성) */
+    box-shadow: 0 0 10px rgba(101, 224, 29, 0.5); /* 형광 빛 효과 */
+}
+
+/* 클릭했을 때 (Active) */
+#yes-btn:active {
+    transform: scale(0.97);        /* 살짝 눌리는 느낌 */
 }

@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>세션 목록</title>
-<!--  reset.css 필요  -->
   <link rel="stylesheet" href="{% static 'live_sessions/live_sessions.css' %}">
 </head>
 
@@ -75,7 +74,6 @@
 
         {% if active_sessions %}
           {% for s in active_sessions %}
-<!--     테스트      -->
             <a href="{% url 'questions:question_main' s.id %}" class="session-link">
               <div class="session-card">
                 <div class="title">{{ s.title }}</div>
@@ -100,15 +98,16 @@
         <div class="section-title">
           아카이브 세션
         </div>
-
         {% if archived_sessions %}
           {% for s in archived_sessions %}
-            <div class="session-card">
-              <div class="title">{{ s.title }}</div>
-              <div class="meta">
-                {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
+            <a href="{% url 'questions:question_main' s.id %}" class="session-link">
+              <div class="session-card">
+                <div class="title">{{ s.title }}</div>
+                <div class="meta">
+                  {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
+                </div>
               </div>
-            </div>
+            </a>
           {% endfor %}
         {% else %}
           <div class="empty-box">

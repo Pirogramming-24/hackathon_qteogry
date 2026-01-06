@@ -11,6 +11,7 @@ from realtime.services import publish_session_event
 from live_sessions.models import LiveSession, LiveSessionMember
 from django.db import transaction
 from django.views.decorators.http import require_POST
+from django.utils import timezone # 👈 상단에 import 추가
 
 # def questions_read(request, pk):
 #     question = Question.objects.get(id=pk)
@@ -38,6 +39,9 @@ def get_sorted_questions(request, session):
             questions = questions.filter(user=request.user).order_by('-created_at')
         else:
             questions = Question.objects.none() # 로그인 안했으면 빈 리스트
+
+    elif sort_mode == 'pending':
+        questions = questions.filter(status='OPEN').order_by('-created_at')
     
     else:
         # 기본: 최신순 정렬
@@ -82,6 +86,7 @@ def question_detail(request, session_id, question_id):
         "cform": Cform,
         'like_count': selected_question.likes.count(),
         'sort_mode': sort_mode, # 상세뷰에서는 정렬 기본값
+        'qform': QuestionForm(),
     }
     
     return render(request, 'questions/main_ny.html', context)
@@ -125,18 +130,18 @@ def understanding_check(request, pk):
 
 
 
-# @login_required
-
-
-
-
+@login_required
 def understanding_check_upload(request):
-    # 임시 세션 하나 가져오기 (없으면 에러 나도 OK)
+    # 임시 세션 (나중엔 URL에서 받아오도록 수정 필요할 수 있음)
     session = LiveSession.objects.first()
 
     if request.method == "POST":
         form = UnderstandingForm(request.POST)
         if form.is_valid():
+            # 1. [핵심] 기존에 활성화된(is_current=True) 체크가 있다면 모두 False로 변경 (아카이브로 보냄)
+            UnderstandingCheck.objects.filter(session=session, is_current=True).update(is_current=False)
+            
+            # 2. 새 체크 생성
             understanding_check = form.save(commit=False)
             understanding_check.session = session
             understanding_check.is_current = True
@@ -144,12 +149,23 @@ def understanding_check_upload(request):
             # 실시간 추가
 
             return redirect("questions:question_main", session.pk)
-
-
     else:
         form = UnderstandingForm()
 
     return render(request, "understanding_check_upload.html", {"form": form})
+
+# 👇 [추가] 진행 중인 체크를 강제로 종료(취소)하는 기능
+@login_required
+def understanding_check_finish(request, check_id):
+    check = get_object_or_404(UnderstandingCheck, id=check_id)
+    
+    # 이미 끝난 게 아니라면 현재 시간으로 종료 처리
+    if not check.ended_at:
+        check.ended_at = timezone.now()
+        check.save()
+    
+    # 해당 세션 메인 페이지로 돌아가기
+    return redirect("questions:question_main", check.session.id)
 
 # def understanding_check_upload(request):
 #     if request.method == "POST": 
@@ -176,50 +192,45 @@ def understanding_check_respond(request):
     check_id = request.POST.get("check_id")
     check = get_object_or_404(UnderstandingCheck, id=check_id)
 
+    # 1. 응답 저장 (기존 로직)
     response, created = UnderstandingResponse.objects.get_or_create(
         understanding_check=check,
         user=request.user
     )
 
+    # 2. 현재 응답 수 카운트
     response_count = check.responses.count()
-    TOTAL_COUNT = 24
+    
+    # 3. [핵심] 목표 인원 달성 시 종료 시간(ended_at) 기록
+    # 이미 끝난 거면(ended_at이 있으면) 기록 안 함
+    if check.ended_at is None and response_count >= check.target_response_count:
+        check.ended_at = timezone.now()
+        check.save()
+        is_finished = True
+    else:
+        is_finished = bool(check.ended_at) # 이미 끝났는지 여부
 
-    progress = int((response_count / TOTAL_COUNT) * 100)
+    # (기존 진행률 로직)
+    total_count = check.target_response_count # 👈 전체 인원 대신 목표 인원 기준으로 변경 추천
+    progress = int((response_count / total_count) * 100) if total_count else 0
 
     return JsonResponse({
         "created": created,
         "response_count": response_count,
+        "total_count": total_count,
         "progress": progress,
+        "is_finished": is_finished, # 👈 프론트엔드에 "끝났다"고 알려줌
+        "duration": check.duration_seconds # 👈 현재까지 걸린 시간도 전송
     })
-    
     
 @login_required
 def question_main(request, session_id):
     session = get_object_or_404(LiveSession, pk=session_id)
     
-    # [수정] 헬퍼 함수를 사용해 질문 리스트와 현재 정렬 모드 가져오기
+    # 1. 질문 리스트 및 정렬 (헬퍼 함수 사용)
     questions, sort_mode = get_sorted_questions(request, session)
 
-    
-    # 이해도 체크 부분
-    TOTAL_COUNT = 24
-
-    understanding_check = (
-        UnderstandingCheck.objects
-        .filter(session=session, is_current=True)
-        .order_by("-created_at")
-        .first()
-    )
-
-    if understanding_check:
-        response_count = understanding_check.responses.count()
-        progress = int((response_count / TOTAL_COUNT) * 100)
-    else:
-        response_count = 0
-        progress = 0
-
-
-    # 3. 질문 작성 로직 (POST 요청 처리)
+    # 2. 질문 작성 로직 (POST 요청 처리)
     if request.method == 'POST':
         form = QuestionForm(request.POST, request.FILES)
         if form.is_valid():
@@ -234,24 +245,24 @@ def question_main(request, session_id):
             return redirect('questions:question_main', session_id=session.id)
     else:
         form = QuestionForm()
-        
-        
-    # 최신 understanding check 가져오기
+
+    # 3. [수정] 이해도 체크 가져오기 (중복 제거 및 목표 인원 연동)
     understanding_check = (
         UnderstandingCheck.objects
         .filter(session=session, is_current=True)
         .order_by("-created_at")
         .first()
     )
+
     if understanding_check:
         response_count = understanding_check.responses.count()
-        total_count = 24
+        # 👇 [핵심] 하드코딩(24) 대신, DB에 저장된 목표 인원을 사용!
+        total_count = understanding_check.target_response_count 
         progress = int((response_count / total_count) * 100) if total_count else 0
     else:
         response_count = 0
         total_count = 0
         progress = 0
-
 
     context = {
         'session': session,
@@ -261,7 +272,7 @@ def question_main(request, session_id):
         
         'understanding_check': understanding_check,
         'response_count': response_count,
-        'total_count': 24,
+        'total_count': total_count, # 👈 이제 템플릿에서 목표 인원을 제대로 표시함
         'progress': progress,
     }
     
