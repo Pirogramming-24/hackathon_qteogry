@@ -3,59 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <title>세션 생성</title>
-  <style>
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont; background: #f5f5f5; margin: 0; }
-    .page { max-width: 480px; margin: 40px auto; background: #fff;
-            padding: 24px 20px 28px; border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
-    h1 { margin: 0 0 16px; font-size: 22px; }
-    label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 4px; }
-    select, input { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; }
-    .field { margin-bottom: 12px; }
-    .actions { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
-    .btn { border-radius: 999px; border: 1px solid #2f80ed; background: #2f80ed;
-           color: #fff; padding: 8px 14px; font-size: 14px; cursor: pointer;
-           text-decoration: none; text-align: center; }
-    .btn--ghost { background: #fff; color: #2f80ed; }
-    .errorlist { color: #e53935; font-size: 13px; margin: 4px 0; padding-left: 16px; }
-  </style>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'live_sessions/live_sessions_ny.css' %}">
 </head>
 <body>
-<div class="page">
-  <h1>세션 생성</h1>
+  <div class="page-wrapper_ny form-page_ny">
+    <div class="form-card_ny">
+      <h1 class="form-title_ny">세션 생성</h1>
 
-  <form method="post">
-    {% csrf_token %}
+      <form method="post">
+        {% csrf_token %}
 
-    <div class="field">
-      <label for="{{ form.generation.id_for_label }}">기수</label>
-      {{ form.generation }}
-      {{ form.generation.errors }}
+        <div class="field_ny">
+          <label for="{{ form.generation.id_for_label }}">기수</label>
+          {{ form.generation }}
+          {{ form.generation.errors }}
+        </div>
+
+        <div class="field_ny">
+          <label for="{{ form.title.id_for_label }}">세션 제목</label>
+          {{ form.title }}
+          {{ form.title.errors }}
+        </div>
+
+        <div class="field_ny">
+          <label for="{{ form.start_at.id_for_label }}">시작 일시</label>
+          {{ form.start_at }}
+          {{ form.start_at.errors }}
+        </div>
+
+        <div class="field_ny">
+          <label for="{{ form.end_at.id_for_label }}">종료 일시</label>
+          {{ form.end_at }}
+          {{ form.end_at.errors }}
+        </div>
+
+        <div class="form-actions_ny">
+          <a href="{% url 'live_sessions:session_list' %}" class="btn_ny btn-outline_ny">
+            ← 돌아가기
+          </a>
+          <button type="submit" class="btn_ny">
+            저장
+          </button>
+        </div>
+      </form>
     </div>
-
-    <div class="field">
-      <label for="{{ form.title.id_for_label }}">세션 제목</label>
-      {{ form.title }}
-      {{ form.title.errors }}
-    </div>
-
-    <div class="field">
-      <label for="{{ form.start_at.id_for_label }}">시작 일시</label>
-      {{ form.start_at }}
-      {{ form.start_at.errors }}
-    </div>
-
-    <div class="field">
-      <label for="{{ form.end_at.id_for_label }}">종료 일시</label>
-      {{ form.end_at }}
-      {{ form.end_at.errors }}
-    </div>
-
-    <div class="actions">
-      <a href="{% url 'session_list' %}" class="btn btn--ghost">← 돌아가기</a>
-      <button type="submit" class="btn">저장</button>
-    </div>
-  </form>
-</div>
+  </div>
 </body>
 </html>

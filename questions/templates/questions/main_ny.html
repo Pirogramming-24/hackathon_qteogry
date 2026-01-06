@@ -75,31 +75,37 @@
         
         <section class="question-list_ny">
             {% for question in questions %}
-            <div class="question-card_ny">
-                <div class="card-header_ny">
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <div style="width: 30px; height: 30px; background: #ddd; border-radius: 50%;"></div>
-                        <span style="font-weight: bold;">{{ question.user.username }}</span>
+            <a href="{% url 'questions:question_detail' session.id question.id %}?sort={{ sort_mode }}" style="text-decoration: none; color: inherit;">
+                <div id="card-{{ question.id }}" class="question-card_ny status-{{ question.status }}">
+                    <div class="card-header_ny">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <div style="width: 30px; height: 30px; background: #ddd; border-radius: 50%;"></div>
+                            <span style="font-weight: bold;">{{ question.user.username }}</span>
+                        </div>
+                        <span class="badge_ny 
+                            {% if question.category == 'CONCEPT' %}badge-concept_ny
+                            {% elif question.category == 'ERROR' %}badge-error_ny
+                            {% else %}badge-etc_ny{% endif %}">
+                            {{ question.get_category_display }}
+                        </span>
                     </div>
-                    <span class="badge_ny 
-                        {% if question.category == 'CONCEPT' %}badge-concept_ny
-                        {% elif question.category == 'ERROR' %}badge-error_ny
-                        {% else %}badge-etc_ny{% endif %}">
-                        {{ question.get_category_display }}
-                    </span>
-                </div>
 
-                <a href="{% url 'questions:questions_read' question.id %}">
-                    <div class="card-content_ny">
-                        {{ question.title }}
+                    <a href="{% url 'questions:question_detail' session.id question.id %}" style="text-decoration: none; color: inherit;">
+                        <div class="card-content_ny">
+                            {{ question.title }}
+                        </div>
+                    </a>
+
+                    <div class="card-footer_ny">
+                        <span>{{ question.created_at|date:"Y.m.d H:i" }}</span>
+                        <span class="like-btn_ny" data-question-id="{{ question.id }}" style="cursor: pointer; z-index: 10;">
+                            저도 궁금해요 😢 
+                            <span id="like-count-list-{{ question.id }}">{{ question.likes.count }}</span>
+                        </span>
                     </div>
-                </a>
-
-                <div class="card-footer_ny">
-                    <span>{{ question.created_at|date:"Y.m.d" }}</span>
-                    <span>저도 궁금해요 😢 {{ question.likes.count }}</span>
                 </div>
-            </div>
+            </a>
+
             {% empty %}
                 <p style="text-align: center; color: #888; margin-top: 50px;">
                     아직 등록된 질문이 없습니다.
@@ -114,40 +120,121 @@
         </section>
 
         <section class="write-section_ny">
-            <div class="form-title_ny">질문 작성하기</div>
+
+            {% if selected_question %}
             
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
+                <div class="question-detail-container-hs">
+                    <div class="question-meta-hs">
+                        <span class="question-user-hs">👤 {{ selected_question.user }}</span>
+                        <span class="badge_ny" style="margin-left: 10px;">{{ selected_question.get_category_display }}</span>
+                    </div>
+
+                    <h2 class="question-title-hs" style="color: #65E01D; margin-top: 10px;">
+                        {{ selected_question.title }}
+                    </h2>
+
+                    <div class="question-info-hs" style="color: #888; font-size: 14px; margin-bottom: 20px;">
+                        <span>{{ selected_question.created_at|date:"Y.m.d H:i" }}</span>
+                        <span style="float: right;">
+                            <div class="question-status-wrapper">
+                                <select class="status-select_ny" data-question-id="{{ selected_question.id }}">
+                                    <option value="OPEN" {% if selected_question.status == 'OPEN' %}selected{% endif %}>
+                                        🟡 대기
+                                    </option>
+                                    <option value="ANSWERED" {% if selected_question.status == 'ANSWERED' %}selected{% endif %}>
+                                        ✅ 답변완료
+                                    </option>
+                                </select>
+                            </div>
+                        </span>
+                    </div>
+
+                    <hr style="border: 0.5px solid #333; margin-bottom: 20px;">
+
+                    {% if selected_question.image %}
+                        <div class="question-image-hs" style="margin-bottom: 20px;">
+                            <img src="{{ selected_question.image.url }}" alt="질문 이미지" style="max-width: 100%; border-radius: 8px;">
+                        </div>
+                    {% endif %}
+
+                    <div class="question-content-hs" style="font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
+                        {{ selected_question.content|linebreaks }}
+                    </div>
+
+                    <div class="question-like-hs" style="text-align: center; margin-bottom: 30px;">
+                        <button class="like-btn_ny" data-question-id="{{ selected_question.id }}" 
+                                style="background: #333; color: white; border: 1px solid transparent; padding: 10px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s;">
+                            😢 저도 궁금해요 
+                            <span id="like-count-detail-{{ selected_question.id }}">{{ like_count }}</span>개
+                        </button>
+                    </div>
+
+                    <hr style="border: 0.5px solid #333;">
+
+                    <div class="comment-section-hs">
+                        <h4 style="color: #65E01D;">💬 댓글</h4>
+
+                        {% if comments %}
+                        <ul class="comment-list-hs" style="list-style: none; padding-left: 0;">
+                            {% for comment in comments %}
+                            <!-- 댓글 마다 -->
+                            <li class="comment-item-hs" style="background: #2C2C2C; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                                <div class="comment-meta-hs" style="display: flex; justify-content: space-between; margin-bottom: 5px; color: #aaa; font-size: 13px;">
+                                    <span class="comment-user-hs">{{ comment.user }}</span>
+                                    <span class="comment-created-at-hs">{{ comment.created_at|date:"Y.m.d H:i" }}</span>
+                                </div>
+                                <div class="comment-content-hs">
+                                    {{ comment.content|linebreaks }}
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="no-comment-hs" style="color: #888; text-align: center; padding: 20px;">아직 댓글이 없습니다.</p>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="question_id" value="{{ selected_question.id }}">
+                            {{ cform.content }}
+                            <button type="submit" name="submit_comment">댓글 등록</button>
+                        </form>
+                        {% else %}
+                        <p style="color:#888; text-align:center; margin-top:20px;">
+                            로그인 후 댓글을 작성할 수 있습니다.
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+            {% else %}
+            
+                <div class="form-title_ny">질문 작성하기</div>
                 
-                <div class="form-group_ny">
-                    <label for="{{ form.category.id_for_label }}">질문 종류</label>
-                    {{ form.category }}
-                </div>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group_ny">
+                        <label>질문 종류</label>
+                        {{ qform.category }}
+                    </div>
+                    <div class="form-group_ny">
+                        <label>제목</label>
+                        {{ qform.title }}
+                    </div>
+                    <div class="form-group_ny">
+                        <label>내용</label>
+                        {{ qform.content }}
+                    </div>
+                    <div class="form-group_ny">
+                        <label>이미지 첨부</label>
+                        {{ qform.image }}
+                    </div>
+                    
+                    <button type="submit" class="submit-btn_ny" name="submit_question">질문 등록하기</button>
+                </form>
 
-                <div class="form-group_ny">
-                    <label for="{{ form.title.id_for_label }}">제목</label>
-                    {{ form.title }}
-                </div>
-
-                <div class="form-group_ny">
-                    <label for="{{ form.content.id_for_label }}">내용</label>
-                    {{ form.content }}
-                </div>
-                
-                 <div class="form-group_ny">
-                    <label>이미지 첨부</label>
-                    {{ form.image }}
-                </div>
-
-                <!-- <div class="form-group_ny">
-                    <label>답변 희망 시간</label>
-                    {{ form.timing }}
-                </div> -->
-
-                <button type="submit" class="submit-btn_ny">질문 등록하기</button>
-            </form>
+            {% endif %}
         </section>
-
     </main>
 
     <script src="{% static 'questions/js/main_ny.js' %}"></script>

@@ -61,10 +61,10 @@ class GenerationCreateView(StaffRequiredMixin, CreateView):
     model = Generation
     form_class = GenerationForm
     template_name = "live_sessions/generation_form.html"
-    success_url = reverse_lazy("session_list")
+    success_url = reverse_lazy("live_sessions:session_list")
 
     def get_success_url(self):
-        return f"{reverse('session_list')}?generation={self.object.id}"
+        return f"{reverse('live_sessions:session_list')}?generation={self.object.id}"
 
 
 # ---- 세션 생성 뷰 ----
@@ -90,4 +90,4 @@ class LiveSessionCreateView(StaffRequiredMixin, CreateView):
 
     def get_success_url(self):
         gen_id = self.object.generation_id
-        return f"{reverse('session_list')}?generation={gen_id}"
+        return f"{reverse('live_sessions:session_list')}?generation={gen_id}"
