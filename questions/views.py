@@ -36,6 +36,9 @@ def get_sorted_questions(request, session):
             questions = questions.filter(user=request.user).order_by('-created_at')
         else:
             questions = Question.objects.none() # 로그인 안했으면 빈 리스트
+
+    elif sort_mode == 'pending':
+        questions = questions.filter(status='OPEN').order_by('-created_at')
     
     else:
         # 기본: 최신순 정렬

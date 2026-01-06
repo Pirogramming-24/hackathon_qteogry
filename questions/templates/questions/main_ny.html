@@ -21,10 +21,21 @@
             
             <!-- ⬅️ 왼쪽: 제목 + 탭 -->
             <div class="header-left_ny">
-                <h1 class="page-title_ny">[1일차] Django 실습</h1>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px; padding: 0 20px;">
+                    <a href="{% url 'live_sessions:session_list' %}" class="back-btn_ny" title="세션 목록으로">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </a>
+                    
+                    <h1 class="page-title_ny" style="margin: 0; padding: 0;">
+                        {{ session.title }}
+                    </h1>
+                </div>
 
                 <nav class="tab-menu_ny">
                     <a href="?sort=all" class="tab-item_ny {% if sort_mode == 'all' %}active_ny{% endif %}">모든 질문</a>
+                    <a href="?sort=pending" class="tab-item_ny {% if sort_mode == 'pending' %}active_ny{% endif %}">대기중인 질문만</a>
                     <a href="?sort=concept" class="tab-item_ny {% if sort_mode == 'concept' %}active_ny{% endif %}">개념 질문만</a>
                     <a href="?sort=likes" class="tab-item_ny {% if sort_mode == 'likes' %}active_ny{% endif %}">공감 순으로</a>
                     <a href="?sort=my" class="tab-item_ny {% if sort_mode == 'my' %}active_ny{% endif %}">내 질문</a>
@@ -50,9 +61,9 @@
                             {% endif %}
                         </div>
 
-                        <div class="check-content-hs" style="margin-bottom: 10px;">
-                            🧠 {{ understanding_check.content }}
-                        </div>
+                     <div class="check-content-hs" style="margin-bottom: 10px;">
+                         🧠 {{ understanding_check.content }}
+                     </div>
 
                         <div class="check-progress-hs">
                             <span id="count-text" style="font-size: 0.9em; color: #ccc;">
@@ -208,6 +219,16 @@
                     <div class="comment-section-hs">
                         <h4 style="color: #65E01D;">💬 댓글</h4>
 
+                        <style>
+                            /* 이 페이지 안에서만 동작: 댓글 섹션 안의 입력창 높이 줄이기 */
+                            .comment-section-hs .input-content_ny {
+                                min-height: 50px !important; /* 기존 200px 무시 */
+                                height: 50px !important;     /* 높이 50px로 고정 */
+                                padding: 10px 12px !important;
+                                line-height: 1.4;
+                            }
+                        </style>
+
                         {% if comments %}
                         <ul class="comment-list-hs" style="list-style: none; padding-left: 0;">
                             {% for comment in comments %}
@@ -231,7 +252,20 @@
                             {% csrf_token %}
                             <input type="hidden" name="question_id" value="{{ selected_question.id }}">
                             {{ cform.content }}
-                            <button type="submit" name="submit_comment">댓글 등록</button>
+                            <button type="submit" name="submit_comment" 
+                                style="width: 100%; 
+                                       margin-top: 10px; 
+                                       padding: 12px; 
+                                       background-color: #65E01D; 
+                                       color: #111; 
+                                       border: none; 
+                                       border-radius: 6px; 
+                                       font-weight: 800; 
+                                       cursor: pointer; 
+                                       font-size: 14px;
+                                       transition: background-color 0.2s;">
+                                댓글 등록
+                            </button>
                         </form>
                         {% else %}
                         <p style="color:#888; text-align:center; margin-top:20px;">
