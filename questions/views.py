@@ -2,19 +2,40 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from .models import Question, UnderstandingCheck, UnderstandingResponse
+from .models import Question, UnderstandingCheck, UnderstandingResponse, Comment
 from .forms import UnderstandingForm, QuestionForm
 from live_sessions.models import LiveSession, LiveSessionMember
 from django.db import transaction
 
-def questions_read(request, pk):
-    question = Question.objects.get(id=pk)
+# def questions_read(request, pk):
+#     question = Question.objects.get(id=pk)
     
-    context = {
-        "question" : question
-    }
-    return render(request, "questions_read.html", context)
+#     context = {
+#         "question" : question
+#     }
+#     return render(request, "questions_read.html", context)
 
+def question_detail(request, session_id, question_id):
+    # 1. 기본 데이터 (리스트 출력을 위해 필요)
+    session = get_object_or_404(LiveSession, pk=session_id)
+    questions = Question.objects.filter(LiveSession=session).order_by('-created_at')
+    
+    # 2. 선택된 질문 데이터 가져오기
+    selected_question = get_object_or_404(Question, pk=question_id)
+    
+    # 3. 댓글 데이터 가져오기 (선택된 질문에 달린 댓글들)
+    comments = Comment.objects.filter(question=selected_question).order_by('created_at')
+
+    context = {
+        'session': session,
+        'questions': questions,
+        'selected_question': selected_question, # 이게 있으면 상세뷰가 뜸
+        'comments': comments,
+        'like_count': selected_question.likes.count(),
+        'sort_mode': 'all', # 상세뷰에서는 정렬 기본값
+    }
+    
+    return render(request, 'questions/main_ny.html', context)
 
 def understanding_check(request, pk):
     understanding_check = get_object_or_404(
