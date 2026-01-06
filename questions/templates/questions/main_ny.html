@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{% static 'questions/understanding_check.css' %}">
     <script src="{% static 'questions/understanding_check.js' %}" defer></script>
     <script src="{% static 'questions/comment_delete.js' %}" defer></script>
+    
 </head>
 <body>
 
@@ -88,7 +89,7 @@
                                     data-url="{% url 'questions:understanding_check_respond' %}"
                                     data-csrf="{{ csrf_token }}"
                                     style="flex: 2; background-color: #7FD957; color: black; border: none; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold;">
-                                    네! (이해했습니다)
+                                    네!
                                 </button>
 
                                 <a href="{% url 'questions:understanding_check_finish' understanding_check.id %}" 
