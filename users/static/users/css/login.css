@@ -311,9 +311,26 @@ body {
         margin-top: 28px;
     }
     
-    .modal-buttons button {
-        font-size: 14px;
-        padding: 14px 0;
+    .modal-buttons button,
+    .modal-buttons a {
+        flex: 1;
+        padding: 16px 0;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        max-width: 160px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        
+        /* 👇 a 태그를 위해 아래 3줄을 꼭 추가해주세요! */
+        display: inline-flex;             /* 박스 형태로 변경 & 내용물 정렬 */
+        justify-content: center;   /* 가로 가운데 정렬 */
+        align-items: center;       /* 세로 가운데 정렬 */
+        text-decoration: none;     /* 링크 밑줄 제거 */
+        box-sizing: border-box;
     }
 }
 

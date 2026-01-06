@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qtegory - 회원가입</title>
-    <link rel="stylesheet" href="{% static 'users/css/signup.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/signup.css' %}?v={% now 'U' %}">
 </head>
 <body>
     <div class="container">
@@ -96,20 +96,19 @@
         </div>
     </div>
 
-    <!-- 닉네임 팝업 모달 -->
-    {% if show_popup %}  <!-- 여기서 if 시작 -->
+        <!-- 팝업 모달 -->
+    {% if show_popup %}
     <div class="modal-overlay active">
         <div class="modal-content">
             <button class="btn-close" onclick="closeModal()">×</button>
             
-            <h2 class="modal-title">닉네임</h2>
+            <h3 class="modal-title">닉네임</h3>
             <p class="modal-text">입장 닉네임은</p>
             
             <div class="nickname-box">
                 {{ nickname }}
             </div>
             
-            <!-- 👇 기수 정보 추가 -->
             <p class="modal-text generation-info">
                 기수: {{ user.profile.generation|generation_format }}
             </p>
@@ -117,12 +116,14 @@
             <p class="modal-text">입니다.<br>입장하시겠습니까?</p>
             
             <div class="modal-buttons">
-                <button onclick="location.href='{{ next_url }}'" class="btn-yes">예</button>
-                <button onclick="closeModal()" class="btn-cancel">취소하기</button>
+                <!-- 👇 네임스페이스 포함해서 URL 생성 -->
+                <a href="{% url 'live_sessions:session_list' %}" class="btn-yes">예</a>
+                <button class="btn-cancel" onclick="closeModal()">취소하기</button>
             </div>
         </div>
     </div>
     {% endif %}
+    
     
     <!-- 스크립트 -->
     <script>
