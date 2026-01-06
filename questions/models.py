@@ -4,19 +4,19 @@ from django.db import models
 from live_sessions.models import LiveSession
 
 # Create your models here.
-
+# TODO:- timing 변수 빼야함
 class Question(models.Model):
     class Category(models.TextChoices):
         CONCEPT = "CONCEPT", "개념"
         ERROR = "ERROR", "오류"
         ETC = "ETC", "기타"
 
-    class Timing(models.TextChoices):
-        NOW = "NOW", "지금 급해요"
-        BREAK = "BREAK", "쉬는 시간에"
-        LATER = "LATER", "끝나고"
+    # class Timing(models.TextChoices):
+    #     NOW = "NOW", "지금 급해요"
+    #     BREAK = "BREAK", "쉬는 시간에"
+    #     LATER = "LATER", "끝나고"
 
-    LiveLiveSession = models.ForeignKey(LiveSession, on_delete=models.CASCADE)
+    live_session = models.ForeignKey(LiveSession, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
@@ -28,7 +28,7 @@ class Question(models.Model):
     content = models.TextField()
 
     category = models.CharField(max_length=20, choices=Category.choices)
-    timing = models.CharField(max_length=20, choices=Timing.choices)
+    # timing = models.CharField(max_length=20, choices=Timing.choices)
 
     status = models.CharField(
         max_length=20,

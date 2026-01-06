@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qtegory 로그인</title>
+    <link rel="stylesheet" href="{% static 'users/css/login.css' %}">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-card">
+            <h2 class="login-title">로그인</h2>
+            
+            <form method="post" action="">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <p style="color: red; font-size: 12px;">아이디 또는 비밀번호가 일치하지 않습니다.</p>
+                {% endif %}
+
+                <div class="input-group">
+                    <label for="id_username">아이디</label>
+                    <input type="text" name="username" id="id_username" placeholder="아이디를 입력하세요" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="id_password">비밀번호</label>
+                    <input type="password" name="password" id="id_password" placeholder="비밀번호를 입력하세요" required>
+                </div>
+
+                <button type="submit" class="btn-login">로그인</button>
+            </form>
+
+            <div class="login-footer">
+                <p>계정이 없으신가요? <a href="{% url 'users:signup' %}">회원가입 하러 가기</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 닉네임 팝업 모달 (개선됨) -->
+    <div class="modal-overlay {% if show_popup %}active{% endif %}">
+        <div class="modal-content">
+            <h3 class="modal-title">닉네임</h3>
+            <p class="modal-text">입장 닉네임은</p>
+            
+            <div class="nickname-box">
+                {{ nickname }}
+            </div>
+            
+            <p class="modal-text">입니다.<br>입장하시겠습니까?</p>
+            
+            <div class="modal-buttons">
+                <button class="btn-yes" onclick="location.href='/questions/list/'">예</button>
+                <button class="btn-cancel" onclick="location.href='/users/login/'">취소하기</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

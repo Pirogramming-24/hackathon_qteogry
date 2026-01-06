@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.conf import settings
 
 User = get_user_model()
 
@@ -59,3 +60,20 @@ class LiveSession(models.Model):
         """
         ref = self.end_at or self.start_at
         return self.is_archived_manual or ref < timezone.now()
+    
+class LiveSessionMember(models.Model):
+    class Role(models.TextChoices):
+        HOST = "HOST", "운영진"
+        LISTENER = "LISTENER", "청취자"
+
+    session = models.ForeignKey(LiveSession, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    role = models.CharField(max_length=20, choices=Role.choices)
+
+    joined_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("session", "user")
