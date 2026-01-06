@@ -88,7 +88,7 @@
                                     data-url="{% url 'questions:understanding_check_respond' %}"
                                     data-csrf="{{ csrf_token }}"
                                     style="flex: 2; background-color: #7FD957; color: black; border: none; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold;">
-                                    네! (이해했습니다)
+                                    네!
                                 </button>
 
                                 <a href="{% url 'questions:understanding_check_finish' understanding_check.id %}" 
@@ -131,7 +131,13 @@
                     <div class="card-header_ny">
                         <div style="display: flex; gap: 10px; align-items: center;">
                             <div style="width: 30px; height: 30px; background: #ddd; border-radius: 50%;"></div>
-                            <span style="font-weight: bold;">{{ question.user.username }}</span>
+                            {{ question.display_name }}
+                        
+                            {% if question.user == request.user %}
+                                <span style="color: #7FD957; font-size: 0.8em; margin-left: 5px;">(나)</span>
+                            {% endif %}
+                        </span>
+                            <span style="font-weight: bold;">
                         </div>
                         <span class="badge_ny 
                             {% if question.category == 'CONCEPT' %}badge-concept_ny
@@ -148,10 +154,11 @@
                     </a>
 
                     <div class="card-footer_ny">
-                        <span>{{ question.created_at|date:"Y.m.d H:i" }}</span>
                         <span class="like-btn_ny" data-question-id="{{ question.id }}" style="cursor: pointer; z-index: 10;">
                             저도 궁금해요 😢 
-                            <span id="like-count-list-{{ question.id }}">{{ question.likes.count }}</span>
+                            <span id="like-count-list-{{ question.id }}">
+                                {{ question.like_count }}
+                            </span>
                         </span>
                     </div>
                 </div>

@@ -71,6 +71,7 @@ class LiveSessionMember(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
+    nickname = models.CharField(max_length=50, default="익명")
     role = models.CharField(max_length=20, choices=Role.choices)
 
     joined_at = models.DateTimeField(auto_now_add=True)

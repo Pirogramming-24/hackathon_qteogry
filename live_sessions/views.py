@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
 from django.views.generic import TemplateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -6,6 +6,9 @@ from django.urls import reverse, reverse_lazy
 
 from .models import Generation, LiveSession
 from .forms import GenerationForm, LiveSessionForm
+from django.db.models import Count
+from django.core.paginator import Paginator  # 👈 [필수] 이거 꼭 추가해주세요!
+from questions.models import Question, UnderstandingCheck
 
 
 class SessionListView(TemplateView):
@@ -91,3 +94,57 @@ class LiveSessionCreateView(StaffRequiredMixin, CreateView):
     def get_success_url(self):
         gen_id = self.object.generation_id
         return f"{reverse('live_sessions:session_list')}?generation={gen_id}"
+    
+
+def session_report(request, pk):
+    session = get_object_or_404(LiveSession, pk=pk)
+    
+    # 1. 질문 유형별 통계
+    questions = Question.objects.filter(LiveSession=session)
+    concept_count = questions.filter(category='CONCEPT').count()
+    error_count = questions.filter(category='ERROR').count()
+    etc_count = questions.filter(category='ETC').count()
+    
+    # 2. 공감 Top 3
+    top_questions = questions.annotate(
+        like_count=Count('likes')
+    ).order_by('-like_count')[:3]
+    
+    # 3. 이해도 체크 (전체 가져오기)
+    all_checks = UnderstandingCheck.objects.filter(
+        session=session, 
+        ended_at__isnull=False
+    ).order_by('created_at')
+
+    # 👇 [추가] 페이지네이션 로직 (9개씩 자르기)
+    paginator = Paginator(all_checks, 9) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'session': session,
+        'chart_data': {
+            'concept': concept_count,
+            'error': error_count,
+            'etc': etc_count
+        },
+        'top_questions': top_questions,
+        # 'understanding_checks': understanding_checks,  👈 이거 지우고
+        'page_obj': page_obj, # 👈 페이징된 객체를 넘겨줍니다.
+    }
+    
+    return render(request, 'live_sessions/session_report.html', context)
+
+# live_sessions/views.py 맨 아래에 추가
+
+def session_archive(request, pk):
+    """
+    세션 아카이브 상태를 변경하는 함수
+    """
+    if request.method == "POST":
+        session = get_object_or_404(LiveSession, pk=pk)
+        # 상태 변경 (True <-> False)
+        session.is_archived_manual = not session.is_archived_manual
+        session.save()
+        
+    return redirect('live_sessions:session_list')
