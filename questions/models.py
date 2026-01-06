@@ -4,19 +4,14 @@ from django.db import models
 from live_sessions.models import LiveSession
 
 # Create your models here.
-# TODO:- timing 변수 빼야함
+
 class Question(models.Model):
     class Category(models.TextChoices):
         CONCEPT = "CONCEPT", "개념"
         ERROR = "ERROR", "오류"
         ETC = "ETC", "기타"
 
-    # class Timing(models.TextChoices):
-    #     NOW = "NOW", "지금 급해요"
-    #     BREAK = "BREAK", "쉬는 시간에"
-    #     LATER = "LATER", "끝나고"
-
-    live_session = models.ForeignKey(LiveSession, on_delete=models.CASCADE)
+    LiveSession = models.ForeignKey(LiveSession, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
@@ -28,7 +23,6 @@ class Question(models.Model):
     content = models.TextField()
 
     category = models.CharField(max_length=20, choices=Category.choices)
-    # timing = models.CharField(max_length=20, choices=Timing.choices)
 
     status = models.CharField(
         max_length=20,
@@ -52,3 +46,31 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ("question", "user")
+
+class UnderstandingCheck(models.Model):
+    session = models.ForeignKey(
+        LiveSession,
+        on_delete=models.CASCADE,
+        related_name="understanding_checks"
+    )
+
+    content = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    is_current = models.BooleanField(default=False)
+
+
+class UnderstandingResponse(models.Model):
+    understanding_check = models.ForeignKey(
+        UnderstandingCheck,
+        on_delete=models.CASCADE,
+        related_name="responses"
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("understanding_check", "user")

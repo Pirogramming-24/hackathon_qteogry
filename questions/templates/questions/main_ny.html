@@ -39,9 +39,11 @@
                     </span>
                 </div>
 
-                <div class="card-content_ny">
-                    {{ question.title }}
-                </div>
+                <a href="{% url 'questions:questions_read' question.id %}">
+                    <div class="card-content_ny">
+                        {{ question.title }}
+                    </div>
+                </a>
 
                 <div class="card-footer_ny">
                     <span>{{ question.created_at|date:"Y.m.d" }}</span>
