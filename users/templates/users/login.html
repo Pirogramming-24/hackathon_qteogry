@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qtegory 로그인</title>
-    <link rel="stylesheet" href="{% static 'users/css/signup.css' %}?v={% now 'U' %}">
+    <link rel="stylesheet" href="{% static 'users/css/login.css' %}?v={% now 'U' %}">
 </head>
 <body>
 
@@ -40,9 +40,11 @@
         </div>
     </div>
     
-    <div class="modal-overlay {% if show_popup %}active{% endif %}">
+    <!-- 닉네임 팝업 모달 -->
+    {% if show_popup %}
+    <div class="modal-overlay active">
         <div class="modal-content">
-            <button class="btn-close" onclick="closeModal()">×</button>  <!-- 추가 -->
+            <button class="btn-close" onclick="closeModal()">×</button>
             
             <h3 class="modal-title">닉네임</h3>
             <p class="modal-text">입장 닉네임은</p>
@@ -51,7 +53,6 @@
                 {{ nickname }}
             </div>
             
-            <!-- 👇 기수 정보 추가 -->
             <p class="modal-text generation-info">
                 기수: {{ user.profile.generation|generation_format }}
             </p>
@@ -60,17 +61,21 @@
             
             <div class="modal-buttons">
                 <a href="{% url 'live_sessions:session_list' %}" class="btn-yes">예</a>
-                <button class="btn-cancel" onclick="closeModal()">취소하기</button>  <!-- 수정 -->
+                <button class="btn-cancel" onclick="closeModal()">취소하기</button>
             </div>
         </div>
     </div>
-        <!-- body 닫기 태그 전에 스크립트 추가 -->
+    {% endif %}
+    
     <script>
     function closeModal() {
-        document.querySelector('.modal-overlay').classList.remove('active');
+        const modal = document.querySelector('.modal-overlay');
+        if (modal) {
+            modal.classList.remove('active');
+        }
     }
-        
-        // ESC 키로 닫기
+    
+    // ESC 키로 닫기
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeModal();
