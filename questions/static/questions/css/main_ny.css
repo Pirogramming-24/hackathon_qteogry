@@ -1,6 +1,6 @@
 /* [전체 레이아웃 - 다크 모드] */
 body {
-    margin: 0;
+    margin: 25px;
     padding: 0;
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
     background-color: #111111; /* 아주 어두운 검정 배경 */
@@ -12,6 +12,60 @@ body {
     background-color: #111111;
     padding-top: 40px;
     border-bottom: 1px solid #333; /* 하단 구분선 추가 */
+}
+.header-top_ny{
+    display: flex;                 /* ⭐ 핵심 */
+    flex-wrap: nowrap;
+    justify-content: space-between; /* 좌 / 우 */
+    align-items: flex-start; 
+}
+
+.header-left_ny{
+    width: 50%;
+    flex-shrink: 0;
+}
+
+.header-right_ny{
+    width: 50%;
+
+}
+
+/*understanding*/
+.fixed-understanding-check {
+    position: fixed;
+    top: 90px;       /* header 아래 */
+    right: 24px;
+    z-index: 1000;
+}
+/* .understanding-check-bar-hs {
+    background: rgb(167, 167, 167);
+    border: 2px 2px 2px 2px solid #39ff14;
+    color: #39ff14;
+    padding: 14px;
+    border-radius: 0 0 12px 12px;
+
+    width: 100%;
+    background-color: #0b0f0c; 
+
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+
+    gap: 8px;
+    padding: 14px;
+
+    box-shadow: 0 0 18px rgba(121, 226, 0, 0.15);
+} */
+
+.understanding-check-bar-hs.empty {
+    opacity: 0.55;
+}
+
+
+
+.empty-text {
+    font-size: 13px;
+    color: #777;
 }
 
 .page-title_ny {
@@ -44,13 +98,23 @@ body {
     border-bottom: 2px solid transparent; /* 밑줄 효과 준비 */
 }
 
-.tab-item_ny:hover {
-    color: #FFF;
+/* 선택된 탭은 형광 연두색으로 강조 */
+.tab-item_ny.active_ny {
+    color: #65E01D !important;          /* 텍스트 색상 */
+    border-bottom: 2px solid #65E01D !important; /* 밑줄 색상 */
+    font-weight: 800;                   /* 글자 더 굵게 */
+    opacity: 1 !important;              /* 투명도 제거 */
 }
 
-.tab-item_ny.active_ny {
-    color: #65E01D; /* 활성화 시 형광 연두 텍스트 */
-    border-bottom: 2px solid #65E01D; /* 형광 밑줄 */
+/* 마우스를 올렸을 때도 동일하게 */
+.tab-item_ny:hover {
+    color: #fff; /* 호버 시엔 흰색 */
+    opacity: 1;
+}
+
+/* 선택된 상태에서 마우스 올렸을 때는 여전히 형광색 유지 */
+.tab-item_ny.active_ny:hover {
+    color: #65E01D !important;
 }
 
 /* [메인 컨텐츠 - 2단 그리드] */
@@ -70,7 +134,8 @@ body {
     padding-right: 15px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 3px;
+    height: 100%;
 }
 
 /* 스크롤바 커스텀 (다크 모드용) */
@@ -241,4 +306,37 @@ body {
     background-color: #52C015;
     transform: translateY(-3px) scale(1.05); /* 마우스 올리면 살짝 커짐 */
     box-shadow: 0 6px 20px rgba(101, 224, 29, 0.6);
+}
+
+.like-btn_ny:hover {
+    color: #65E01D !important;            /* 글자색도 형광 연두색으로 */
+    transition: all 0.3s ease;            /* 부드러운 전환 효과 */
+}
+
+.question-card_ny.status-ANSWERED {
+    background-color: #1a1a1a;   /* 배경을 더 어둡게 */
+    border: 1px solid #444;      /* 테두리 회색으로 */
+    opacity: 0.6;                /* 전체적으로 흐릿하게 (완료된 느낌) */
+}
+
+.question-card_ny.status-ANSWERED:hover {
+    opacity: 1; /* 마우스 올리면 다시 선명하게 */
+    border-color: #65E01D;
+}
+
+/* 2. 상태 변경 드롭다운 (상세 뷰) */
+.status-select_ny {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.status-select_ny:focus {
+    border-color: #65E01D; /* 포커스 시 형광 연두 */
 }
