@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'questions/understanding_check_upload.css' %}">
     <link rel="stylesheet" href="{% static 'questions/understanding_check.css' %}">
     <script src="{% static 'questions/understanding_check.js' %}" defer></script>
+    <script src="{% static 'questions/comment_delete.js' %}" defer></script>
 </head>
 <body>
 
@@ -191,22 +192,44 @@
 
                         {% if comments %}
                         <ul class="comment-list-hs" style="list-style: none; padding-left: 0;">
-                            {% for comment in comments %}
-                            <!-- 댓글 마다 -->
-                            <li class="comment-item-hs" style="background: #2C2C2C; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
-                                <div class="comment-meta-hs" style="display: flex; justify-content: space-between; margin-bottom: 5px; color: #aaa; font-size: 13px;">
-                                    <span class="comment-user-hs">{{ comment.user }}</span>
-                                    <span class="comment-created-at-hs">{{ comment.created_at|date:"Y.m.d H:i" }}</span>
+                        {% for comment in comments %}
+                        <li class="comment-item-hs"
+                            data-id="{{ comment.id }}"
+                            style="background:#2C2C2C; padding:15px; border-radius:8px; margin-bottom:10px;">
+
+                            <div class="comment-meta-hs">
+                                <span class="comment-user-hs">{{ comment.user }}</span>
+
+                                <div class="comment-right-hs">
+                                    <span class="comment-created-at-hs">
+                                    {{ comment.created_at|date:"Y.m.d H:i" }}
+                                    </span>
+
+                                    {% if comment.user == request.user %}
+                                    <button
+                                    class="comment-delete-btn"
+                                    data-id="{{ comment.id }}"
+                                    data-url="{% url 'questions:comment_delete' %}"
+                                    data-csrf="{{ csrf_token }}"
+                                    >
+                                    삭제
+                                    </button>
+                                    {% endif %}
                                 </div>
-                                <div class="comment-content-hs">
-                                    {{ comment.content|linebreaks }}
-                                </div>
-                            </li>
-                            {% endfor %}
+                            </div>
+
+
+                            <div class="comment-content-hs">
+                            {{ comment.content|linebreaks }}
+                            </div>
+                        </li>
+                        {% endfor %}
                         </ul>
                         {% else %}
-                        <p class="no-comment-hs" style="color: #888; text-align: center; padding: 20px;">아직 댓글이 없습니다.</p>
+                        <p class="no-comment-hs">아직 댓글이 없습니다.</p>
                         {% endif %}
+
+
                         {% if user.is_authenticated %}
                         <form method="post">
                             {% csrf_token %}
