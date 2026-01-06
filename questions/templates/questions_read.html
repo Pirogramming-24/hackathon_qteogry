@@ -1,93 +1,83 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="question-detail-container-hs">
 
-<div class="header">
-  <h3 class="mb-3">🛠️ My SW Idea Manage</h3>
+  <!-- 질문 메타 정보 -->
+  <div class="question-meta-hs">
+    <span class="question-user-hs">
+      👤 {{ question.user }}
+    </span>
 
-  <a href="{% url 'myIdeas:ideas_create' %}" class="btn idea_create_btn">
-    아이디어 등록
-  </a>
-  <span class="header-divider">|</span>
-  <a href="{% url 'myIdeas:ideas_list' %}" class="btn idea_update_btn" style="color: rgb(86, 146, 249);">
-    아이디어 관리
-  </a>
-  <span class="header-divider">|</span>
-  <a href="{% url 'myIdeas:devtool_create' %}" class="btn devtool_create_btn">
-    개발툴 등록
-  </a>
-  <span class="header-divider">|</span>
-  <a href="{% url 'myIdeas:devtool_list' %}" class="btn devtool_update_btn">
-    개발툴 관리
-  </a>
-</div>
+    <span class="question-category-hs">
+      🏷 {{ question.get_category_display }}
+    </span>
 
-<h2 class="idea-detail-header">Idea detail</h2>
-<hr>
-<div class="idea-detail-body">
+    <span class="question-timing-hs">
+      ⏰ {{ question.get_timing_display }}
+    </span>
+  </div>
 
-  {% if idea.image %}
-    <div class="idea-image">
-      <img src="{{ idea.image.url }}" alt="{{ idea.title }}">
+  <!-- 질문 제목 -->
+  <h2 class="question-title-hs">
+    {{ question.title }}
+  </h2>
+
+  <!-- 질문 상태 + 생성 시간 -->
+  <div class="question-info-hs">
+    <span class="question-status-hs">
+      상태: {{ question.get_status_display }}
+    </span>
+    <span class="question-created-at-hs">
+      {{ question.created_at|date:"Y.m.d H:i" }}
+    </span>
+  </div>
+
+  <!-- 질문 이미지 (있을 때만) -->
+  {% if question.image %}
+    <div class="question-image-hs">
+      <img src="{{ question.image.url }}" alt="질문 이미지">
     </div>
   {% endif %}
 
-  
-  
-  <div class="idea-info">
-    <h3 class="idea-title">{{ idea.title }}</h3>
-    <p>
-      <strong>개발툴:</strong>
-      <a href="{% url 'myIdeas:devtool_read' idea.devtool.id %}" class="devtool-link">
-        {{ idea.devtool.name }}
-      </a>
-    </p>
-
-    <p>
-      <strong>관심도:</strong> {{ idea.interest }}
-    </p>
-
-    <p>
-      <strong>찜 여부:</strong>
-      {% if is_starred %}
-        <span>⭐ 찜함</span>
-      {% else %}
-        <span>☆ 찜 안 함</span>
-      {% endif %}
-    </p>
-    
-
-    <hr>
-
-    <strong>아이디어 설명</strong>
-    <div class="idea-content">
-      
-      {{ idea.content|linebreaks }}
-    </div>
-
+  <!-- 질문 내용 -->
+  <div class="question-content-hs">
+    <p>{{ question.content|linebreaks }}</p>
   </div>
 
-  
+  <!-- 좋아요 영역 -->
+  <div class="question-like-hs">
+    👍 공감 {{ like_count }}개
+  </div>
+
+  <hr>
+
+  <!-- 댓글 영역 -->
+  <div class="comment-section-hs">
+    <h4>💬 댓글</h4>
+
+    {% if comments %}
+      <ul class="comment-list-hs">
+        {% for comment in comments %}
+          <li class="comment-item-hs">
+            <div class="comment-meta-hs">
+              <span class="comment-user-hs">
+                {{ comment.user }}
+              </span>
+              <span class="comment-created-at-hs">
+                {{ comment.created_at|date:"Y.m.d H:i" }}
+              </span>
+            </div>
+            <div class="comment-content-hs">
+              {{ comment.content|linebreaks }}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="no-comment-hs">아직 댓글이 없습니다.</p>
+    {% endif %}
+  </div>
 
 </div>
-
-
-<div class="bottom-links">
-  <a href="{% url 'myIdeas:ideas_list' %}" class="back-link">
-    ← 목록으로 돌아가기
-  </a>
-
-  <a href="{% url 'myIdeas:update' idea.id %}" class="edit-link">
-    ✏️ 수정
-  </a>
-
-  <form action="{% url 'myIdeas:delete' idea.id %}" method="post" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit" class="delete-link">
-      🗑 삭제
-      
-    </button>
-  </form>
-</div>
-
 {% endblock %}
