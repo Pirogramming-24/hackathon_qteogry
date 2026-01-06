@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   const yesBtn = document.getElementById("yes-btn");
-  if (!yesBtn) return; // 페이지에 없으면 종료
+  if (!yesBtn) return;
 
-  const progressBar = document.getElementById("progress-bar");
   const countText = document.getElementById("count-text");
+  const progressBar = document.getElementById("progress-bar");
 
   const url = yesBtn.dataset.url;
   const csrf = yesBtn.dataset.csrf;
@@ -20,12 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then(res => res.json())
     .then(data => {
-      countText.textContent = `${data.response_count} / ${data.total_count}`;
-      progressBar.style.width = `${data.progress}%`;
-
       if (!data.created) {
         alert("이미 응답하셨습니다 🙂");
+        return;
       }
+
+      countText.textContent = `${data.response_count} / 24`;
+      progressBar.style.width = `${data.progress}%`;
     });
   });
 });
