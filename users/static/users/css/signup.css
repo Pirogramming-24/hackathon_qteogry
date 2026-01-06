@@ -1,3 +1,5 @@
+/* users/static/users/css/signup.css */
+
 /* 전역 스타일 */
 * {
     margin: 0;
@@ -7,7 +9,7 @@
 
 body {
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: #D9D9D9;
+    background-color: #000000;  /* 👈 검은 배경 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,122 +25,147 @@ body {
 
 /* 회원가입 카드 */
 .signup-card {
-    background-color: white;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #1A1A1A;  /* 👈 어두운 회색 */
+    border-radius: 24px;
+    padding: 50px 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    border: 1px solid #2A2A2A;
 }
 
 /* 타이틀 */
 .title {
-    font-size: 32px;
-    font-weight: bold;
+    font-size: 36px;
+    font-weight: 800;
     text-align: center;
-    color: #333;
-    margin-bottom: 10px;
+    color: #7FD957;  /* 👈 피로그래밍 그린 */
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 .subtitle {
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
-    color: #666;
-    margin-bottom: 30px;
+    color: #AAAAAA;
+    margin-bottom: 40px;
+    font-weight: 400;
 }
 
 /* 폼 스타일 */
 .signup-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
 .form-group label {
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: #CCCCCC;
+    padding-left: 4px;
 }
 
 .form-group input[type="text"],
 .form-group input[type="password"] {
     width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 14px;
-    transition: border-color 0.3s;
+    padding: 16px 20px;
+    background-color: #2A2A2A;  /* 👈 어두운 입력창 */
+    border: 2px solid #3A3A3A;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #FFFFFF;
+    transition: all 0.3s ease;
+}
+
+.form-group input::placeholder {
+    color: #666666;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: #4A90E2;
+    border-color: #7FD957;  /* 👈 피로그래밍 그린 */
+    background-color: #252525;
+    box-shadow: 0 0 0 3px rgba(127, 217, 87, 0.1);
 }
 
 /* 도움말 텍스트 */
 .help-text {
     font-size: 12px;
-    color: #888;
-    margin-top: 5px;
+    color: #888888;
+    margin-top: 6px;
+    padding-left: 4px;
 }
 
 /* 에러 메시지 */
 .error-message {
-    color: #e74c3c;
+    color: #FF6B6B;
     font-size: 12px;
-    margin-top: 5px;
+    margin-top: 6px;
+    padding-left: 4px;
 }
 
 .error-message p {
-    margin: 2px 0;
+    margin: 3px 0;
 }
 
 /* 회원가입 버튼 */
 .btn-signup {
     width: 100%;
-    padding: 14px;
-    background-color: #4A90E2;
-    color: white;
+    padding: 18px;
+    background: linear-gradient(135deg, #7FD957 0%, #5FB83A 100%);
+    color: #000000;
     border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
+    border-radius: 12px;
+    font-size: 17px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
     margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .btn-signup:hover {
-    background-color: #357ABD;
+    background: linear-gradient(135deg, #8FE967 0%, #6FC84A 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(127, 217, 87, 0.4);
+}
+
+.btn-signup:active {
+    transform: translateY(0);
 }
 
 /* 로그인 링크 */
 .login-link {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 28px;
 }
 
 .login-link p {
     font-size: 14px;
-    color: #666;
+    color: #888888;
 }
 
 .login-link a {
-    color: #4A90E2;
+    color: #7FD957;
     text-decoration: none;
     font-weight: 600;
+    transition: color 0.3s;
 }
 
 .login-link a:hover {
+    color: #8FE967;
     text-decoration: underline;
 }
 
 /* ========================================
-   모달 스타일 (개선됨)
+   모달 스타일 (피로그래밍 스타일)
 ======================================== */
 
 /* 모달 오버레이 */
@@ -148,7 +175,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #D9D9D9;
+    background-color: #000000;  /* 👈 검은 배경 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -157,129 +184,155 @@ body {
 
 /* 모달 콘텐츠 */
 .modal-content {
-    background-color: #E0E0E0;
-    border-radius: 20px;
+    background-color: #1A1A1A;  /* 👈 어두운 회색 */
+    border-radius: 24px;
     padding: 50px 40px;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 90%;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+    max-width: 450px;
+    width: 88%;
+    box-sizing: border-box;
+    border: 1px solid #2A2A2A;
 }
 
 /* 모달 타이틀 */
 .modal-title {
-    font-size: 26px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 25px;
+    font-size: 32px;
+    font-weight: 800;
+    color: #7FD957;  /* 👈 피로그래밍 그린 */
+    margin: 0 0 30px 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 /* 모달 텍스트 */
 .modal-text {
     font-size: 16px;
-    color: #555;
-    line-height: 1.6;
+    color: #AAAAAA;
+    line-height: 1.8;
     margin: 12px 0;
+    font-weight: 400;
 }
 
 /* 닉네임 박스 */
 .nickname-box {
-    background-color: white;
-    width: 100%;
-    padding: 25px 20px;
-    margin: 20px 0;
-    font-size: 26px;
+    background: linear-gradient(135deg, #2A2A2A 0%, #1F1F1F 100%);
+    width: calc(100% - 8px);
+    max-width: 100%;
+    padding: 28px 24px;
+    margin: 25px auto;
+    font-size: 28px;
     font-weight: 800;
-    color: #333;
-    border-radius: 15px;
+    color: #7FD957;  /* 👈 피로그래밍 그린 */
+    border-radius: 16px;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    letter-spacing: 0.5px;
+    box-shadow: 0 4px 16px rgba(127, 217, 87, 0.2);
+    letter-spacing: 1px;
+    border: 2px solid #3A3A3A;
+    box-sizing: border-box;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 
 /* 모달 버튼 영역 */
 .modal-buttons {
     display: flex;
-    gap: 12px;
+    gap: 14px;
     justify-content: center;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 35px;
 }
 
 /* 모달 버튼 공통 스타일 */
 .modal-buttons button {
     flex: 1;
-    padding: 14px 0;
+    padding: 16px 0;
     border: none;
     border-radius: 12px;
     cursor: pointer;
     font-weight: 700;
     font-size: 16px;
-    transition: all 0.2s;
-    max-width: 150px;
+    transition: all 0.3s ease;
+    max-width: 160px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 /* 예 버튼 */
 .btn-yes {
-    background-color: #648EF7;
-    color: white;
+    background: linear-gradient(135deg, #7FD957 0%, #5FB83A 100%);
+    color: #000000;
 }
 
 .btn-yes:hover {
-    background-color: #5278E0;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(100, 142, 247, 0.3);
+    background: linear-gradient(135deg, #8FE967 0%, #6FC84A 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(127, 217, 87, 0.4);
+}
+
+.btn-yes:active {
+    transform: translateY(0);
 }
 
 /* 취소 버튼 */
 .btn-cancel {
-    background-color: #EFA649;
-    color: white;
+    background-color: #2A2A2A;
+    color: #AAAAAA;
+    border: 2px solid #3A3A3A;
 }
 
 .btn-cancel:hover {
-    background-color: #E09438;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(239, 166, 73, 0.3);
+    background-color: #333333;
+    color: #CCCCCC;
+    border-color: #4A4A4A;
+    transform: translateY(-2px);
 }
 
-/* Django 기본 폼 스타일 제거 */
-.signup-form input[type="text"],
-.signup-form input[type="password"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+.btn-cancel:active {
+    transform: translateY(0);
 }
 
 /* 반응형 디자인 */
 @media (max-width: 480px) {
     .signup-card {
-        padding: 30px 20px;
+        padding: 40px 28px;
     }
     
     .title {
-        font-size: 28px;
+        font-size: 30px;
     }
     
     .subtitle {
-        font-size: 16px;
+        font-size: 14px;
     }
     
     .modal-content {
         padding: 40px 30px;
+        width: 90%;
     }
     
     .modal-title {
-        font-size: 22px;
+        font-size: 26px;
+        margin-bottom: 25px;
+    }
+    
+    .modal-text {
+        font-size: 14px;
     }
     
     .nickname-box {
-        font-size: 22px;
-        padding: 20px 15px;
+        font-size: 24px;
+        padding: 24px 20px;
+        margin: 20px auto;
+    }
+    
+    .modal-buttons {
+        gap: 10px;
+        margin-top: 28px;
     }
     
     .modal-buttons button {
         font-size: 14px;
-        padding: 12px 0;
+        padding: 14px 0;
     }
 }
