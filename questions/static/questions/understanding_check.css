@@ -1,0 +1,62 @@
+/* 전체 바 */
+.understanding-check-bar-hs {
+    width: 40%;
+    background-color: bisque;
+
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+
+    gap: 2px;              /* 최소 간격 */
+    padding: 10px;
+
+    justify-content: flex-start;  /* ← 핵심 */
+    /* height 삭제 */
+}
+
+
+/* 상단 버튼 영역 (오른쪽 정렬) */
+.check-action-hs {
+    align-self: flex-end;
+    background: #79e200;
+    border-radius: 10px;
+    padding: 6px 12px;
+    white-space: nowrap; /* 줄바꿈 방지 */
+    margin: 10px 10px;
+    margin-bottom: 0;
+}
+
+.check-upload-btn-hs {
+    color: black;
+    text-decoration: none;
+    font-size: 14px; /* 글자 줄임 */
+}
+
+/* 이해도 문구 */
+.check-content-hs {
+    font-size: 20px;
+    text-align: left; 
+    padding: 10px; margin-top: 0;
+}
+
+/* 응답 비율 */
+.check-progress-hs {
+    width: 500px; height: 20px;
+    background-color: mintcream;
+    padding: 6px 12px;
+    text-align: center;
+}
+
+/* 네 버튼 */
+.check-yes-hs {
+    text-align: left;
+}
+
+.check-yes-hs button {
+    width: 50px; height: 35px;
+    background-color: rgb(50, 150, 237);
+    color: white; font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 0;
+}
