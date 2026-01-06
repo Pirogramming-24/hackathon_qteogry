@@ -1,0 +1,25 @@
+<a href="{% url 'questions:question_detail' session.id q.id %}" style="text-decoration:none; color:inherit;">
+  <div class="question-card_ny">
+    <div class="card-header_ny">
+      <div style="display:flex; gap:10px; align-items:center;">
+        <div style="width:30px; height:30px; background:#ddd; border-radius:50%;"></div>
+        <span style="font-weight:bold;">{{ q.user.username }}</span>
+      </div>
+      <span class="badge_ny
+        {% if q.category == 'CONCEPT' %}badge-concept_ny
+        {% elif q.category == 'ERROR' %}badge-error_ny
+        {% else %}badge-etc_ny{% endif %}">
+        {{ q.get_category_display }}
+      </span>
+    </div>
+
+    <div class="card-content_ny">
+      {{ q.title }}
+    </div>
+
+    <div class="card-footer_ny">
+      <span>{{ q.created_at|date:"Y.m.d" }}</span>
+      <span>저도 궁금해요 😢 {{ q.likes.count }}</span>
+    </div>
+  </div>
+</a>

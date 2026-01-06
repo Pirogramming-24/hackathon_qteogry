@@ -14,4 +14,14 @@ urlpatterns = [
     # path('<int:session_id>/<int:question_id>/comments/create', views.comment_create,name='comment_create')
     path('like/<int:question_id>/', views.question_like, name='question_like'),
     path('status/<int:question_id>/', views.question_update_status, name='question_update_status'),
+    path("api/sessions/<int:session_id>/questions/<int:question_id>/comments/<int:comment_id>/partial/",
+        views.comment_partial,
+        name="comment_partial",
+    ),
+    path(
+        "api/sessions/<int:session_id>/questions/<int:question_id>/partial/",
+        views.question_partial,
+        name="question_partial",
+    ),
+
 ]
