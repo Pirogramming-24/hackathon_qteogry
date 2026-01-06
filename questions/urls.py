@@ -11,4 +11,5 @@ urlpatterns = [
     path("understanding_check/respond/", views.understanding_check_respond, name="understanding_check_respond"),
     path('<int:session_id>/', views.question_main, name='question_main'),
     path('<int:session_id>/<int:question_id>/', views.question_detail, name='question_detail'),
+    # path('<int:session_id>/<int:question_id>/comments/create', views.comment_create,name='comment_create')
 ]

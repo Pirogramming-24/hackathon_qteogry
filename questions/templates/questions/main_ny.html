@@ -126,6 +126,18 @@
                         {% else %}
                         <p class="no-comment-hs" style="color: #888; text-align: center; padding: 20px;">아직 댓글이 없습니다.</p>
                         {% endif %}
+                        {% if user.is_authenticated %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="question_id" value="{{ selected_question.id }}">
+                            {{ cform.content }}
+                            <button type="submit" name="submit_comment">댓글 등록</button>
+                        </form>
+                        {% else %}
+                        <p style="color:#888; text-align:center; margin-top:20px;">
+                            로그인 후 댓글을 작성할 수 있습니다.
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -137,22 +149,22 @@
                     {% csrf_token %}
                     <div class="form-group_ny">
                         <label>질문 종류</label>
-                        {{ form.category }}
+                        {{ qform.category }}
                     </div>
                     <div class="form-group_ny">
                         <label>제목</label>
-                        {{ form.title }}
+                        {{ qform.title }}
                     </div>
                     <div class="form-group_ny">
                         <label>내용</label>
-                        {{ form.content }}
+                        {{ qform.content }}
                     </div>
                     <div class="form-group_ny">
                         <label>이미지 첨부</label>
-                        {{ form.image }}
+                        {{ qform.image }}
                     </div>
                     
-                    <button type="submit" class="submit-btn_ny">질문 등록하기</button>
+                    <button type="submit" class="submit-btn_ny" name="submit_question">질문 등록하기</button>
                 </form>
 
             {% endif %}
