@@ -1,3 +1,4 @@
+{% load custom_filters %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="ko">
@@ -38,10 +39,11 @@
             </div>
         </div>
     </div>
-
-    <!-- 닉네임 팝업 모달 (개선됨) -->
+    
     <div class="modal-overlay {% if show_popup %}active{% endif %}">
         <div class="modal-content">
+            <button class="btn-close" onclick="closeModal()">×</button>  <!-- 추가 -->
+            
             <h3 class="modal-title">닉네임</h3>
             <p class="modal-text">입장 닉네임은</p>
             
@@ -49,14 +51,32 @@
                 {{ nickname }}
             </div>
             
+            <!-- 👇 기수 정보 추가 -->
+            <p class="modal-text generation-info">
+                기수: {{ user.profile.generation|generation_format }}
+            </p>
+            
             <p class="modal-text">입니다.<br>입장하시겠습니까?</p>
             
             <div class="modal-buttons">
                 <button class="btn-yes" onclick="location.href='/questions/list/'">예</button>
-                <button class="btn-cancel" onclick="location.href='/users/login/'">취소하기</button>
+                <button class="btn-cancel" onclick="closeModal()">취소하기</button>  <!-- 수정 -->
             </div>
         </div>
     </div>
+        <!-- body 닫기 태그 전에 스크립트 추가 -->
+    <script>
+    function closeModal() {
+        document.querySelector('.modal-overlay').classList.remove('active');
+    }
+        
+        // ESC 키로 닫기
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+    </script>
 
 </body>
 </html>

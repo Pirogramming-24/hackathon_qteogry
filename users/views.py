@@ -34,18 +34,21 @@ def login_view(request):
     return render(request, 'users/login.html', {'form': form})
 
 
+# views.py의 signup_view 수정 필요
 def signup_view(request):
     if request.method == 'POST':
-        # 👇 커스텀 폼 사용
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            # 사용자 생성
             user = form.save()
             
-            # 프로필 자동 생성 (save 메서드에서 랜덤 닉네임 생성됨)
-            profile, created = UserProfile.objects.get_or_create(user=user)
+            # 프로필 생성 시 role과 generation 저장
+            profile = UserProfile.objects.create(
+                user=user,
+                role=form.cleaned_data.get('role', 'student'),
+                generation=form.cleaned_data.get('generation', 1)
+            )
             
-            # 자동 로그인 처리
+            # 자동 로그인
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
@@ -53,21 +56,18 @@ def signup_view(request):
             if user is not None:
                 login(request, user)
                 
-                # 회원가입 성공 시 닉네임 팝업 표시
                 return render(request, 'users/signup.html', {
                     'form': form,
                     'show_popup': True,
-                    'nickname': profile.nickname
+                    'nickname': profile.nickname,
+                    'user': user  # 👈 user 객체 전달
                 })
         else:
-            # 폼 에러가 있을 경우 에러 메시지와 함께 다시 렌더링
             return render(request, 'users/signup.html', {'form': form})
     else:
-        # 👇 커스텀 폼 사용
         form = CustomUserCreationForm()
     
     return render(request, 'users/signup.html', {'form': form})
-
 
 def logout_view(request):
     logout(request)
