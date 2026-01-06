@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if understanding_check %}
+<div class="understanding-check-bar-hs">
+
+  <div class="check-action-hs">
+    <a href="{% url 'questions:understanding_check_upload' %}" class="check-upload-btn-hs">
+      새로운 이해도 check 올리기
+    </a>
+  </div>
+
+  <br>
+
+  <div class="check-content-hs">
+    🧠 {{ understanding_check.content }}
+  </div>
+
+  <br>
+
+  <div class="check-progress-hs">
+    {{ response_count }} / {{ total_count }}
+  </div>
+
+  <br>
+
+  <div class="check-yes-hs">
+    <button type="button">네</button>
+  </div>
+
+</div>
+{% endif %}
+{% endblock %}
