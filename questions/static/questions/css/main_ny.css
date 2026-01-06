@@ -80,7 +80,8 @@ body {
     padding-right: 15px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 3px;
+    height: 100%;
 }
 
 /* 스크롤바 커스텀 (다크 모드용) */
