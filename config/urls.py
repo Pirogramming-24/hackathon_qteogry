@@ -21,7 +21,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+<<<<<<< HEAD
     path("realtime/", include("realtime.urls")),
+=======
+    path("questions/", include("questions.urls")),
+>>>>>>> origin/feat/ny
 ]
 
 if settings.DEBUG:
