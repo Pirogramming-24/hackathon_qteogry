@@ -1,13 +1,17 @@
 import json
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.template.loader import render_to_string
+
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .models import Question, UnderstandingCheck, UnderstandingResponse, Comment, Like
 from .forms import UnderstandingForm, QuestionForm, CommentForm
+from realtime.services import publish_session_event
 from live_sessions.models import LiveSession, LiveSessionMember
 from django.db import transaction
 from django.views.decorators.http import require_POST
+from django.utils import timezone # 👈 상단에 import 추가
 
 # def questions_read(request, pk):
 #     question = Question.objects.get(id=pk)
@@ -55,7 +59,7 @@ def question_detail(request, session_id, question_id):
     # 2. 선택된 질문 데이터 가져오기
     selected_question = get_object_or_404(Question, pk=question_id)
     
-    comments = Comment.objects.filter(question=selected_question).select_related("user").order_by("-created_at")
+    comments = Comment.objects.filter(question=selected_question).select_related("user").order_by("created_at")
     Cform = CommentForm()
 
     if request.method == "POST":
@@ -65,6 +69,12 @@ def question_detail(request, session_id, question_id):
             new_comment.user = request.user
             new_comment.question = selected_question
             new_comment.save()
+            # 실시간 추가 
+            publish_session_event(str(session.id), "comment:new", {
+                "comment_id": new_comment.id,
+                "question_id": selected_question.id,
+            })
+
             return redirect("questions:question_detail", session_id=session.id, question_id=selected_question.id)
 
     context = {
@@ -76,6 +86,7 @@ def question_detail(request, session_id, question_id):
         "cform": Cform,
         'like_count': selected_question.likes.count(),
         'sort_mode': sort_mode, # 상세뷰에서는 정렬 기본값
+        'qform': QuestionForm(),
     }
     
     return render(request, 'questions/main_ny.html', context)
@@ -119,30 +130,42 @@ def understanding_check(request, pk):
 
 
 
-# @login_required
-
-
-
-
+@login_required
 def understanding_check_upload(request):
-    # 임시 세션 하나 가져오기 (없으면 에러 나도 OK)
+    # 임시 세션 (나중엔 URL에서 받아오도록 수정 필요할 수 있음)
     session = LiveSession.objects.first()
 
     if request.method == "POST":
         form = UnderstandingForm(request.POST)
         if form.is_valid():
+            # 1. [핵심] 기존에 활성화된(is_current=True) 체크가 있다면 모두 False로 변경 (아카이브로 보냄)
+            UnderstandingCheck.objects.filter(session=session, is_current=True).update(is_current=False)
+            
+            # 2. 새 체크 생성
             understanding_check = form.save(commit=False)
             understanding_check.session = session
             understanding_check.is_current = True
             understanding_check.save()
+            # 실시간 추가
 
             return redirect("questions:question_main", session.pk)
-
-
     else:
         form = UnderstandingForm()
 
     return render(request, "understanding_check_upload.html", {"form": form})
+
+# 👇 [추가] 진행 중인 체크를 강제로 종료(취소)하는 기능
+@login_required
+def understanding_check_finish(request, check_id):
+    check = get_object_or_404(UnderstandingCheck, id=check_id)
+    
+    # 이미 끝난 게 아니라면 현재 시간으로 종료 처리
+    if not check.ended_at:
+        check.ended_at = timezone.now()
+        check.save()
+    
+    # 해당 세션 메인 페이지로 돌아가기
+    return redirect("questions:question_main", check.session.id)
 
 # def understanding_check_upload(request):
 #     if request.method == "POST": 
@@ -169,50 +192,45 @@ def understanding_check_respond(request):
     check_id = request.POST.get("check_id")
     check = get_object_or_404(UnderstandingCheck, id=check_id)
 
+    # 1. 응답 저장 (기존 로직)
     response, created = UnderstandingResponse.objects.get_or_create(
         understanding_check=check,
         user=request.user
     )
 
+    # 2. 현재 응답 수 카운트
     response_count = check.responses.count()
-    TOTAL_COUNT = 24
+    
+    # 3. [핵심] 목표 인원 달성 시 종료 시간(ended_at) 기록
+    # 이미 끝난 거면(ended_at이 있으면) 기록 안 함
+    if check.ended_at is None and response_count >= check.target_response_count:
+        check.ended_at = timezone.now()
+        check.save()
+        is_finished = True
+    else:
+        is_finished = bool(check.ended_at) # 이미 끝났는지 여부
 
-    progress = int((response_count / TOTAL_COUNT) * 100)
+    # (기존 진행률 로직)
+    total_count = check.target_response_count # 👈 전체 인원 대신 목표 인원 기준으로 변경 추천
+    progress = int((response_count / total_count) * 100) if total_count else 0
 
     return JsonResponse({
         "created": created,
         "response_count": response_count,
+        "total_count": total_count,
         "progress": progress,
+        "is_finished": is_finished, # 👈 프론트엔드에 "끝났다"고 알려줌
+        "duration": check.duration_seconds # 👈 현재까지 걸린 시간도 전송
     })
-    
     
 @login_required
 def question_main(request, session_id):
     session = get_object_or_404(LiveSession, pk=session_id)
     
-    # [수정] 헬퍼 함수를 사용해 질문 리스트와 현재 정렬 모드 가져오기
+    # 1. 질문 리스트 및 정렬 (헬퍼 함수 사용)
     questions, sort_mode = get_sorted_questions(request, session)
 
-    
-    # 이해도 체크 부분
-    TOTAL_COUNT = 24
-
-    understanding_check = (
-        UnderstandingCheck.objects
-        .filter(session=session, is_current=True)
-        .order_by("-created_at")
-        .first()
-    )
-
-    if understanding_check:
-        response_count = understanding_check.responses.count()
-        progress = int((response_count / TOTAL_COUNT) * 100)
-    else:
-        response_count = 0
-        progress = 0
-
-
-    # 3. 질문 작성 로직 (POST 요청 처리)
+    # 2. 질문 작성 로직 (POST 요청 처리)
     if request.method == 'POST':
         form = QuestionForm(request.POST, request.FILES)
         if form.is_valid():
@@ -220,36 +238,41 @@ def question_main(request, session_id):
             new_question.user = request.user
             new_question.LiveSession = session
             new_question.save()
+            # 실시간
+            publish_session_event(str(session_id), "question:new", {
+                "question_id": new_question.id,
+            })
             return redirect('questions:question_main', session_id=session.id)
     else:
         form = QuestionForm()
-        
-        
-    # 최신 understanding check 가져오기
+
+    # 3. [수정] 이해도 체크 가져오기 (중복 제거 및 목표 인원 연동)
     understanding_check = (
         UnderstandingCheck.objects
         .filter(session=session, is_current=True)
         .order_by("-created_at")
         .first()
     )
+
     if understanding_check:
         response_count = understanding_check.responses.count()
-        total_count = 24
+        # 👇 [핵심] 하드코딩(24) 대신, DB에 저장된 목표 인원을 사용!
+        total_count = understanding_check.target_response_count 
         progress = int((response_count / total_count) * 100) if total_count else 0
     else:
         response_count = 0
         total_count = 0
         progress = 0
 
-
     context = {
         'session': session,
         'questions': questions,
         'qform': form,
-        'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함        
+        'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함
+        
         'understanding_check': understanding_check,
         'response_count': response_count,
-        'total_count': 24,
+        'total_count': total_count, # 👈 이제 템플릿에서 목표 인원을 제대로 표시함
         'progress': progress,
     }
     
@@ -291,6 +314,10 @@ def question_update_status(request, question_id):
         question = get_object_or_404(Question, pk=question_id)
         question.status = new_status
         question.save()
+        # 실시간 추가 상태변경
+        publish_session_event(str(question.LiveSession), "question:new", {
+            "question_id": question.id,
+        })
 
         return JsonResponse({'status': new_status, 'message': 'Status updated'})
     except Exception as e:
@@ -311,3 +338,38 @@ def comment_delete(request):
         return JsonResponse({"success": True})
 
     return JsonResponse({"success": False}, status=400)
+def comment_partial(request, session_id, question_id, comment_id):
+    comment = get_object_or_404(
+        Comment.objects.select_related("user", "question"),
+        id=comment_id,
+        question_id=question_id,
+        question__LiveSession_id=session_id,
+    )
+
+    html = render_to_string(
+        "partials/comment_item.html",
+        {"c": comment},
+        request=request,
+    )
+    return HttpResponse(html)
+
+def question_partial(request, session_id, question_id):
+    q = get_object_or_404(
+        Question.objects.select_related("user", "LiveSession"),
+        id=question_id,
+        LiveSession_id=session_id,
+    )
+
+
+    sort_mode = request.GET.get("sort", "all")  # 링크 유지용
+
+    html = render_to_string(
+        "partials/question_item.html",
+        {
+            "q": q,
+            "session": q.LiveSession,  # ✅ 템플릿에서 session.id 쓰게 보장
+            "sort_mode": sort_mode
+        },
+        request=request,
+    )
+    return HttpResponse(html)

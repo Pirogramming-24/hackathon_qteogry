@@ -5,9 +5,26 @@ from .models import UnderstandingCheck, UnderstandingResponse,Question, Comment
 class UnderstandingForm(forms.ModelForm):
     class Meta:
         model = UnderstandingCheck
-        fields = [
-            'content'
-        ]
+        # 👇 target_response_count 필드를 추가했습니다.
+        fields = ['content', 'target_response_count']
+        
+        widgets = {
+            'content': forms.TextInput(attrs={
+                'class': 'input-content_ny', 
+                'placeholder': 'DB 개론 실습 1'
+            }),
+            # 👇 목표 인원 입력창 (최소 1명)
+            'target_response_count': forms.NumberInput(attrs={
+                'class': 'input-count_ny',
+                'placeholder': '목표 인원 (명)',
+                'min': 1,
+                'value': 20  # 기본값
+            })
+        }
+        labels = {
+            'content': '질문 내용',
+            'target_response_count': '목표 응답 인원',
+        }
 
 
 class QuestionForm(forms.ModelForm):
@@ -51,7 +68,7 @@ class CommentForm(forms.ModelForm):
         fields = ['content']
         widgets= {
             'content' : forms.TextInput(attrs={
-                'class' : 'input-content_ny',
+                'class' : 'input-title_ny',
                 'rows' : 3,
                 'placeholder' : '댓글 작성',
             })

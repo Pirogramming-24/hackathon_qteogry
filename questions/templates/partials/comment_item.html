@@ -1,0 +1,9 @@
+<li class="comment-item-hs" style="background:#2C2C2C; padding:15px; border-radius:8px; margin-bottom:10px;">
+  <div class="comment-meta-hs" style="display:flex; justify-content:space-between; margin-bottom:5px; color:#aaa; font-size:13px;">
+    <span class="comment-user-hs">{{ c.user }}</span>
+    <span class="comment-created-at-hs">{{ c.created_at|date:"Y.m.d H:i" }}</span>
+  </div>
+  <div class="comment-content-hs">
+    {{ c.content|linebreaks }}
+  </div>
+</li>

@@ -93,7 +93,7 @@ body {
     padding: 0 20px;
     font-size: 28px;
     font-weight: 800; /* 더 굵게 */
-    color: #65E01D;
+    color: #fff;
     letter-spacing: -0.5px;
 }
 
@@ -458,4 +458,18 @@ body {
 .comment-delete-btn:hover {
   text-decoration: underline;
   color: black;
+}
+.back-btn_ny {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    color: #fff; /* 기본 색상: 어두운 회색 */
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.back-btn_ny:hover {
+    color: #65E01D; /* 호버 시: 형광 연두색 */
+    transform: translateX(-3px); /* 왼쪽으로 살짝 움직이는 애니메이션 */
 }
