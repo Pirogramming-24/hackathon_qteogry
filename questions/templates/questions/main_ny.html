@@ -75,8 +75,8 @@
         
         <section class="question-list_ny">
             {% for question in questions %}
-            <a href="{% url 'questions:question_detail' session.id question.id %}" style="text-decoration: none; color: inherit;">
-                <div class="question-card_ny">
+            <a href="{% url 'questions:question_detail' session.id question.id %}?sort={{ sort_mode }}" style="text-decoration: none; color: inherit;">
+                <div id="card-{{ question.id }}" class="question-card_ny status-{{ question.status }}">
                     <div class="card-header_ny">
                         <div style="display: flex; gap: 10px; align-items: center;">
                             <div style="width: 30px; height: 30px; background: #ddd; border-radius: 50%;"></div>
@@ -97,8 +97,11 @@
                     </a>
 
                     <div class="card-footer_ny">
-                        <span>{{ question.created_at|date:"Y.m.d" }}</span>
-                        <span>저도 궁금해요 😢 {{ question.likes.count }}</span>
+                        <span>{{ question.created_at|date:"Y.m.d H:i" }}</span>
+                        <span class="like-btn_ny" data-question-id="{{ question.id }}" style="cursor: pointer; z-index: 10;">
+                            저도 궁금해요 😢 
+                            <span id="like-count-list-{{ question.id }}">{{ question.likes.count }}</span>
+                        </span>
                     </div>
                 </div>
             </a>
@@ -132,7 +135,18 @@
 
                     <div class="question-info-hs" style="color: #888; font-size: 14px; margin-bottom: 20px;">
                         <span>{{ selected_question.created_at|date:"Y.m.d H:i" }}</span>
-                        <span style="float: right;">상태: {{ selected_question.get_status_display }}</span>
+                        <span style="float: right;">
+                            <div class="question-status-wrapper">
+                                <select class="status-select_ny" data-question-id="{{ selected_question.id }}">
+                                    <option value="OPEN" {% if selected_question.status == 'OPEN' %}selected{% endif %}>
+                                        🟡 대기
+                                    </option>
+                                    <option value="ANSWERED" {% if selected_question.status == 'ANSWERED' %}selected{% endif %}>
+                                        ✅ 답변완료
+                                    </option>
+                                </select>
+                            </div>
+                        </span>
                     </div>
 
                     <hr style="border: 0.5px solid #333; margin-bottom: 20px;">
@@ -148,8 +162,10 @@
                     </div>
 
                     <div class="question-like-hs" style="text-align: center; margin-bottom: 30px;">
-                        <button style="background: #333; color: white; border: 1px solid #65E01D; padding: 10px 20px; border-radius: 20px; cursor: pointer;">
-                            👍 공감 {{ like_count }}개
+                        <button class="like-btn_ny" data-question-id="{{ selected_question.id }}" 
+                                style="background: #333; color: white; border: 1px solid transparent; padding: 10px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s;">
+                            😢 저도 궁금해요 
+                            <span id="like-count-detail-{{ selected_question.id }}">{{ like_count }}</span>개
                         </button>
                     </div>
 
