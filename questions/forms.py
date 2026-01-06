@@ -17,23 +17,23 @@ class QuestionForm(forms.ModelForm):
         
         widgets = {
             'category': forms.Select(attrs={
-                'class': 'input-category_ny', 
+                'class': 'input-category', 
                 'placeholder': '질문 종류 선택'
             }),
             'title': forms.TextInput(attrs={
-                'class': 'input-title_ny', 
+                'class': 'input-title', 
                 'placeholder': '제목을 입력하세요'
             }),
             'content': forms.Textarea(attrs={
-                'class': 'input-content_ny', 
+                'class': 'input-content', 
                 'rows': 10, 
                 'placeholder': '질문 내용을 구체적으로 작성해주세요.'
             }),
             'image': forms.FileInput(attrs={
-                'class': 'input-image_ny'
+                'class': 'input-image'
             }),
             # 'timing': forms.RadioSelect(attrs={
-            #     'class': 'input-timing_ny'
+            #     'class': 'input-timing'
             # }),
         }
         

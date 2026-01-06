@@ -20,20 +20,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from live_sessions.views import (
-    SessionListView,
-    GenerationCreateView,
-    LiveSessionCreateView,
-)
-
 urlpatterns = [
     path("admin/", admin.site.urls),
+
+    path('', include('users.urls')),
     
     path("sessions/", include("live_sessions.urls")),
     
     path("questions/", include("questions.urls")),
-    
-    path('', include('users.urls')),
     
     path("realtime/", include("realtime.urls")),
 ]
