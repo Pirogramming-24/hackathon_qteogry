@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="question-detail-container-hs">
+
+  <!-- 질문 메타 정보 -->
+  <div class="question-meta-hs">
+    <span class="question-user-hs">
+      👤 {{ question.user }}
+    </span>
+
+    <span class="question-category-hs">
+      🏷 {{ question.get_category_display }}
+    </span>
+
+    <span class="question-timing-hs">
+      ⏰ {{ question.get_timing_display }}
+    </span>
+  </div>
+
+  <!-- 질문 제목 -->
+  <h2 class="question-title-hs">
+    {{ question.title }}
+  </h2>
+
+  <!-- 질문 상태 + 생성 시간 -->
+  <div class="question-info-hs">
+    <span class="question-status-hs">
+      상태: {{ question.get_status_display }}
+    </span>
+    <span class="question-created-at-hs">
+      {{ question.created_at|date:"Y.m.d H:i" }}
+    </span>
+  </div>
+
+  <!-- 질문 이미지 (있을 때만) -->
+  {% if question.image %}
+    <div class="question-image-hs">
+      <img src="{{ question.image.url }}" alt="질문 이미지">
+    </div>
+  {% endif %}
+
+  <!-- 질문 내용 -->
+  <div class="question-content-hs">
+    <p>{{ question.content|linebreaks }}</p>
+  </div>
+
+  <!-- 좋아요 영역 -->
+  <div class="question-like-hs">
+    👍 공감 {{ like_count }}개
+  </div>
+
+  <hr>
+
+  <!-- 댓글 영역 -->
+  <div class="comment-section-hs">
+    <h4>💬 댓글</h4>
+
+    {% if comments %}
+      <ul class="comment-list-hs">
+        {% for comment in comments %}
+          <li class="comment-item-hs">
+            <div class="comment-meta-hs">
+              <span class="comment-user-hs">
+                {{ comment.user }}
+              </span>
+              <span class="comment-created-at-hs">
+                {{ comment.created_at|date:"Y.m.d H:i" }}
+              </span>
+            </div>
+            <div class="comment-content-hs">
+              {{ comment.content|linebreaks }}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="no-comment-hs">아직 댓글이 없습니다.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="uch-modal-overlay-hs">
+
+  <div class="uch-modal-container-hs">
+
+    <!-- 우측 상단 닫기 버튼 -->
+    <div class="uch-modal-header-hs">
+      <h3>새로운 이해도 Check</h3>
+      <a href="javascript:history.back()" class="uch-modal-close-hs">✕</a>
+    </div>
+
+    <!-- 이해도 체크 생성 폼 -->
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="uch-content-hs">이해도 체크 문구</label>
+        <input
+          type="text"
+          id="content"
+          name="content"
+          placeholder="예) 여기까지 이해되시나요?"
+          required
+        >
+      </div>
+
+      <div class="uch-form-actions-hs">
+        <button type="submit" class="uch-submit-btn-hs">
+          생성
+        </button>
+      </div>
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}
