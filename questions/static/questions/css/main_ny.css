@@ -14,9 +14,9 @@ body {
     border-bottom: 1px solid #333; /* 하단 구분선 추가 */
 }
 .header-top_ny{
-    display: flex;                 /* ⭐ 핵심 */
+    display: flex;
     flex-wrap: nowrap;
-    justify-content: space-between; /* 좌 / 우 */
+    justify-content: space-between;
     align-items: flex-start; 
 }
 
