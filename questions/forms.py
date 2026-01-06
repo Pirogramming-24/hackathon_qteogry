@@ -1,6 +1,6 @@
 from django import forms
-from .models import UnderstandingCheck, UnderstandingResponse
-from .models import Question
+from .models import UnderstandingCheck, UnderstandingResponse,Question, Comment
+
 
 class UnderstandingForm(forms.ModelForm):
     class Meta:
@@ -43,4 +43,19 @@ class QuestionForm(forms.ModelForm):
             'content': '내용',
             'image': '이미지 첨부',
             # 'timing': '답변 희망 시간',
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets= {
+            'content' : forms.TextInput(attrs={
+                'class' : 'input-content_ny',
+                'rows' : 3,
+                'placeholder' : '댓글 작성',
+            })
+        }
+        labels = {
+            'content': '댓글 내용',
         }

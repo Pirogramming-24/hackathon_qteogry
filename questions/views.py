@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .models import Question, UnderstandingCheck, UnderstandingResponse, Comment, Like
-from .forms import UnderstandingForm, QuestionForm
+from .forms import UnderstandingForm, QuestionForm, CommentForm
 from live_sessions.models import LiveSession, LiveSessionMember
 from django.db import transaction
 from django.views.decorators.http import require_POST
@@ -52,14 +52,25 @@ def question_detail(request, session_id, question_id):
     # 2. 선택된 질문 데이터 가져오기
     selected_question = get_object_or_404(Question, pk=question_id)
     
-    # 3. 댓글 데이터 가져오기 (선택된 질문에 달린 댓글들)
-    comments = Comment.objects.filter(question=selected_question).order_by('created_at')
+    comments = Comment.objects.filter(question=selected_question).select_related("user").order_by("-created_at")
+    Cform = CommentForm()
+
+    if request.method == "POST":
+        Cform = CommentForm(request.POST)
+        if Cform.is_valid():
+            new_comment = Cform.save(commit=False)
+            new_comment.user = request.user
+            new_comment.question = selected_question
+            new_comment.save()
+            return redirect("questions:question_detail", session_id=session.id, question_id=selected_question.id)
 
     context = {
         'session': session,
         'questions': questions,
+        "question": selected_question,\
         'selected_question': selected_question, # 이게 있으면 상세뷰가 뜸
         'comments': comments,
+        "cform": Cform,
         'like_count': selected_question.likes.count(),
         'sort_mode': sort_mode, # 상세뷰에서는 정렬 기본값
     }

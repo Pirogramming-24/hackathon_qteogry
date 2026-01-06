@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <title>세션 목록</title>
   {% load static %}
+  <link rel="stylesheet" href="{% static 'css/reset.css' %}">
   <link rel="stylesheet" href="{% static 'live_sessions/live_sessions_ny.css' %}">
+  
 </head>
 
 <body>
@@ -80,9 +82,9 @@
         {% if active_sessions %}
           {% for s in active_sessions %}
             <a href="/questions/{{ s.id }}" class="session-link"> 
-              <div class="session-card">
-                <div class="title">{{ s.title }}</div>
-                <div class="meta">
+              <div class="session-card_ny">
+                <div class="title_ny">{{ s.title }}</div>
+                <div class="meta_ny">
                   {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
                   {% if s.created_by %}
                     · 세션자: {{ s.created_by.username }}
