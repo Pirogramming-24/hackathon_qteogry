@@ -16,6 +16,19 @@ from realtime.services import publish_session_event  # 실시간 기능이 있�
 
 
 # ✅ [헬퍼 함수] 질문 정렬 및 최적화 (N+1 문제 해결)
+from django.db import transaction
+from django.views.decorators.http import require_POST
+from django.utils import timezone # 👈 상단에 import 추가
+
+
+# def questions_read(request, pk):
+#     question = Question.objects.get(id=pk)
+    
+#     context = {
+#         "question" : question
+#     }
+#     return render(request, "questions_read.html", context)
+
 def get_sorted_questions(request, session):
     sort_mode = request.GET.get('sort', 'all')
     
