@@ -29,18 +29,12 @@ from live_sessions.views import (
 urlpatterns = [
     path("admin/", admin.site.urls),
     
-    # 세션 목록 (메인)
-    path("", SessionListView.as_view(), name="session_list"),
-    # 기수 생성
-    path("generations/new/", GenerationCreateView.as_view(), name="generation_create"),
-    # 세션 생성
-    path("sessions/new/", LiveSessionCreateView.as_view(), name="session_create"),
-    
+    path("sessions/", include("live_sessions.urls")),
     
     path("questions/", include("questions.urls")),
-  
-    path('users/', include('users.urls')),
-  
+    
+    path('', include('users.urls')),
+    
     path("realtime/", include("realtime.urls")),
 ]
 

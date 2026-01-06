@@ -155,18 +155,18 @@
       {% if is_session_owner %}
       <div class="admin-actions">
         <a class="btn btn--outline"
-           href="{% url 'generation_create' %}">
+           href="{% url 'live_sessions:generation_create' %}">
           + 기수 추가
         </a>
 
         {% if selected_generation %}
           <a class="btn"
-             href="{% url 'session_create' %}?generation={{ selected_generation.id }}">
+             href="{% url 'live_sessions:session_create' %}?generation={{ selected_generation.id }}">
             + 세션 생성
           </a>
         {% else %}
           <a class="btn"
-             href="{% url 'session_create' %}">
+             href="{% url 'live_sessions:session_create' %}">
             + 세션 생성
           </a>
         {% endif %}
@@ -180,7 +180,7 @@
       <div class="generation-list">
         {% for gen in generations %}
           <a
-            href="{% url 'session_list' %}?generation={{ gen.id }}"
+            href="{% url 'live_sessions:session_list' %}?generation={{ gen.id }}"
             class="generation-chip
               {% if selected_generation and gen.id == selected_generation.id %}
                 active
