@@ -24,20 +24,20 @@
       </div>
 
       {% if is_session_owner %}
-      <div class="admin-actions_ny">
-        <a class="btn_ny btn-outline_ny btn-sm_ny"
-           href="{% url 'generation_create' %}">
+      <div class="admin-actions">
+        <a class="btn btn--outline"
+           href="{% url 'live_sessions:generation_create' %}">
           + 기수 추가
         </a>
 
         {% if selected_generation %}
-          <a class="btn_ny btn-sm_ny"
-             href="{% url 'session_create' %}?generation={{ selected_generation.id }}">
+          <a class="btn"
+             href="{% url 'live_sessions:session_create' %}?generation={{ selected_generation.id }}">
             + 세션 생성
           </a>
         {% else %}
-          <a class="btn_ny btn-sm_ny"
-             href="{% url 'session_create' %}">
+          <a class="btn"
+             href="{% url 'live_sessions:session_create' %}">
             + 세션 생성
           </a>
         {% endif %}
@@ -51,8 +51,11 @@
       <div class="generation-list_ny">
         {% for gen in generations %}
           <a
-            href="{% url 'session_list' %}?generation={{ gen.id }}"
-            class="generation-chip_ny {% if selected_generation and gen.id == selected_generation.id %}active_ny{% endif %}"
+            href="{% url 'live_sessions:session_list' %}?generation={{ gen.id }}"
+            class="generation-chip
+              {% if selected_generation and gen.id == selected_generation.id %}
+                active
+              {% endif %}"
           >
             {{ gen.name }}
           </a>
