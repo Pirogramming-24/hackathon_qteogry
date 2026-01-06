@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>세션 목록</title>
-<!--  reset.css 필요  -->
   <link rel="stylesheet" href="{% static 'live_sessions/live_sessions.css' %}">
 </head>
 
@@ -75,11 +74,10 @@
 
         {% if active_sessions %}
           {% for s in active_sessions %}
-            
             <a href="{% url 'questions:question_main' s.id %}" class="session-link">
-              <div class="session-card_ny">
-                <div class="title_ny">{{ s.title }}</div>
-                <div class="meta_ny">
+              <div class="session-card">
+                <div class="title">{{ s.title }}</div>
+                <div class="meta">
                   {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
                   {% if s.created_by %}
                     · 세션자: {{ s.created_by.username }}
@@ -100,13 +98,12 @@
         <div class="section-title">
           아카이브 세션
         </div>
-
         {% if archived_sessions %}
           {% for s in archived_sessions %}
             <a href="{% url 'questions:question_main' s.id %}" class="session-link">
-              <div class="session-card_ny">
-                <div class="title_ny">{{ s.title }}</div>
-                <div class="meta_ny">
+              <div class="session-card">
+                <div class="title">{{ s.title }}</div>
+                <div class="meta">
                   {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
                 </div>
               </div>
