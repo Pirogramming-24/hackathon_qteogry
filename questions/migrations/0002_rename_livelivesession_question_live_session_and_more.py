@@ -6,17 +6,27 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('live_sessions', '0001_initial'),
+        ('questions', '0001_initial'),
     ]
 
     operations = [
+        migrations.RenameField(
+            model_name='question',
+            old_name='LiveLiveSession',
+            new_name='live_session',
+        ),
         migrations.AlterField(
-            model_name='livesession',
+            model_name='comment',
             name='id',
             field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
         ),
         migrations.AlterField(
-            model_name='livesessionmember',
+            model_name='like',
+            name='id',
+            field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
+        ),
+        migrations.AlterField(
+            model_name='question',
             name='id',
             field=models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID'),
         ),
