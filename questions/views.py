@@ -62,6 +62,8 @@ def question_detail(request, session_id, question_id):
             new_comment.user = request.user
             new_comment.question = selected_question
             new_comment.save()
+            # 실시간 추가 
+
             return redirect("questions:question_detail", session_id=session.id, question_id=selected_question.id)
 
     context = {
@@ -132,6 +134,7 @@ def understanding_check_upload(request):
             understanding_check.session = session
             understanding_check.is_current = True
             understanding_check.save()
+            # 실시간 추가
 
             return redirect("questions:question_main", session.pk)
 
@@ -218,6 +221,7 @@ def question_main(request, session_id):
             new_question.user = request.user
             new_question.LiveSession = session
             new_question.save()
+            # 실시간
             return redirect('questions:question_main', session_id=session.id)
     else:
         form = QuestionForm()
@@ -243,7 +247,7 @@ def question_main(request, session_id):
     context = {
         'session': session,
         'questions': questions,
-        'form': form,
+        'qform': form,
         'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함
         'understanding_check': understanding_check,
         'response_count': response_count,
@@ -294,6 +298,7 @@ def question_update_status(request, question_id):
         question = get_object_or_404(Question, pk=question_id)
         question.status = new_status
         question.save()
+        # 실시간 추가
 
         return JsonResponse({'status': new_status, 'message': 'Status updated'})
     except Exception as e:
