@@ -1,0 +1,138 @@
+
+/* 전체 컨테이너 */
+.question-detail-container-hs {
+  max-width: 820px;
+  margin: 40px auto;
+  padding: 24px 28px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: "Pretendard", sans-serif;
+}
+
+/* 상단 메타 정보 */
+.question-meta-hs {
+  background-color: aqua;
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.question-user-hs {
+  font-weight: 600;
+}
+
+.question-category-hs,
+.question-timing-hs {
+  background-color: #f3f4f6;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+/* 제목 */
+.question-title-hs {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 12px 0 16px;
+  color: #222;
+}
+
+/* 상태 + 시간 */
+.question-info-hs {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.question-status-hs {
+  font-weight: 600;
+}
+
+/* 이미지 */
+.question-image-hs {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.question-image-hs img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 질문 내용 */
+.question-content-hs {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+/* 좋아요 */
+.question-like-hs {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 12px;
+}
+
+/* 구분선 */
+.question-detail-container-hs hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 24px 0;
+}
+
+/* 댓글 영역 */
+.comment-section-hs h4 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #222;
+}
+
+/* 댓글 리스트 */
+.comment-list-hs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comment-item-hs {
+  padding: 14px 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+/* 댓글 메타 */
+.comment-meta-hs {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.comment-user-hs {
+  font-weight: 600;
+}
+
+/* 댓글 내용 */
+.comment-content-hs {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* 댓글 없을 때 */
+.no-comment-hs {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  margin-top: 20px;
+}

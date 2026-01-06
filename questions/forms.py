@@ -1,5 +1,14 @@
 from django import forms
+from .models import UnderstandingCheck, UnderstandingResponse
 from .models import Question
+
+class UnderstandingForm(forms.ModelForm):
+    class Meta:
+        model = UnderstandingCheck
+        fields = [
+            'content'
+        ]
+
 
 class QuestionForm(forms.ModelForm):
     class Meta:
