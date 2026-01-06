@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #000000 !important;
+        color: #ffffff;
+    }
+    .report-card {
+        background: #1A1A1A;
+        padding: 30px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        border: 1px solid #2A2A2A; /* 아주 은은한 테두리 */
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .pagination-btn {
+        padding: 8px 16px;
+        background: #333;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.9em;
+        transition: 0.2s;
+    }
+    .pagination-btn:hover {
+        background: #444;
+    }
+</style>
+
+<div style="max-width: 800px; margin: 0 auto; padding: 40px 20px;">
+    
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #7FD957; margin-bottom: 10px; font-weight: 800;">📊 세션 리포트</h1>
+        <h3 style="color: #aaa; font-weight: 400;">{{ session.title }}</h3>
+        <p style="color: #666; font-size: 0.9em;">{{ session.start_at|date:"Y.m.d" }} 진행</p>
+    </div>
+
+    <div class="report-card">
+        <h2 style="margin-bottom: 20px; color: #fff; border-left: 4px solid #7FD957; padding-left: 10px;">📈 질문 유형 분석</h2>
+        <div style="height: 250px;">
+            <canvas id="questionChart"></canvas>
+        </div>
+    </div>
+
+    <div class="report-card">
+        <h2 style="margin-bottom: 20px; color: #fff; border-left: 4px solid #7FD957; padding-left: 10px;">🏆 베스트 질문 Top 3</h2>
+        
+        {% for q in top_questions %}
+        <div style="background: #2A2A2A; padding: 20px; border-radius: 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #333;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="color: #000; background: #7FD957; font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 0.9em;">{{ forloop.counter }}위</span>
+                <span style="font-size: 1.1em; color: #eee; font-weight: 600;">{{ q.title }}</span>
+            </div>
+            <div style="color: #FF6B6B; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                <span>❤</span> {{ q.like_count }}
+            </div>
+        </div>
+        {% empty %}
+        <p style="color: #666; text-align: center; padding: 30px;">등록된 질문이 없습니다.</p>
+        {% endfor %}
+    </div>
+
+    <div id="check-section" class="report-card">
+        <h2 style="margin-bottom: 20px; color: #fff; border-left: 4px solid #7FD957; padding-left: 10px;">⏱️ 이해도 체크 난이도</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px;">
+            {% for check in page_obj %}
+            <div style="background: #2A2A2A; padding: 20px; border-radius: 16px; text-align: center; border: 1px solid #333;">
+                <div style="font-size: 0.9em; color: #aaa; margin-bottom: 15px; min-height: 40px; display: flex; align-items: center; justify-content: center; line-height: 1.4;">
+                    Q. {{ check.content|truncatechars:20 }}
+                </div>
+                
+                <div style="font-size: 1.4em; font-weight: 800; margin-bottom: 10px; color: #fff;">
+                    {{ check.difficulty_level }}
+                </div>
+                
+                <div style="font-size: 0.85em; color: #888; background: #111; display: inline-block; padding: 6px 12px; border-radius: 10px;">
+                    소요시간: {{ check.duration_seconds|floatformat:0 }}초
+                </div>
+            </div>
+            {% empty %}
+            <p style="color: #666; width: 100%; text-align: center; padding: 30px; grid-column: 1/-1;">진행된 이해도 체크가 없습니다.</p>
+            {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+            
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}#check-section" class="pagination-btn">
+                   &lt; 이전
+                </a>
+            {% endif %}
+
+            <span style="padding: 8px 12px; color: #7FD957; font-weight: bold; display: flex; align-items: center;">
+                {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}#check-section" class="pagination-btn">
+                   다음 &gt;
+                </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div style="text-align: center; margin-top: 60px;">
+        <a href="{% url 'live_sessions:session_list' %}" 
+           style="display: inline-block; padding: 12px 30px; border: 1px solid #444; border-radius: 30px; color: #888; text-decoration: none; transition: 0.3s; background: #111;">
+           목록으로 돌아가기
+        </a>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const chartData = {
+        labels: ['개념 질문', '오류 해결', '기타'],
+        datasets: [{
+            label: '질문 수',
+            data: [
+                {{ chart_data.concept }}, 
+                {{ chart_data.error }}, 
+                {{ chart_data.etc }}
+            ],
+            backgroundColor: [
+                'rgba(127, 217, 87, 0.7)',
+                'rgba(255, 99, 132, 0.7)',
+                'rgba(201, 203, 207, 0.7)'
+            ],
+            borderColor: [
+                'rgba(127, 217, 87, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(201, 203, 207, 1)'
+            ],
+            borderWidth: 0,
+            borderRadius: 6, // 막대 끝 둥글게
+            barPercentage: 0.5, // 막대 두께 비율 (작을수록 얇아짐)
+            maxBarThickness: 50 // 막대 최대 두께 (픽셀)
+        }]
+    };
+
+    const ctx = document.getElementById('questionChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // 캔버스 높이에 맞춤
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#333' },
+                    ticks: { color: '#888', stepSize: 1 }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#aaa', font: { size: 14 } }
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+{% endblock %}
