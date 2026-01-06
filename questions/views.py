@@ -323,6 +323,21 @@ def question_update_status(request, question_id):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
     
+    
+@login_required
+def comment_delete(request):
+    if request.method == "POST":
+        comment_id = request.POST.get("comment_id")
+        comment = get_object_or_404(Comment, id=comment_id)
+
+        # ⭐ 본인 댓글인지 체크
+        if comment.user != request.user:
+            return JsonResponse({"success": False, "error": "권한 없음"}, status=403)
+
+        comment.delete()
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False}, status=400)
 def comment_partial(request, session_id, question_id, comment_id):
     comment = get_object_or_404(
         Comment.objects.select_related("user", "question"),

@@ -421,6 +421,44 @@ body {
     border-color: #65E01D; /* 포커스 시 형광 연두 */
 }
 
+.comment-delete-btn{
+    color: red;
+}
+
+.comment-delete-btn:hover{
+    cursor: pointer;
+}
+
+.comment-meta-hs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.comment-right-hs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.comment-created-at-hs{
+}
+
+.comment-delete-btn {
+  background: #ff6b6b;
+  padding: 5px;
+  border: none;
+  border-radius: 2px;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.comment-delete-btn:hover {
+  text-decoration: underline;
+  color: black;
+}
 .back-btn_ny {
     display: flex;
     align-items: center;
