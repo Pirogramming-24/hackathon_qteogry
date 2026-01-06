@@ -35,6 +35,9 @@ def get_sorted_questions(request, session):
             questions = questions.filter(user=request.user).order_by('-created_at')
         else:
             questions = Question.objects.none() # 로그인 안했으면 빈 리스트
+
+    elif sort_mode == 'pending':
+        questions = questions.filter(status='OPEN').order_by('-created_at')
     
     else:
         # 기본: 최신순 정렬
@@ -234,11 +237,6 @@ def question_main(request, session_id):
         'questions': questions,
         'form': form,
         'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함
-        'understanding_check': understanding_check,
-        'response_count': response_count,
-        'total_count': total_count,
-        'progress': progress,
-        
         'understanding_check': understanding_check,
         'response_count': response_count,
         'total_count': total_count,
