@@ -1,10 +1,13 @@
 import json
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.template.loader import render_to_string
+
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .models import Question, UnderstandingCheck, UnderstandingResponse, Comment, Like
 from .forms import UnderstandingForm, QuestionForm, CommentForm
+from realtime.services import publish_session_event
 from live_sessions.models import LiveSession, LiveSessionMember
 from django.db import transaction
 from django.views.decorators.http import require_POST
@@ -56,7 +59,7 @@ def question_detail(request, session_id, question_id):
     # 2. 선택된 질문 데이터 가져오기
     selected_question = get_object_or_404(Question, pk=question_id)
     
-    comments = Comment.objects.filter(question=selected_question).select_related("user").order_by("-created_at")
+    comments = Comment.objects.filter(question=selected_question).select_related("user").order_by("created_at")
     Cform = CommentForm()
 
     if request.method == "POST":
@@ -66,6 +69,12 @@ def question_detail(request, session_id, question_id):
             new_comment.user = request.user
             new_comment.question = selected_question
             new_comment.save()
+            # 실시간 추가 
+            publish_session_event(str(session.id), "comment:new", {
+                "comment_id": new_comment.id,
+                "question_id": selected_question.id,
+            })
+
             return redirect("questions:question_detail", session_id=session.id, question_id=selected_question.id)
 
     context = {
@@ -137,6 +146,7 @@ def understanding_check_upload(request):
             understanding_check.session = session
             understanding_check.is_current = True
             understanding_check.save()
+            # 실시간 추가
 
             return redirect("questions:question_main", session.pk)
     else:
@@ -228,6 +238,10 @@ def question_main(request, session_id):
             new_question.user = request.user
             new_question.LiveSession = session
             new_question.save()
+            # 실시간
+            publish_session_event(str(session_id), "question:new", {
+                "question_id": new_question.id,
+            })
             return redirect('questions:question_main', session_id=session.id)
     else:
         form = QuestionForm()
@@ -254,7 +268,7 @@ def question_main(request, session_id):
         'session': session,
         'questions': questions,
         'qform': form,
-        'sort_mode': sort_mode,
+        'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함
         
         'understanding_check': understanding_check,
         'response_count': response_count,
@@ -300,7 +314,47 @@ def question_update_status(request, question_id):
         question = get_object_or_404(Question, pk=question_id)
         question.status = new_status
         question.save()
+        # 실시간 추가 상태변경
+        publish_session_event(str(question.LiveSession), "question:new", {
+            "question_id": question.id,
+        })
 
         return JsonResponse({'status': new_status, 'message': 'Status updated'})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+    
+def comment_partial(request, session_id, question_id, comment_id):
+    comment = get_object_or_404(
+        Comment.objects.select_related("user", "question"),
+        id=comment_id,
+        question_id=question_id,
+        question__LiveSession_id=session_id,
+    )
+
+    html = render_to_string(
+        "partials/comment_item.html",
+        {"c": comment},
+        request=request,
+    )
+    return HttpResponse(html)
+
+def question_partial(request, session_id, question_id):
+    q = get_object_or_404(
+        Question.objects.select_related("user", "LiveSession"),
+        id=question_id,
+        LiveSession_id=session_id,
+    )
+
+
+    sort_mode = request.GET.get("sort", "all")  # 링크 유지용
+
+    html = render_to_string(
+        "partials/question_item.html",
+        {
+            "q": q,
+            "session": q.LiveSession,  # ✅ 템플릿에서 session.id 쓰게 보장
+            "sort_mode": sort_mode
+        },
+        request=request,
+    )
+    return HttpResponse(html)

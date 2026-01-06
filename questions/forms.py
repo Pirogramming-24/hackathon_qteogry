@@ -68,7 +68,7 @@ class CommentForm(forms.ModelForm):
         fields = ['content']
         widgets= {
             'content' : forms.TextInput(attrs={
-                'class' : 'input-content_ny',
+                'class' : 'input-title_ny',
                 'rows' : 3,
                 'placeholder' : '댓글 작성',
             })

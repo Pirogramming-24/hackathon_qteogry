@@ -15,6 +15,11 @@
 
     {% comment %} understanding {% endcomment %}
 
+    <!-- realtime.js 정보 전달용 -->
+    <div id="realtime-root"
+        data-session-id="{{ session.id }}"
+        data-question-id="{% if selected_question %}{{ selected_question.id }}{% endif %}">
+    </div>
 
     <div class="header-container_ny">
         <div class="header-top_ny">
@@ -118,7 +123,7 @@
 
     <main class="main-container_ny">
         
-        <section class="question-list_ny">
+        <section class="question-list_ny" id="question-list">
             {% for question in questions %}
             <a href="{% url 'questions:question_detail' session.id question.id %}?sort={{ sort_mode }}" style="text-decoration: none; color: inherit;">
                 <div id="card-{{ question.id }}" class="question-card_ny status-{{ question.status }}">
@@ -152,7 +157,7 @@
             </a>
 
             {% empty %}
-                <p style="text-align: center; color: #888; margin-top: 50px;">
+                <p id="empty-questions" style="text-align: center; color: #888; margin-top: 50px;">
                     아직 등록된 질문이 없습니다.
                 </p>
             {% endfor %}
@@ -162,6 +167,7 @@
                     <path d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z" fill="black"/>
                 </svg>
             </a>
+            
         </section>
 
         <section class="write-section_ny">
@@ -230,23 +236,30 @@
                         </style>
 
                         {% if comments %}
-                        <ul class="comment-list-hs" style="list-style: none; padding-left: 0;">
-                            {% for comment in comments %}
-                            <!-- 댓글 마다 -->
-                            <li class="comment-item-hs" style="background: #2C2C2C; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
-                                <div class="comment-meta-hs" style="display: flex; justify-content: space-between; margin-bottom: 5px; color: #aaa; font-size: 13px;">
-                                    <span class="comment-user-hs">{{ comment.user }}</span>
-                                    <span class="comment-created-at-hs">{{ comment.created_at|date:"Y.m.d H:i" }}</span>
-                                </div>
-                                <div class="comment-content-hs">
-                                    {{ comment.content|linebreaks }}
-                                </div>
-                            </li>
-                            {% endfor %}
+                        <ul id="comments-{{ selected_question.id }}"
+                            class="comment-list-hs"
+                            data-session-id="{{ session.id }}"
+                            data-question-id="{{ selected_question.id }}"
+                            style="list-style:none; padding-left:0;">
+                        {% for comment in comments %}
+                            {% include "partials/comment_item.html" with c=comment %}
+                        {% endfor %}
                         </ul>
                         {% else %}
-                        <p class="no-comment-hs" style="color: #888; text-align: center; padding: 20px;">아직 댓글이 없습니다.</p>
+                        <p id="no-comments-{{ selected_question.id }}"
+                        class="no-comment-hs"
+                        style="color:#888; text-align:center; padding:20px;">
+                        아직 댓글이 없습니다.
+                        </p>
+
+                        <ul id="comments-{{ selected_question.id }}"
+                            class="comment-list-hs"
+                            data-session-id="{{ session.id }}"
+                            data-question-id="{{ selected_question.id }}"
+                            style="list-style:none; padding-left:0;">
+                        </ul>
                         {% endif %}
+
                         {% if user.is_authenticated %}
                         <form method="post">
                             {% csrf_token %}
@@ -318,7 +331,9 @@
             {% endif %}
         </section>
     </main>
+   
 
+    <script src="{% static 'questions/js/realtime.js' %}"></script>
     <script src="{% static 'questions/js/main_ny.js' %}"></script>
 </body>
 </html>
