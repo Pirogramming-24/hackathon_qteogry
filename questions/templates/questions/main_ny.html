@@ -47,8 +47,11 @@
                     </a>
 
                     <div class="card-footer_ny">
-                        <span>{{ question.created_at|date:"Y.m.d" }}</span>
-                        <span>저도 궁금해요 😢 {{ question.likes.count }}</span>
+                        <span>{{ question.created_at|date:"Y.m.d H:i" }}</span>
+                        <span class="like-btn_ny" data-question-id="{{ question.id }}" style="cursor: pointer; z-index: 10;">
+                            저도 궁금해요 😢 
+                            <span id="like-count-list-{{ question.id }}">{{ question.likes.count }}</span>
+                        </span>
                     </div>
                 </div>
             </a>
@@ -98,8 +101,10 @@
                     </div>
 
                     <div class="question-like-hs" style="text-align: center; margin-bottom: 30px;">
-                        <button style="background: #333; color: white; border: 1px solid #65E01D; padding: 10px 20px; border-radius: 20px; cursor: pointer;">
-                            👍 공감 {{ like_count }}개
+                        <button class="like-btn_ny" data-question-id="{{ selected_question.id }}" 
+                                style="background: #333; color: white; border: 1px solid transparent; padding: 10px 20px; border-radius: 20px; cursor: pointer; transition: 0.3s;">
+                            😢 저도 궁금해요 
+                            <span id="like-count-detail-{{ selected_question.id }}">{{ like_count }}</span>개
                         </button>
                     </div>
 

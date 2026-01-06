@@ -242,3 +242,8 @@ body {
     transform: translateY(-3px) scale(1.05); /* 마우스 올리면 살짝 커짐 */
     box-shadow: 0 6px 20px rgba(101, 224, 29, 0.6);
 }
+
+.like-btn_ny:hover {
+    color: #65E01D !important;            /* 글자색도 형광 연두색으로 */
+    transition: all 0.3s ease;            /* 부드러운 전환 효과 */
+}

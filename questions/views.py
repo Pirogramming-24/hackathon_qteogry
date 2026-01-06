@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from .models import Question, UnderstandingCheck, UnderstandingResponse, Comment
+from .models import Question, UnderstandingCheck, UnderstandingResponse, Comment, Like
 from .forms import UnderstandingForm, QuestionForm
 from live_sessions.models import LiveSession, LiveSessionMember
 from django.db import transaction
+from django.views.decorators.http import require_POST
 
 # def questions_read(request, pk):
 #     question = Question.objects.get(id=pk)
@@ -198,3 +199,27 @@ def question_main(request, session_id):
     }
     
     return render(request, 'questions/main_ny.html', context)
+
+@require_POST
+def question_like(request, question_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Login required'}, status=403)
+
+    question = get_object_or_404(Question, pk=question_id)
+    user = request.user
+
+    # 이미 좋아요를 눌렀는지 확인
+    if question.likes.filter(user=user).exists():
+        # 이미 눌렀으면 삭제 (좋아요 취소)
+        question.likes.filter(user=user).delete()
+        liked = False
+    else:
+        # 안 눌렀으면 추가 (좋아요)
+        Like.objects.create(question=question, user=user)
+        liked = True
+
+    context = {
+        'liked': liked,
+        'count': question.likes.count()
+    }
+    return JsonResponse(context)
