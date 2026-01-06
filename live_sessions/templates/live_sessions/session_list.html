@@ -3,149 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <title>세션 목록</title>
-
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont;
-      margin: 0;
-      padding: 0;
-      background: #f5f5f5;
-    }
-
-    .page {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
-    }
-
-    /* ----- HEADER ----- */
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 8px;
-    }
-
-    .page-header-left {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .page-title {
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .admin-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: 1px solid #2f80ed;
-      background: #2f80ed;
-      color: #fff;
-      padding: 6px 12px;
-      font-size: 13px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .btn--outline {
-      background: #fff;
-      color: #2f80ed;
-    }
-
-    /* ----- GENERATION BAR ----- */
-    .generation-bar {
-      margin: 8px 0 16px;
-    }
-
-    .generation-list {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .generation-chip {
-      padding: 6px 12px;
-      font-size: 14px;
-      border-radius: 999px;
-      border: 1px solid #ddd;
-      background: white;
-      cursor: pointer;
-      text-decoration: none;
-      color: #333;
-    }
-
-    .generation-chip.active {
-      background: #2f80ed;
-      color: #fff;
-      border-color: #2f80ed;
-    }
-
-    /* ----- CONTENT LAYOUT ----- */
-    .content-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    .section-title {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    /* ----- SESSION CARD ----- */
-    .session-card {
-      border-radius: 20px;
-      padding: 12px 16px;
-      background: white;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      margin-bottom: 12px;
-    }
-
-    .session-card .title {
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .session-card .meta {
-      font-size: 12px;
-      color: #777;
-    }
-
-    .empty-box {
-      padding: 12px;
-      border-radius: 12px;
-      background: white;
-      border: 1px solid #eee;
-      color: #999;
-      font-size: 13px;
-    }
-
-    .session-link {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-
-  </style>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'live_sessions/live_sessions_ny.css' %}">
 </head>
 
 <body>
-  <div class="page">
+  <div class="page-wrapper_ny">
 
     <!-- ===== HEADER ===== -->
-    <div class="page-header">
-      <div class="page-header-left">
-        <div class="page-title">세션 목록</div>
+    <div class="page-header_ny">
+      <div class="page-header-left_ny">
+        <div class="page-title_ny">세션 목록</div>
 
         {% if selected_generation %}
-          <div style="font-size: 13px; color: #666;">
+          <div class="page-subtitle_ny">
             현재 선택된 기수:
             <strong>{{ selected_generation.name }}</strong>
           </div>
@@ -155,18 +26,18 @@
       {% if is_session_owner %}
       <div class="admin-actions">
         <a class="btn btn--outline"
-           href="{% url 'generation_create' %}">
+           href="{% url 'live_sessions:generation_create' %}">
           + 기수 추가
         </a>
 
         {% if selected_generation %}
           <a class="btn"
-             href="{% url 'session_create' %}?generation={{ selected_generation.id }}">
+             href="{% url 'live_sessions:session_create' %}?generation={{ selected_generation.id }}">
             + 세션 생성
           </a>
         {% else %}
           <a class="btn"
-             href="{% url 'session_create' %}">
+             href="{% url 'live_sessions:session_create' %}">
             + 세션 생성
           </a>
         {% endif %}
@@ -176,11 +47,11 @@
 
 
     <!-- ===== GENERATION TOGGLE ===== -->
-    <div class="generation-bar">
-      <div class="generation-list">
+    <div class="generation-bar_ny">
+      <div class="generation-list_ny">
         {% for gen in generations %}
           <a
-            href="{% url 'session_list' %}?generation={{ gen.id }}"
+            href="{% url 'live_sessions:session_list' %}?generation={{ gen.id }}"
             class="generation-chip
               {% if selected_generation and gen.id == selected_generation.id %}
                 active
@@ -189,7 +60,7 @@
             {{ gen.name }}
           </a>
         {% empty %}
-          <span style="font-size: 13px; color: #999;">
+          <span class="empty-text_ny">
             아직 생성된 기수가 없습니다.
           </span>
         {% endfor %}
@@ -198,11 +69,11 @@
 
 
     <!-- ===== MAIN CONTENT ===== -->
-    <div class="content-row">
+    <div class="content-row_ny">
 
       <!-- LEFT: ACTIVE -->
       <div>
-        <div class="section-title">
+        <div class="section-title_ny">
           진행 예정 / 진행 중 세션
         </div>
 
@@ -221,30 +92,30 @@
             </a>
           {% endfor %}
         {% else %}
-          <div class="empty-box">
+          <div class="empty-box_ny">
             예정된 세션이 없습니다.
           </div>
         {% endif %}
-
+      </div>
 
 
       <!-- RIGHT: ARCHIVE -->
       <div>
-        <div class="section-title">
+        <div class="section-title_ny">
           아카이브 세션
         </div>
 
         {% if archived_sessions %}
           {% for s in archived_sessions %}
-            <div class="session-card">
-              <div class="title">{{ s.title }}</div>
-              <div class="meta">
-                {{ s.scheduled_at|date:"Y-m-d H:i" }}
+            <div class="session-card_ny">
+              <div class="title_ny">{{ s.title }}</div>
+              <div class="meta_ny">
+                {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
               </div>
             </div>
           {% endfor %}
         {% else %}
-          <div class="empty-box">
+          <div class="empty-box_ny">
             아카이브된 세션이 없습니다.
           </div>
         {% endif %}
