@@ -246,7 +246,7 @@ def question_main(request, session_id):
     context = {
         'session': session,
         'questions': questions,
-        'form': form,
+        'qform': form,
         'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함
         'understanding_check': understanding_check,
         'response_count': response_count,
