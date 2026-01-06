@@ -75,11 +75,11 @@
 
         {% if active_sessions %}
           {% for s in active_sessions %}
-<!--     테스트      -->
+            
             <a href="{% url 'questions:question_main' s.id %}" class="session-link">
-              <div class="session-card">
-                <div class="title">{{ s.title }}</div>
-                <div class="meta">
+              <div class="session-card_ny">
+                <div class="title_ny">{{ s.title }}</div>
+                <div class="meta_ny">
                   {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
                   {% if s.created_by %}
                     · 세션자: {{ s.created_by.username }}
@@ -103,12 +103,14 @@
 
         {% if archived_sessions %}
           {% for s in archived_sessions %}
-            <div class="session-card">
-              <div class="title">{{ s.title }}</div>
-              <div class="meta">
-                {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
+            <a href="{% url 'questions:question_main' s.id %}" class="session-link">
+              <div class="session-card_ny">
+                <div class="title_ny">{{ s.title }}</div>
+                <div class="meta_ny">
+                  {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
+                </div>
               </div>
-            </div>
+            </a>
           {% endfor %}
         {% else %}
           <div class="empty-box">
