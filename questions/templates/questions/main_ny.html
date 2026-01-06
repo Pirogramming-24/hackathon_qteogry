@@ -42,46 +42,76 @@
                 </nav>
             </div>
 
-            <!-- ➡️ 오른쪽: Understanding Check -->
             <div class="header-right_ny">
-                <div class="understanding-check-bar-hs">
-                    <div class="check-action-hs">
+                
+                {% if understanding_check %}
+                    <div class="understanding-check-bar-hs">
+                        
+                        <div class="check-header-hs" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div class="timer-area" style="font-weight: bold; color: #7FD957; font-size: 1.1em;">
+                                ⏱️ <span id="realtime-timer">00:00</span>
+                            </div>
+                            
+                            {% if understanding_check.ended_at %}
+                                <span style="color: #FF6B6B; font-weight: bold; font-size: 0.9em;">
+                                    종료됨 (난이도: {{ understanding_check.difficulty_level }})
+                                </span>
+                            {% else %}
+                                <span style="color: #888; font-size: 0.9em;">진행 중...</span>
+                            {% endif %}
+                        </div>
+
+                     <div class="check-content-hs" style="margin-bottom: 10px;">
+                         🧠 {{ understanding_check.content }}
+                     </div>
+
+                        <div class="check-progress-hs">
+                            <span id="count-text" style="font-size: 0.9em; color: #ccc;">
+                                {{ response_count }} / {{ understanding_check.target_response_count }}
+                            </span>
+                            <div class="progress-bar-bg">
+                                <div id="progress-bar" class="progress-bar-fill" style="width: {{ progress }}%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="check-actions" style="margin-top: 15px; display: flex; gap: 10px;">
+                            
+                            {% if not understanding_check.ended_at %}
+                                <button type="button" id="yes-btn" class="check-btn-yes"
+                                    data-id="{{ understanding_check.id }}"
+                                    data-url="{% url 'questions:understanding_check_respond' %}"
+                                    data-csrf="{{ csrf_token }}"
+                                    style="flex: 2; background-color: #7FD957; color: black; border: none; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                                    네! (이해했습니다)
+                                </button>
+
+                                <a href="{% url 'questions:understanding_check_finish' understanding_check.id %}" 
+                                onclick="return confirm('투표를 강제로 종료하시겠습니까?');"
+                                style="flex: 1; background-color: #333; color: #ccc; text-align: center; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 0.9em; display: flex; align-items: center; justify-content: center;">
+                                ⛔ 종료
+                                </a>
+
+                            {% else %}
+                                <a href="{% url 'questions:understanding_check_upload' %}" 
+                                style="width: 100%; background-color: #7FD957; color: black; text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+                                🔄 새로운 이해도 Check 생성하기
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        <input type="hidden" id="uc-start-time" value="{{ understanding_check.created_at|date:'c' }}">
+                        <input type="hidden" id="uc-end-time" value="{{ understanding_check.ended_at|date:'c'|default:'' }}">
+                    </div>
+
+                {% else %}
+                    <div class="understanding-check-bar-hs" style="justify-content: center; padding: 20px;">
                         <a href="{% url 'questions:understanding_check_upload' %}" class="check-upload-btn-hs">
-                            새로운 이해도 check 올리기
+                            새로운 이해도 Check 올리기
                         </a>
                     </div>
+                {% endif %}
 
-                    <div class="check-content-hs">
-                        ✅ {{ understanding_check.content }}
-                    </div>
-
-                    <div class="check-progress-hs">
-                        <span id="count-text">
-                            {{ response_count }} / 24
-                        </span>
-
-                        <div class="progress-bar-bg">
-                            <div
-                                id="progress-bar"
-                                class="progress-bar-fill"
-                                style="width: {{ progress }}%;"
-                            ></div>
-                        </div>
-                    </div>
-
-                    <button
-                        type="button"
-                        id="yes-btn"
-                        data-id="{{ understanding_check.id }}"
-                        data-url="{% url 'questions:understanding_check_respond' %}"
-                        data-csrf="{{ csrf_token }}"
-                    >
-                        네
-                    </button>
-
-                </div>
             </div>
-
         </div>
     </div>
 
@@ -245,12 +275,26 @@
                     </div>
                 </div>
 
-            {% else %}
+                {% else %}
             
                 <div class="form-title_ny">질문 작성하기</div>
                 
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
+                    
+                    {% if qform.errors %}
+                        <div style="background: #FF6B6B; color: white; padding: 10px; margin-bottom: 20px; border-radius: 8px;">
+                            <p style="margin: 0; font-weight: bold;">⚠️ 다음 내용을 확인해주세요:</p>
+                            {% for field in qform %}
+                                {% for error in field.errors %}
+                                    <p style="margin: 5px 0 0 0; font-size: 0.9em;">
+                                        • {{ field.label }}: {{ error }}
+                                    </p>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
                     <div class="form-group_ny">
                         <label>질문 종류</label>
                         {{ qform.category }}
