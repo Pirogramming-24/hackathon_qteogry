@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from .models import Question, UnderstandingCheck, UnderstandingResponse, Comment, Like
-from .forms import UnderstandingForm, QuestionForm
+from .forms import UnderstandingForm, QuestionForm, CommentForm
 from live_sessions.models import LiveSession, LiveSessionMember
 from django.db import transaction
 from django.views.decorators.http import require_POST
@@ -52,14 +52,25 @@ def question_detail(request, session_id, question_id):
     # 2. 선택된 질문 데이터 가져오기
     selected_question = get_object_or_404(Question, pk=question_id)
     
-    # 3. 댓글 데이터 가져오기 (선택된 질문에 달린 댓글들)
-    comments = Comment.objects.filter(question=selected_question).order_by('created_at')
+    comments = Comment.objects.filter(question=selected_question).select_related("user").order_by("-created_at")
+    Cform = CommentForm()
+
+    if request.method == "POST":
+        Cform = CommentForm(request.POST)
+        if Cform.is_valid():
+            new_comment = Cform.save(commit=False)
+            new_comment.user = request.user
+            new_comment.question = selected_question
+            new_comment.save()
+            return redirect("questions:question_detail", session_id=session.id, question_id=selected_question.id)
 
     context = {
         'session': session,
         'questions': questions,
+        "question": selected_question,\
         'selected_question': selected_question, # 이게 있으면 상세뷰가 뜸
         'comments': comments,
+        "cform": Cform,
         'like_count': selected_question.likes.count(),
         'sort_mode': sort_mode, # 상세뷰에서는 정렬 기본값
     }
@@ -150,28 +161,24 @@ def understanding_check_upload(request):
 
     
     
+@login_required
 def understanding_check_respond(request):
     check_id = request.POST.get("check_id")
     check = get_object_or_404(UnderstandingCheck, id=check_id)
 
-    # 이미 응답했는지 확인
     response, created = UnderstandingResponse.objects.get_or_create(
         understanding_check=check,
         user=request.user
     )
 
     response_count = check.responses.count()
-    total_count = LiveSessionMember.objects.filter(
-        session=check.session,
-        role=LiveSessionMember.Role.LISTENER
-    ).count()
+    TOTAL_COUNT = 24
 
-    progress = int((response_count / total_count) * 100) if total_count else 0
+    progress = int((response_count / TOTAL_COUNT) * 100)
 
     return JsonResponse({
-        "created": created,  # 새 응답인지 여부
+        "created": created,
         "response_count": response_count,
-        "total_count": total_count,
         "progress": progress,
     })
     
@@ -184,20 +191,23 @@ def question_main(request, session_id):
     questions, sort_mode = get_sorted_questions(request, session)
 
     
-    # 5. 이해도 체크 (main_ny 전용)
-    understanding_check = UnderstandingCheck.objects.filter(
-        session=session,
-        is_current=True
-    ).first()
+    # 이해도 체크 부분
+    TOTAL_COUNT = 24
+
+    understanding_check = (
+        UnderstandingCheck.objects
+        .filter(session=session, is_current=True)
+        .order_by("-created_at")
+        .first()
+    )
 
     if understanding_check:
         response_count = understanding_check.responses.count()
-        total_count = session.livesessionmember_set.count()
-        progress = int(response_count / total_count * 100) if total_count else 0
+        progress = int((response_count / TOTAL_COUNT) * 100)
     else:
         response_count = 0
-        total_count = 0
         progress = 0
+
 
     # 3. 질문 작성 로직 (POST 요청 처리)
     if request.method == 'POST':
@@ -210,15 +220,34 @@ def question_main(request, session_id):
             return redirect('questions:question_main', session_id=session.id)
     else:
         form = QuestionForm()
+        
+        
+    # 최신 understanding check 가져오기
+    understanding_check = (
+        UnderstandingCheck.objects
+        .filter(session=session, is_current=True)
+        .order_by("-created_at")
+        .first()
+    )
+    if understanding_check:
+        response_count = understanding_check.responses.count()
+        total_count = 24
+        progress = int((response_count / total_count) * 100) if total_count else 0
+    else:
+        response_count = 0
+        total_count = 0
+        progress = 0
+
 
     context = {
         'session': session,
         'questions': questions,
         'form': form,
         'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함
+        
         'understanding_check': understanding_check,
         'response_count': response_count,
-        'total_count': total_count,
+        'total_count': 24,
         'progress': progress,
     }
     

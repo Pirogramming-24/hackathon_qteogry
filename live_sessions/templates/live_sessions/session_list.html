@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>세션 목록</title>
+<!--  reset.css 필요  -->
   <link rel="stylesheet" href="{% static 'live_sessions/live_sessions.css' %}">
 </head>
 
@@ -74,6 +75,7 @@
 
         {% if active_sessions %}
           {% for s in active_sessions %}
+<!--     테스트      -->
             <a href="{% url 'questions:question_main' s.id %}" class="session-link">
               <div class="session-card">
                 <div class="title">{{ s.title }}</div>
