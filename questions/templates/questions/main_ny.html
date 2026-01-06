@@ -21,7 +21,7 @@
             
             <!-- ⬅️ 왼쪽: 제목 + 탭 -->
             <div class="header-left_ny">
-                <h1 class="page-title_ny">[1일차] Django 실습</h1>
+                <h1 class="page-title_ny">{{ session.title }}</h1>
 
                 <nav class="tab-menu_ny">
                     <a href="?sort=all" class="tab-item_ny {% if sort_mode == 'all' %}active_ny{% endif %}">모든 질문</a>
@@ -175,6 +175,16 @@
                     <div class="comment-section-hs">
                         <h4 style="color: #65E01D;">💬 댓글</h4>
 
+                        <style>
+                            /* 이 페이지 안에서만 동작: 댓글 섹션 안의 입력창 높이 줄이기 */
+                            .comment-section-hs .input-content_ny {
+                                min-height: 50px !important; /* 기존 200px 무시 */
+                                height: 50px !important;     /* 높이 50px로 고정 */
+                                padding: 10px 12px !important;
+                                line-height: 1.4;
+                            }
+                        </style>
+
                         {% if comments %}
                         <ul class="comment-list-hs" style="list-style: none; padding-left: 0;">
                             {% for comment in comments %}
@@ -198,7 +208,20 @@
                             {% csrf_token %}
                             <input type="hidden" name="question_id" value="{{ selected_question.id }}">
                             {{ cform.content }}
-                            <button type="submit" name="submit_comment">댓글 등록</button>
+                            <button type="submit" name="submit_comment" 
+                                style="width: 100%; 
+                                       margin-top: 10px; 
+                                       padding: 12px; 
+                                       background-color: #65E01D; 
+                                       color: #111; 
+                                       border: none; 
+                                       border-radius: 6px; 
+                                       font-weight: 800; 
+                                       cursor: pointer; 
+                                       font-size: 14px;
+                                       transition: background-color 0.2s;">
+                                댓글 등록
+                            </button>
                         </form>
                         {% else %}
                         <p style="color:#888; text-align:center; margin-top:20px;">

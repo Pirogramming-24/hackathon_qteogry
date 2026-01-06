@@ -159,7 +159,11 @@ body {
     padding-right: 15px;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    
+    /* [수정] 카드 사이 간격 늘리기 (3px -> 12px) */
+    /* 첫 번째 카드의 시작 위치는 변하지 않습니다 */
+    gap: 8px; 
+    
     height: 100%;
 }
 
