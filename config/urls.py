@@ -19,8 +19,23 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
+from live_sessions.views import (
+    SessionListView,
+    GenerationCreateView,
+    LiveSessionCreateView,
+)
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+
+    # 세션 목록 (메인)
+    path("", SessionListView.as_view(), name="session_list"),
+
+    # 기수 생성
+    path("generations/new/", GenerationCreateView.as_view(), name="generation_create"),
+
+    # 세션 생성
+    path("sessions/new/", LiveSessionCreateView.as_view(), name="session_create"),
 ]
 
 if settings.DEBUG:
