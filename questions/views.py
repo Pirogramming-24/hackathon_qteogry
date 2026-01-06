@@ -93,10 +93,8 @@ def understanding_check_upload(request):
             understanding_check.is_current = True
             understanding_check.save()
 
-            return redirect(
-                "questions:understanding_check",
-                pk=understanding_check.pk
-            )
+            return redirect("questions:question_main", session.pk)
+
 
     else:
         form = UnderstandingForm()
@@ -176,6 +174,22 @@ def question_main(request, session_id):
         # 기본: 최신순 정렬
         questions = questions.order_by('-created_at')
 
+    
+    # 5. 이해도 체크 (main_ny 전용)
+    understanding_check = UnderstandingCheck.objects.filter(
+        session=session,
+        is_current=True
+    ).first()
+
+    if understanding_check:
+        response_count = understanding_check.responses.count()
+        total_count = session.livesessionmember_set.count()
+        progress = int(response_count / total_count * 100) if total_count else 0
+    else:
+        response_count = 0
+        total_count = 0
+        progress = 0
+
     # 3. 질문 작성 로직 (POST 요청 처리)
     if request.method == 'POST':
         form = QuestionForm(request.POST, request.FILES)
@@ -195,6 +209,10 @@ def question_main(request, session_id):
         'questions': questions,
         'form': form,
         'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함
+        'understanding_check': understanding_check,
+        'response_count': response_count,
+        'total_count': total_count,
+        'progress': progress,
     }
     
     return render(request, 'questions/main_ny.html', context)
