@@ -1,0 +1,244 @@
+/* [전체 레이아웃 - 다크 모드] */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    background-color: #111111; /* 아주 어두운 검정 배경 */
+    color: #FFFFFF; /* 기본 텍스트 흰색 */
+}
+
+/* [헤더 & 탭바] */
+.header-container_ny {
+    background-color: #111111;
+    padding-top: 40px;
+    border-bottom: 1px solid #333; /* 하단 구분선 추가 */
+}
+
+.page-title_ny {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+    font-size: 28px;
+    font-weight: 800; /* 더 굵게 */
+    color: #65E01D;
+    letter-spacing: -0.5px;
+}
+
+.tab-menu_ny {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 15px;
+}
+
+.tab-item_ny {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    background-color: transparent; /* 배경 투명 */
+    color: #888; /* 비활성 텍스트 회색 */
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    border-bottom: 2px solid transparent; /* 밑줄 효과 준비 */
+}
+
+.tab-item_ny:hover {
+    color: #FFF;
+}
+
+.tab-item_ny.active_ny {
+    color: #65E01D; /* 활성화 시 형광 연두 텍스트 */
+    border-bottom: 2px solid #65E01D; /* 형광 밑줄 */
+}
+
+/* [메인 컨텐츠 - 2단 그리드] */
+.main-container_ny {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    height: calc(100vh - 200px);
+}
+
+/* [왼쪽: 질문 리스트] */
+.question-list_ny {
+    overflow-y: auto;
+    padding-right: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 스크롤바 커스텀 (다크 모드용) */
+.question-list_ny::-webkit-scrollbar {
+    width: 8px;
+}
+.question-list_ny::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+.question-list_ny::-webkit-scrollbar-track {
+    background-color: #222;
+}
+
+.question-card_ny {
+    background: #1E1E1E; /* 카드 배경: 짙은 회색 */
+    border: 1px solid #333; /* 테두리 추가 */
+    border-radius: 12px;
+    padding: 25px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.question-card_ny:hover {
+    transform: translateY(-3px);
+    border-color: #65E01D; /* 호버 시 형광 테두리 */
+}
+
+.card-header_ny {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.badge_ny {
+    padding: 4px 10px;
+    border-radius: 20px; /* 둥근 뱃지 */
+    font-size: 11px;
+    font-weight: bold;
+    background: transparent;
+    border: 1px solid;
+}
+
+/* 뱃지 색상도 네온 스타일로 변경 */
+.badge-concept_ny { color: #55DDFF; border-color: #55DDFF; } /* 하늘색 */
+.badge-error_ny { color: #FF6B6B; border-color: #FF6B6B; } /* 붉은색 */
+.badge-etc_ny { color: #BBB; border-color: #BBB; } /* 회색 */
+
+.card-content_ny {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 25px;
+    line-height: 1.5;
+    color: #EEE;
+}
+
+.card-footer_ny {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #777;
+    border-top: 1px solid #333;
+    padding-top: 15px;
+}
+
+/* [오른쪽: 질문 작성 폼] */
+.write-section_ny {
+    background: #1E1E1E;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 30px;
+    height: fit-content;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.form-title_ny {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #65E01D; /* 형광 연두 */
+}
+
+.form-group_ny {
+    margin-bottom: 20px;
+}
+
+.form-group_ny label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #CCC;
+}
+
+/* 입력창 스타일 (다크 모드) */
+.input-title_ny, .input-category_ny, .input-content_ny {
+    width: 100%;
+    padding: 14px;
+    background-color: #2C2C2C; /* 입력창 배경 더 밝게 */
+    border: 1px solid #444;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 15px;
+    color: #FFF; /* 입력 텍스트 흰색 */
+    transition: border-color 0.2s;
+}
+
+.input-title_ny:focus, .input-category_ny:focus, .input-content_ny:focus {
+    outline: none;
+    border-color: #65E01D; /* 포커스 시 형광색 */
+}
+
+.input-content_ny {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.input-image_ny {
+    width: 100%;
+    padding: 10px;
+    background: #2C2C2C;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #CCC;
+}
+
+.submit-btn_ny {
+    width: 100%;
+    padding: 16px;
+    background-color: #65E01D; /* 형광 연두 버튼 */
+    color: #111; /* 텍스트는 검정으로 대비 */
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.2s;
+}
+
+.submit-btn_ny:hover {
+    background-color: #52C015; /* 살짝 어두운 연두 */
+    transform: translateY(-2px);
+}
+
+/* [글쓰기 플로팅 버튼 - 왼쪽 구석 고정 수정본] */
+.floating-btn_ny {
+    position: fixed; /* 화면 스크롤 상관없이 고정 */
+    bottom: 30px;    /* 바닥에서 30px 위로 */
+    right: 30px;      /* 왼쪽 벽에서 30px 떨어짐 */
+    
+    width: 60px;
+    height: 60px;
+    background-color: #65E01D; /* 형광 연두 */
+    border-radius: 50%; /* 완전 원형 */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    box-shadow: 0 4px 15px rgba(101, 224, 29, 0.4); /* 형광 그림자 */
+    transition: transform 0.2s, background-color 0.2s;
+    z-index: 9999; /* 제일 위에 뜨도록 숫자 높게 설정 */
+}
+
+.floating-btn_ny:hover {
+    background-color: #52C015;
+    transform: translateY(-3px) scale(1.05); /* 마우스 올리면 살짝 커짐 */
+    box-shadow: 0 6px 20px rgba(101, 224, 29, 0.6);
+}
