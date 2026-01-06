@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -227,3 +228,20 @@ def question_like(request, question_id):
         'count': question.likes.count()
     }
     return JsonResponse(context)
+
+@require_POST
+def question_update_status(request, question_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Login required'}, status=403)
+
+    try:
+        data = json.loads(request.body)
+        new_status = data.get('status') # 'OPEN' 또는 'ANSWERED'
+
+        question = get_object_or_404(Question, pk=question_id)
+        question.status = new_status
+        question.save()
+
+        return JsonResponse({'status': new_status, 'message': 'Status updated'})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)

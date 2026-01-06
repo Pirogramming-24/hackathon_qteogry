@@ -257,3 +257,31 @@ body {
     color: #65E01D !important;            /* 글자색도 형광 연두색으로 */
     transition: all 0.3s ease;            /* 부드러운 전환 효과 */
 }
+
+.question-card_ny.status-ANSWERED {
+    background-color: #1a1a1a;   /* 배경을 더 어둡게 */
+    border: 1px solid #444;      /* 테두리 회색으로 */
+    opacity: 0.6;                /* 전체적으로 흐릿하게 (완료된 느낌) */
+}
+
+.question-card_ny.status-ANSWERED:hover {
+    opacity: 1; /* 마우스 올리면 다시 선명하게 */
+    border-color: #65E01D;
+}
+
+/* 2. 상태 변경 드롭다운 (상세 뷰) */
+.status-select_ny {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.status-select_ny:focus {
+    border-color: #65E01D; /* 포커스 시 형광 연두 */
+}

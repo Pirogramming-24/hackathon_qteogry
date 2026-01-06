@@ -26,7 +26,7 @@
         <section class="question-list_ny">
             {% for question in questions %}
             <a href="{% url 'questions:question_detail' session.id question.id %}?sort={{ sort_mode }}" style="text-decoration: none; color: inherit;">
-                <div class="question-card_ny">
+                <div id="card-{{ question.id }}" class="question-card_ny status-{{ question.status }}">
                     <div class="card-header_ny">
                         <div style="display: flex; gap: 10px; align-items: center;">
                             <div style="width: 30px; height: 30px; background: #ddd; border-radius: 50%;"></div>
@@ -85,7 +85,18 @@
 
                     <div class="question-info-hs" style="color: #888; font-size: 14px; margin-bottom: 20px;">
                         <span>{{ selected_question.created_at|date:"Y.m.d H:i" }}</span>
-                        <span style="float: right;">상태: {{ selected_question.get_status_display }}</span>
+                        <span style="float: right;">
+                            <div class="question-status-wrapper">
+                                <select class="status-select_ny" data-question-id="{{ selected_question.id }}">
+                                    <option value="OPEN" {% if selected_question.status == 'OPEN' %}selected{% endif %}>
+                                        🟡 대기
+                                    </option>
+                                    <option value="ANSWERED" {% if selected_question.status == 'ANSWERED' %}selected{% endif %}>
+                                        ✅ 답변완료
+                                    </option>
+                                </select>
+                            </div>
+                        </span>
                     </div>
 
                     <hr style="border: 0.5px solid #333; margin-bottom: 20px;">

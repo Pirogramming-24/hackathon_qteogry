@@ -58,6 +58,45 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => console.error('Error:', error));
         });
     });
+
+    /* 3. 질문 상태(Status) 변경 AJAX (새로 추가됨) */
+    const statusSelects = document.querySelectorAll('.status-select_ny');
+
+    statusSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            const questionId = this.getAttribute('data-question-id');
+            const newStatus = this.value; // 'OPEN' or 'ANSWERED'
+            const url = `/questions/status/${questionId}/`;
+
+            // AJAX 요청
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert("오류 발생: " + data.error);
+                    return;
+                }
+
+                // [시각적 피드백] 왼쪽 리스트에 있는 해당 카드의 스타일 즉시 변경
+                const targetCard = document.getElementById(`card-${questionId}`);
+                if (targetCard) {
+                    // 기존 클래스 제거 후 새 클래스 추가
+                    targetCard.classList.remove('status-OPEN', 'status-ANSWERED');
+                    targetCard.classList.add(`status-${newStatus}`);
+                    
+                    console.log(`질문 ${questionId} 상태 변경 완료: ${newStatus}`);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
 });
 
 /* [보조 함수] 쿠키에서 CSRF Token 가져오기 */
