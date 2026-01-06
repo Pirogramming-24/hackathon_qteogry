@@ -208,7 +208,7 @@
 
         {% if active_sessions %}
           {% for s in active_sessions %}
-            <a href="/questions/?session={{ s.id }}" class="session-link">
+            <a href="/questions/{{ s.id }}" class="session-link"> 
               <div class="session-card">
                 <div class="title">{{ s.title }}</div>
                 <div class="meta">

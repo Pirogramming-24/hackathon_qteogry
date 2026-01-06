@@ -137,7 +137,7 @@ def question_main(request, session_id):
     sort_mode = request.GET.get('sort', 'all') # 기본값은 전체 보기
     
     # 해당 세션의 질문들만 가져오기
-    questions = Question.objects.filter(live_session=session)
+    questions = Question.objects.filter(LiveSession=session)
     
     if sort_mode == 'concept':
         # 개념 질문만 필터링
@@ -161,7 +161,7 @@ def question_main(request, session_id):
         if form.is_valid():
             new_question = form.save(commit=False)
             new_question.user = request.user      # 현재 로그인한 유저 연결
-            new_question.live_session = session   # 현재 세션 연결
+            new_question.LiveSession = session   # 현재 세션 연결
             new_question.save()
             # 작성이 끝나면 현재 페이지로 리다이렉트 (새로고침 시 중복 전송 방지)
             return redirect('questions:question_main', session_id=session.id)
