@@ -10,15 +10,15 @@
 </head>
 
 <body>
-  <div class="page">
+  <div class="page-wrapper_ny">
 
     <!-- ===== HEADER ===== -->
-    <div class="page-header">
-      <div class="page-header-left">
-        <div class="page-title">세션 목록</div>
+    <div class="page-header_ny">
+      <div class="page-header-left_ny">
+        <div class="page-title_ny">세션 목록</div>
 
         {% if selected_generation %}
-          <div style="font-size: 13px; color: #666;">
+          <div class="page-subtitle_ny">
             현재 선택된 기수:
             <strong>{{ selected_generation.name }}</strong>
           </div>
@@ -49,8 +49,8 @@
 
 
     <!-- ===== GENERATION TOGGLE ===== -->
-    <div class="generation-bar">
-      <div class="generation-list">
+    <div class="generation-bar_ny">
+      <div class="generation-list_ny">
         {% for gen in generations %}
           <a
             href="{% url 'live_sessions:session_list' %}?generation={{ gen.id }}"
@@ -62,7 +62,7 @@
             {{ gen.name }}
           </a>
         {% empty %}
-          <span style="font-size: 13px; color: #999;">
+          <span class="empty-text_ny">
             아직 생성된 기수가 없습니다.
           </span>
         {% endfor %}
@@ -71,11 +71,11 @@
 
 
     <!-- ===== MAIN CONTENT ===== -->
-    <div class="content-row">
+    <div class="content-row_ny">
 
       <!-- LEFT: ACTIVE -->
       <div>
-        <div class="section-title">
+        <div class="section-title_ny">
           진행 예정 / 진행 중 세션
         </div>
 
@@ -94,30 +94,30 @@
             </a>
           {% endfor %}
         {% else %}
-          <div class="empty-box">
+          <div class="empty-box_ny">
             예정된 세션이 없습니다.
           </div>
         {% endif %}
-
+      </div>
 
 
       <!-- RIGHT: ARCHIVE -->
       <div>
-        <div class="section-title">
+        <div class="section-title_ny">
           아카이브 세션
         </div>
 
         {% if archived_sessions %}
           {% for s in archived_sessions %}
-            <div class="session-card">
-              <div class="title">{{ s.title }}</div>
-              <div class="meta">
-                {{ s.scheduled_at|date:"Y-m-d H:i" }}
+            <div class="session-card_ny">
+              <div class="title_ny">{{ s.title }}</div>
+              <div class="meta_ny">
+                {{ s.start_at|date:"Y-m-d H:i" }} ~ {{ s.end_at|date:"H:i" }}
               </div>
             </div>
           {% endfor %}
         {% else %}
-          <div class="empty-box">
+          <div class="empty-box_ny">
             아카이브된 세션이 없습니다.
           </div>
         {% endif %}
