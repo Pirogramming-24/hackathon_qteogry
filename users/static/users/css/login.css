@@ -227,7 +227,9 @@ body {
 }
 
 /* 모달 버튼 공통 스타일 */
-.modal-buttons button {
+/* 👇 수정 후 (아래 코드로 덮어씌우세요) */
+.modal-buttons button,
+.modal-buttons a {
     flex: 1;
     padding: 16px 0;
     border: none;
@@ -239,6 +241,14 @@ body {
     max-width: 160px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    
+    /* a 태그를 버튼처럼 보이게 하기 위한 필수 속성 추가 */
+    display: flex;             /* 박스 형태로 변경 */
+    justify-content: center;   /* 가로 가운데 정렬 */
+    align-items: center;       /* 세로 가운데 정렬 */
+    text-decoration: none;     /* 밑줄 제거 */
+    box-sizing: border-box;    /* 패딩 포함 크기 계산 */
+    color: #000000;            /* 글자색 강제 지정 (필요 시) */
 }
 
 /* 예 버튼 */

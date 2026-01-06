@@ -10,7 +10,7 @@ body {
 }
 
 /* 페이지 공통 래퍼 */
-.page-wrapper_ny {
+.page-wrapper {
     max-width: 960px;
     margin: 0 auto;
     padding: 32px 16px 48px;
@@ -20,7 +20,7 @@ body {
 /* ===========================
    공통 버튼 스타일
    =========================== */
-.btn_ny {
+.btn {
     display: inline-block;
     border-radius: 999px;
     border: 1px solid #65E01D;
@@ -35,20 +35,20 @@ body {
     transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.btn_ny:hover {
+.btn:hover {
     background-color: #52C015;
     border-color: #52C015;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(101, 224, 29, 0.45);
 }
 
-.btn-outline_ny {
+.btn-outline {
     background: transparent;
     color: #65E01D;
 }
 
 /* 작은 버튼 (헤더용) */
-.btn-sm_ny {
+.btn-sm {
     padding: 6px 12px;
     font-size: 13px;
 }
@@ -56,12 +56,12 @@ body {
 /* ===========================
    폼 페이지 (기수 / 세션 생성)
    =========================== */
-.form-page_ny {
+.form-page {
     max-width: 480px;
     margin: 40px auto;
 }
 
-.form-card_ny {
+.form-card {
     background: #1E1E1E;
     border-radius: 16px;
     padding: 24px 20px 28px;
@@ -70,7 +70,7 @@ body {
     box-sizing: border-box;
 }
 
-.form-title_ny {
+.form-title {
     margin: 0 0 16px;
     font-size: 22px;
     font-weight: 800;
@@ -78,12 +78,12 @@ body {
 }
 
 /* 각 필드 블록 */
-.field_ny {
+.field {
     margin-bottom: 14px;
 }
 
 /* 라벨 공통 */
-.field_ny label {
+.field label {
     font-size: 14px;
     font-weight: 600;
     display: block;
@@ -92,9 +92,9 @@ body {
 }
 
 /* 인풋 / 셀렉트 / 텍스트에어리어 공통 */
-.form-card_ny input,
-.form-card_ny select,
-.form-card_ny textarea {
+.form-card input,
+.form-card select,
+.form-card textarea {
     width: 100%;
     padding: 9px 11px;
     border-radius: 8px;
@@ -105,15 +105,15 @@ body {
     box-sizing: border-box;
 }
 
-.form-card_ny input:focus,
-.form-card_ny select:focus,
-.form-card_ny textarea:focus {
+.form-card input:focus,
+.form-card select:focus,
+.form-card textarea:focus {
     outline: none;
     border-color: #65E01D;
 }
 
 /* 버튼 영역 */
-.form-actions_ny {
+.form-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -133,47 +133,47 @@ body {
    =========================== */
 
 /* 헤더 영역 */
-.page-header_ny {
+.page-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 16px;
 }
 
-.page-header-left_ny {
+.page-header-left {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-.page-title_ny {
+.page-title {
     font-size: 24px;
     font-weight: 800;
     color: #65E01D;
 }
 
-.page-subtitle_ny {
+.page-subtitle {
     font-size: 13px;
     color: #AAAAAA;
 }
 
-.admin-actions_ny {
+.admin-actions {
     display: flex;
     gap: 8px;
 }
 
 /* 기수 선택 토글 */
-.generation-bar_ny {
+.generation-bar {
     margin: 8px 0 18px;
 }
 
-.generation-list_ny {
+.generation-list {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
 }
 
-.generation-chip_ny {
+.generation-chip {
     padding: 6px 12px;
     font-size: 14px;
     border-radius: 999px;
@@ -185,32 +185,32 @@ body {
     transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.generation-chip_ny:hover {
+.generation-chip:hover {
     border-color: #65E01D;
     color: #FFFFFF;
 }
 
-.generation-chip_ny.active_ny {
+.generation-chip.active {
     background: #65E01D;
     color: #111;
     border-color: #65E01D;
 }
 
 /* 메인 2단 레이아웃 (진행 / 아카이브) */
-.content-row_ny {
+.content-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
 }
 
-.section-title_ny {
+.section-title {
     font-size: 15px;
     font-weight: 700;
     margin-bottom: 8px;
 }
 
 /* 세션 카드 */
-.session-card_ny {
+.session-card {
     border-radius: 16px;
     padding: 12px 16px;
     background: #1E1E1E;
@@ -220,31 +220,31 @@ body {
     transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
-.session-card_ny:hover {
+.session-card:hover {
     transform: translateY(-2px);
     border-color: #65E01D;
     box-shadow: 0 6px 16px rgba(101, 224, 29, 0.4);
 }
 
-.session-card_ny .title_ny {
+.session-card .title {
     font-weight: 700;
     margin-bottom: 4px;
     color: #FFFFFF;
 }
 
-.session-card_ny .meta_ny {
+.session-card .meta {
     font-size: 12px;
     color: #AAAAAA;
 }
 
-.session-link_ny {
+.session-link {
     text-decoration: none;
     color: inherit;
     display: block;
 }
 
 /* 비어 있을 때 박스 */
-.empty-box_ny {
+.empty-box {
     padding: 12px;
     border-radius: 12px;
     background: #1E1E1E;
@@ -254,7 +254,7 @@ body {
 }
 
 /* 작은 안내 텍스트 */
-.empty-text_ny {
+.empty-text {
     font-size: 13px;
     color: #888888;
 }
@@ -263,11 +263,11 @@ body {
    반응형 (태블릿 이하)
    =========================== */
 @media (max-width: 768px) {
-    .page-wrapper_ny {
+    .page-wrapper {
         padding: 24px 12px 32px;
     }
 
-    .content-row_ny {
+    .content-row {
         grid-template-columns: 1fr;
         gap: 18px;
     }
