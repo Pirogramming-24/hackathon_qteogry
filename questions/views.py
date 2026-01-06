@@ -60,7 +60,7 @@ def question_detail(request, session_id, question_id):
         'selected_question': selected_question, # 이게 있으면 상세뷰가 뜸
         'comments': comments,
         'like_count': selected_question.likes.count(),
-        'sort_mode': 'sort_mode', # 상세뷰에서는 정렬 기본값
+        'sort_mode': sort_mode, # 상세뷰에서는 정렬 기본값
     }
     
     return render(request, 'questions/main_ny.html', context)

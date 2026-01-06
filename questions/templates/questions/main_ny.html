@@ -25,7 +25,7 @@
         
         <section class="question-list_ny">
             {% for question in questions %}
-            <a href="{% url 'questions:question_detail' session.id question.id %}" style="text-decoration: none; color: inherit;">
+            <a href="{% url 'questions:question_detail' session.id question.id %}?sort={{ sort_mode }}" style="text-decoration: none; color: inherit;">
                 <div class="question-card_ny">
                     <div class="card-header_ny">
                         <div style="display: flex; gap: 10px; align-items: center;">

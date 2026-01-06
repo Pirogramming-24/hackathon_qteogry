@@ -44,13 +44,23 @@ body {
     border-bottom: 2px solid transparent; /* 밑줄 효과 준비 */
 }
 
-.tab-item_ny:hover {
-    color: #FFF;
+/* 선택된 탭은 형광 연두색으로 강조 */
+.tab-item_ny.active_ny {
+    color: #65E01D !important;          /* 텍스트 색상 */
+    border-bottom: 2px solid #65E01D !important; /* 밑줄 색상 */
+    font-weight: 800;                   /* 글자 더 굵게 */
+    opacity: 1 !important;              /* 투명도 제거 */
 }
 
-.tab-item_ny.active_ny {
-    color: #65E01D; /* 활성화 시 형광 연두 텍스트 */
-    border-bottom: 2px solid #65E01D; /* 형광 밑줄 */
+/* 마우스를 올렸을 때도 동일하게 */
+.tab-item_ny:hover {
+    color: #fff; /* 호버 시엔 흰색 */
+    opacity: 1;
+}
+
+/* 선택된 상태에서 마우스 올렸을 때는 여전히 형광색 유지 */
+.tab-item_ny.active_ny:hover {
+    color: #65E01D !important;
 }
 
 /* [메인 컨텐츠 - 2단 그리드] */
