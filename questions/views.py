@@ -10,6 +10,7 @@ from django.db import transaction
 from django.views.decorators.http import require_POST
 from django.utils import timezone # 👈 상단에 import 추가
 
+
 # def questions_read(request, pk):
 #     question = Question.objects.get(id=pk)
     
