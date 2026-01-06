@@ -5,4 +5,8 @@ app_name = "questions"
 
 urlpatterns = [
 	    path('questions_read/<int:pk>', views.questions_read, name='questions_read'),
+        path("understanding_check/<int:pk>/", views.understanding_check, name="understanding_check"),
+        path("understanding_check/upload/", views.understanding_check_upload, name="understanding_check_upload"),
+        path("understanding_check/respond/", views.understanding_check_respond, name="understanding_check_respond"),
+
 ]
