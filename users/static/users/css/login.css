@@ -1,0 +1,280 @@
+/* users/static/users/css/login.css */
+
+/* 1. 전체 배경 (회색) */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #D9D9D9;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* 2. 로그인 카드 (흰색 박스) */
+.login-card {
+    background-color: white;
+    width: 100%;
+    max-width: 400px;
+    padding: 60px 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center;
+}
+
+/* 3. 타이틀 '로그인' */
+.login-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 40px 0;
+    color: #333;
+}
+
+/* 폼 태그 너비 100% 확보 */
+.login-card form {
+    width: 100%;
+}
+
+/* 4. 입력창 그룹 */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+    padding-left: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-sizing: border-box;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #555;
+}
+
+/* 5. 로그인 버튼 */
+.btn-login {
+    width: 100%;
+    padding: 16px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.2s;
+}
+
+.btn-login:hover {
+    background-color: #e0e0e0;
+}
+
+/* 6. 하단 링크 */
+.login-footer {
+    margin-top: 25px;
+    font-size: 13px;
+    color: #888;
+}
+
+.login-footer a {
+    color: #4A90E2;
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ========================================
+   모달 스타일 (최종 개선)
+======================================== */
+
+/* 모달 오버레이 */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #D9D9D9;
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* 활성화될 때 */
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+/* 모달 콘텐츠 */
+.modal-content {
+    background-color: #E8E8E8;
+    border-radius: 24px;
+    padding: 45px 35px;  /* 👈 좌우 패딩 줄임 */
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    max-width: 420px;
+    width: 88%;
+    box-sizing: border-box;  /* 👈 추가 */
+}
+
+/* 모달 타이틀 */
+.modal-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2C2C2C;
+    margin: 0 0 25px 0;
+    letter-spacing: -0.5px;
+}
+
+/* 모달 텍스트 */
+.modal-text {
+    font-size: 17px;
+    color: #4A4A4A;
+    line-height: 1.7;
+    margin: 8px 0;
+    font-weight: 500;
+}
+
+/* 닉네임 박스 */
+.nickname-box {
+    background-color: white;
+    width: calc(100% - 8px);  /* 👈 양쪽 여백 확보 */
+    max-width: 100%;  /* 👈 추가 */
+    padding: 24px 20px;  /* 👈 패딩 조정 */
+    margin: 20px auto;  /* 👈 auto로 중앙 정렬 */
+    font-size: 26px;  /* 👈 폰트 크기 약간 줄임 */
+    font-weight: 800;
+    color: #1A1A1A;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    letter-spacing: 0.5px;
+    border: 2px solid #F5F5F5;
+    box-sizing: border-box;  /* 👈 추가 */
+    word-break: keep-all;  /* 👈 단어 줄바꿈 방지 */
+    overflow-wrap: break-word;  /* 👈 긴 단어 줄바꿈 */
+}
+
+/* 모달 버튼 영역 */
+.modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 30px;
+}
+
+/* 모달 버튼 공통 스타일 */
+.modal-buttons button {
+    flex: 1;
+    padding: 15px 0;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    transition: all 0.25s ease;
+    max-width: 150px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 예 버튼 */
+.btn-yes {
+    background: linear-gradient(135deg, #6B9EF7 0%, #5A8AE8 100%);
+    color: white;
+}
+
+.btn-yes:hover {
+    background: linear-gradient(135deg, #5A8AE8 0%, #4A7AD9 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(100, 142, 247, 0.35);
+}
+
+.btn-yes:active {
+    transform: translateY(0);
+}
+
+/* 취소 버튼 */
+.btn-cancel {
+    background: linear-gradient(135deg, #F5A962 0%, #EFA649 100%);
+    color: white;
+}
+
+.btn-cancel:hover {
+    background: linear-gradient(135deg, #EFA649 0%, #E09438 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(239, 166, 73, 0.35);
+}
+
+.btn-cancel:active {
+    transform: translateY(0);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 40px 28px;
+    }
+    
+    .login-title {
+        font-size: 24px;
+    }
+    
+    .modal-content {
+        padding: 35px 25px;  /* 👈 모바일 패딩 조정 */
+        width: 90%;
+    }
+    
+    .modal-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    .modal-text {
+        font-size: 15px;
+    }
+    
+    .nickname-box {
+        font-size: 22px;  /* 👈 모바일 폰트 크기 */
+        padding: 20px 16px;
+        margin: 18px auto;
+        width: calc(100% - 4px);
+    }
+    
+    .modal-buttons {
+        gap: 10px;
+        margin-top: 25px;
+    }
+    
+    .modal-buttons button {
+        font-size: 15px;
+        padding: 13px 0;
+    }
+}
