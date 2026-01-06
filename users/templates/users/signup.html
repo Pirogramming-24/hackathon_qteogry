@@ -1,3 +1,4 @@
+{% load custom_filters %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="ko">
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Qtegory - 회원가입</title>
-    <link rel="stylesheet" href="{% static 'users/css/signup.css' %}">
+    <link rel="stylesheet" href="{% static 'users/css/signup.css' %}?v={% now 'U' %}">
 </head>
 <body>
     <div class="container">
@@ -53,6 +54,39 @@
                     {% endif %}
                 </div>
                 
+                <div class="form-group">
+                    <label>역할</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="role" value="student" checked>
+                            <span>수강생</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="role" value="staff">
+                            <span>운영진</span>
+                        </label>
+                    </div>
+                    {% if form.role.errors %}
+                        <div class="error-message">
+                            {% for error in form.role.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.generation.id_for_label }}">기수</label>
+                    {{ form.generation }}
+                    {% if form.generation.errors %}
+                        <div class="error-message">
+                            {% for error in form.generation.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
                 <button type="submit" class="btn-signup">회원가입</button>
             </form>
             
@@ -62,25 +96,48 @@
         </div>
     </div>
 
-    <!-- 닉네임 팝업 모달 (개선됨) -->
+        <!-- 팝업 모달 -->
     {% if show_popup %}
-    <div class="modal-overlay">
+    <div class="modal-overlay active">
         <div class="modal-content">
-            <h2 class="modal-title">닉네임</h2>
+            <button class="btn-close" onclick="closeModal()">×</button>
+            
+            <h3 class="modal-title">닉네임</h3>
             <p class="modal-text">입장 닉네임은</p>
             
             <div class="nickname-box">
                 {{ nickname }}
             </div>
             
+            <p class="modal-text generation-info">
+                기수: {{ user.profile.generation|generation_format }}
+            </p>
+            
             <p class="modal-text">입니다.<br>입장하시겠습니까?</p>
             
             <div class="modal-buttons">
-                <button onclick="location.href='/questions/list/'" class="btn-yes">예</button>
-                <button onclick="location.href='{% url 'users:login' %}'" class="btn-cancel">취소하기</button>
+                <!-- 👇 네임스페이스 포함해서 URL 생성 -->
+                <a href="{% url 'live_sessions:session_list' %}" class="btn-yes">예</a>
+                <button class="btn-cancel" onclick="closeModal()">취소하기</button>
             </div>
         </div>
     </div>
     {% endif %}
+    
+    
+    <!-- 스크립트 -->
+    <script>
+    function closeModal() {
+        document.querySelector('.modal-overlay').classList.remove('active');
+    }
+    
+    // ESC 키로 닫기
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+    </script>
+
 </body>
 </html>
