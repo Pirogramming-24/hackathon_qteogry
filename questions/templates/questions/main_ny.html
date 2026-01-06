@@ -21,7 +21,17 @@
             
             <!-- ⬅️ 왼쪽: 제목 + 탭 -->
             <div class="header-left_ny">
-                <h1 class="page-title_ny">{{ session.title }}</h1>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 30px; padding: 0 20px;">
+                    <a href="{% url 'live_sessions:session_list' %}" class="back-btn_ny" title="세션 목록으로">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </a>
+                    
+                    <h1 class="page-title_ny" style="margin: 0; padding: 0;">
+                        {{ session.title }}
+                    </h1>
+                </div>
 
                 <nav class="tab-menu_ny">
                     <a href="?sort=all" class="tab-item_ny {% if sort_mode == 'all' %}active_ny{% endif %}">모든 질문</a>
@@ -42,7 +52,7 @@
                     </div>
 
                     <div class="check-content-hs">
-                        🧠 {{ understanding_check.content }}
+                        ✅ {{ understanding_check.content }}
                     </div>
 
                     <div class="check-progress-hs">
