@@ -16,10 +16,37 @@ from django.views.decorators.http import require_POST
 #     }
 #     return render(request, "questions_read.html", context)
 
+def get_sorted_questions(request, session):
+    sort_mode = request.GET.get('sort', 'all') # URL에서 sort 파라미터 가져오기
+    questions = Question.objects.filter(LiveSession=session)
+    
+    if sort_mode == 'concept':
+        # 개념 질문만 필터링 + 최신순 정렬
+        questions = questions.filter(category='CONCEPT').order_by('-created_at')
+        
+    elif sort_mode == 'likes':
+        # 공감 순 정렬 (공감수 내림차순 -> 최신순)
+        questions = questions.annotate(like_count=Count('likes')).order_by('-like_count', '-created_at')
+        
+    elif sort_mode == 'my':
+        # 내 질문만 보기 + 최신순 정렬
+        if request.user.is_authenticated:
+            questions = questions.filter(user=request.user).order_by('-created_at')
+        else:
+            questions = Question.objects.none() # 로그인 안했으면 빈 리스트
+    
+    else:
+        # 기본: 최신순 정렬
+        questions = questions.order_by('-created_at')
+        sort_mode = 'all' # 이상한 값이 들어오면 all로 처리
+        
+    return questions, sort_mode
+
 def question_detail(request, session_id, question_id):
     # 1. 기본 데이터 (리스트 출력을 위해 필요)
     session = get_object_or_404(LiveSession, pk=session_id)
-    questions = Question.objects.filter(LiveSession=session).order_by('-created_at')
+    # questions = Question.objects.filter(LiveSession=session).order_by('-created_at')
+    questions, sort_mode = get_sorted_questions(request, session)
     
     # 2. 선택된 질문 데이터 가져오기
     selected_question = get_object_or_404(Question, pk=question_id)
@@ -33,7 +60,7 @@ def question_detail(request, session_id, question_id):
         'selected_question': selected_question, # 이게 있으면 상세뷰가 뜸
         'comments': comments,
         'like_count': selected_question.likes.count(),
-        'sort_mode': 'all', # 상세뷰에서는 정렬 기본값
+        'sort_mode': 'sort_mode', # 상세뷰에서는 정렬 기본값
     }
     
     return render(request, 'questions/main_ny.html', context)
@@ -152,50 +179,27 @@ def understanding_check_respond(request):
     
 @login_required
 def question_main(request, session_id):
-    # 1. 현재 접속한 라이브 세션 가져오기
     session = get_object_or_404(LiveSession, pk=session_id)
     
-    # 2. 필터링 및 정렬 로직 (GET 파라미터 처리)
-    sort_mode = request.GET.get('sort', 'all') # 기본값은 전체 보기
-    
-    # 해당 세션의 질문들만 가져오기
-    questions = Question.objects.filter(LiveSession=session)
-    
-    if sort_mode == 'concept':
-        # 개념 질문만 필터링
-        questions = questions.filter(category='CONCEPT')
-        
-    elif sort_mode == 'likes':
-        # 공감 순 정렬
-        questions = questions.annotate(like_count=Count('likes')).order_by('-like_count', '-created_at')
-        
-    elif sort_mode == 'my':
-        # 내 질문만 보기
-        questions = questions.filter(user=request.user)
-    
-    else:
-        # 기본: 최신순 정렬
-        questions = questions.order_by('-created_at')
+    # [수정] 헬퍼 함수를 사용해 질문 리스트와 현재 정렬 모드 가져오기
+    questions, sort_mode = get_sorted_questions(request, session)
 
-    # 3. 질문 작성 로직 (POST 요청 처리)
     if request.method == 'POST':
         form = QuestionForm(request.POST, request.FILES)
         if form.is_valid():
             new_question = form.save(commit=False)
-            new_question.user = request.user      # 현재 로그인한 유저 연결
-            new_question.LiveSession = session   # 현재 세션 연결
+            new_question.user = request.user
+            new_question.LiveSession = session
             new_question.save()
-            # 작성이 끝나면 현재 페이지로 리다이렉트 (새로고침 시 중복 전송 방지)
             return redirect('questions:question_main', session_id=session.id)
     else:
         form = QuestionForm()
 
-    # 4. 템플릿에 전달할 데이터
     context = {
         'session': session,
         'questions': questions,
         'form': form,
-        'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함
+        'sort_mode': sort_mode, # 이제 뷰에서 결정된 정렬 모드를 전달
     }
     
     return render(request, 'questions/main_ny.html', context)
