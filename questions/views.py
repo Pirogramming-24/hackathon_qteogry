@@ -210,11 +210,6 @@ def question_main(request, session_id):
         'response_count': response_count,
         'total_count': total_count,
         'progress': progress,
-        
-        'understanding_check': understanding_check,
-        'response_count': response_count,
-        'total_count': total_count,
-        'progress': progress,
     }
     
     return render(request, 'questions/main_ny.html', context)
