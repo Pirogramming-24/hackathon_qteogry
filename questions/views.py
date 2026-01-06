@@ -210,12 +210,35 @@ def question_main(request, session_id):
             return redirect('questions:question_main', session_id=session.id)
     else:
         form = QuestionForm()
+        
+        
+    # 최신 understanding check 가져오기
+    understanding_check = (
+        UnderstandingCheck.objects
+        .filter(session=session, is_current=True)
+        .order_by("-created_at")
+        .first()
+    )
+    if understanding_check:
+        response_count = understanding_check.responses.count()
+        total_count = session.livesessionmember_set.count()
+        progress = int((response_count / total_count) * 100) if total_count else 0
+    else:
+        response_count = 0
+        total_count = 0
+        progress = 0
+
 
     context = {
         'session': session,
         'questions': questions,
         'form': form,
         'sort_mode': sort_mode, # 현재 어떤 탭이 활성화되었는지 표시하기 위함
+        'understanding_check': understanding_check,
+        'response_count': response_count,
+        'total_count': total_count,
+        'progress': progress,
+        
         'understanding_check': understanding_check,
         'response_count': response_count,
         'total_count': total_count,
