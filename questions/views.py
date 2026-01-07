@@ -200,8 +200,8 @@ def question_detail(request, session_id, question_id):
 
 # ✅ 이해도 체크 생성 (운영진용)
 @login_required
-def understanding_check_upload(request):
-    session = LiveSession.objects.first() # 추후 session_id 인자로 받도록 개선 가능
+def understanding_check_upload(request, session_id):
+    session = get_object_or_404(LiveSession, pk=session_id) # 추후 session_id 인자로 받도록 개선 가능
 
     if request.method == "POST":
         form = UnderstandingForm(request.POST)
