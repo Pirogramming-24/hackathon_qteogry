@@ -158,6 +158,26 @@ def question_detail(request, session_id, question_id):
     # 선택된 질문의 작성자 닉네임 매핑
     selected_question.display_name = nickname_map.get(selected_question.user_id, selected_question.user.username)
     
+    # 👇 [추가] 여기부터 이해도 체크 로직을 복사해서 넣어주세요! ------------------
+    understanding_check = (
+        UnderstandingCheck.objects
+        .filter(session=session, is_current=True)
+        .order_by("-created_at")
+        .first()
+    )
+
+    if understanding_check:
+        response_count = understanding_check.responses.count()
+        total_count = understanding_check.target_response_count 
+        progress = int((response_count / total_count) * 100) if total_count else 0
+    else:
+        response_count = 0
+        total_count = 0
+        progress = 0
+    # -----------------------------------------------------------------------
+
+    print(f"DEBUG CHECK: progress={progress}, total={total_count}, response={response_count}")
+
     comments = Comment.objects.filter(question=selected_question).select_related("user").order_by("created_at")
     
     # 댓글 작성자 닉네임 매핑
@@ -193,6 +213,10 @@ def question_detail(request, session_id, question_id):
         'like_count': selected_question.likes.count(),
         'sort_mode': sort_mode,
         'qform': QuestionForm(),
+        'response_count': response_count,
+        'total_count': total_count,
+        'understanding_check': understanding_check,
+        'progress': progress,
     }
     
     return render(request, 'questions/main_ny.html', context)
