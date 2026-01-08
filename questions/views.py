@@ -404,3 +404,19 @@ def understanding_check(request, pk):
     
     # 템플릿 파일이 있는지 확인 필요 (없으면 에러 날 수 있음)
     return render(request, "understanding_check.html", context)
+    sort_mode = request.GET.get("sort", "all")  # 링크 유지용
+
+    html = render_to_string(
+        "partials/question_item.html",
+        {
+            "q": q,
+            "session": q.LiveSession,  # ✅ 템플릿에서 session.id 쓰게 보장
+            "sort_mode": sort_mode
+        },
+        request=request,
+    )
+    return HttpResponse(html)
+
+
+
+

@@ -1,6 +1,119 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+  /* 모달 배경 */
+.uch-modal-overlay-hs {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75); /* 더 진한 블랙 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+/* 모달 박스 */
+.uch-modal-container-hs {
+  background: #111111; /* 진한 블랙 배경 */
+  width: 400px;
+  padding: 30px;
+  border-radius: 12px;
+  color: #FFFFFF; /* 기본 글씨 흰색 */
+  text-align: center;
+  font-family: 'Pretendard', sans-serif;
+}
+
+/* 헤더 */
+.uch-modal-header-hs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.uch-modal-header-hs h3 {
+  font-size: 22px;
+  font-weight: 800; /* 두껍게 */
+  color: white;   /* 네온 그린 */
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+.uch-modal-close-hs {
+  text-decoration: none;
+  font-size: 22px;
+  color: #FFFFFF; /* 흰색 */
+  flex-shrink: 0;
+  transition: 0.2s;
+}
+
+.uch-modal-close-hs:hover {
+  color: #39ff14; /* 네온 그린으로 강조 */
+  transform: scale(1.1);
+}
+
+/* 폼 그룹 */
+.form-group {
+  margin-top: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #39ff14; /* 네온 그린 */
+}
+
+.form-group input, .form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid white; /* 네온 그린 테두리 */
+  background: #1a1a1a; /* 어두운 배경 */
+  color: #FFFFFF; /* 텍스트 흰색 */
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: white; /* 포커스 시 네온 그린 강조 */
+}
+
+/* 액션 버튼 영역 */
+.uch-form-actions-hs {
+  margin-top: 25px;
+  text-align: center; /* 버튼 중앙 정렬 */
+}
+
+/* 제출 버튼 */
+.uch-submit-btn-hs {
+  padding: 10px 24px;
+  background-color: #39ff14; /* 네온 그린 */
+  color: #111; /* 글씨는 검정으로 대비 */
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.uch-submit-btn-hs:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+</style>
+
+
 <div class="uch-modal-overlay-hs">
 
   <div class="uch-modal-container-hs">
@@ -23,7 +136,7 @@
         <label for="id_content">이해도 체크 문구</label>
         {{ form.content }}
       </div>
-
+      <br>
       <div class="form-group" style="margin-top: 15px;">
         <label for="id_target_response_count">목표 인원 설정</label>
         {{ form.target_response_count }}
