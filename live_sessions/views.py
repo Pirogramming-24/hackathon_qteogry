@@ -99,41 +99,6 @@ class LiveSessionCreateView(StaffRequiredMixin, CreateView):
 def session_report(request, pk):
     session = get_object_or_404(LiveSession, pk=pk)
     
-    # 1. 질문 유형별 통계 (막대 그래프용 데이터)
-    questions = Question.objects.filter(LiveSession=session)
-    
-    concept_count = questions.filter(category='CONCEPT').count()
-    error_count = questions.filter(category='ERROR').count()
-    etc_count = questions.filter(category='ETC').count()
-    
-    # 2. 공감(좋아요) 많이 받은 질문 Top 3
-    top_questions = questions.annotate(
-        like_count=Count('likes')
-    ).order_by('-like_count')[:3]
-    
-    # 3. 이해도 체크 타이머 데이터 (난이도 분석용)
-    understanding_checks = UnderstandingCheck.objects.filter(
-        session=session, 
-        ended_at__isnull=False  # 완료된 것만 가져옴
-    ).order_by('created_at')
-
-    context = {
-        'session': session,
-        # 그래프 데이터
-        'chart_data': {
-            'concept': concept_count,
-            'error': error_count,
-            'etc': etc_count
-        },
-        'top_questions': top_questions,
-        'understanding_checks': understanding_checks,
-    }
-    
-    return render(request, 'live_sessions/session_report.html', context)
-
-def session_report(request, pk):
-    session = get_object_or_404(LiveSession, pk=pk)
-    
     # 1. 질문 유형별 통계
     questions = Question.objects.filter(LiveSession=session)
     concept_count = questions.filter(category='CONCEPT').count()

@@ -99,7 +99,7 @@
                                 </a>
 
                             {% else %}
-                                <a href="{% url 'questions:understanding_check_upload' %}" 
+                                <a href="{% url 'questions:understanding_check_upload' session.id %}" 
                                 style="width: 100%; background-color: #7FD957; color: black; text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: bold;">
                                 🔄 새로운 이해도 Check 생성하기
                                 </a>
@@ -111,9 +111,9 @@
                     </div>
 
                 {% else %}
-                    <div class="understanding-check-bar-hs" style="justify-content: center; padding: 20px;">
-                        <a href="{% url 'questions:understanding_check_upload' %}" class="check-upload-btn-hs">
-                            새로운 이해도 Check 올리기
+                <div class="understanding-check-bar-hs" style="justify-content: center; padding: 20px;">
+                        <a href="{% url 'questions:understanding_check_upload' session.id %}" 
+                        class="uch-create-btn-hs"> 🔄 새로운 이해도 Check 생성하기
                         </a>
                     </div>
                 {% endif %}
@@ -132,6 +132,13 @@
                     <div class="card-header_ny">
                         <div style="display: flex; gap: 10px; align-items: center;">
                             <div style="width: 30px; height: 30px; background: #ddd; border-radius: 50%;"></div>
+                            {{ question.display_name }}
+                        
+                            {% if question.user == request.user %}
+                                <span style="color: #7FD957; font-size: 0.8em; margin-left: 5px;">(나)</span>
+                            {% endif %}
+                        </span>
+                            <span style="font-weight: bold;">
                             <span style="font-weight: bold;">{{ question.user.profile.nickname }}</span>
                         </div>
                         <span class="badge_ny 
@@ -149,10 +156,11 @@
                     </a>
 
                     <div class="card-footer_ny">
-                        <span>{{ question.created_at|date:"Y.m.d H:i" }}</span>
                         <span class="like-btn_ny" data-question-id="{{ question.id }}" style="cursor: pointer; z-index: 10;">
                             저도 궁금해요 😢 
-                            <span id="like-count-list-{{ question.id }}">{{ question.likes.count }}</span>
+                            <span id="like-count-list-{{ question.id }}">
+                                {{ question.like_count }}
+                            </span>
                         </span>
                     </div>
                 </div>
