@@ -132,7 +132,7 @@
                     <div class="card-header_ny">
                         <div style="display: flex; gap: 10px; align-items: center;">
                             <div style="width: 30px; height: 30px; background: #ddd; border-radius: 50%;"></div>
-                            <span style="font-weight: bold;">{{ question.user.username }}</span>
+                            <span style="font-weight: bold;">{{ question.user.profile.nickname }}</span>
                         </div>
                         <span class="badge_ny 
                             {% if question.category == 'CONCEPT' %}badge-concept_ny
@@ -178,7 +178,7 @@
             
                 <div class="question-detail-container-hs">
                     <div class="question-meta-hs">
-                        <span class="question-user-hs">👤 {{ selected_question.user }}</span>
+                        <span class="question-user-hs">👤 {{ selected_question.user.profile.nickname }}</span>
                         <span class="badge_ny" style="margin-left: 10px;">{{ selected_question.get_category_display }}</span>
                     </div>
 
@@ -245,7 +245,7 @@
                             style="background:#2C2C2C; padding:15px; border-radius:8px; margin-bottom:10px;">
 
                             <div class="comment-meta-hs">
-                                <span class="comment-user-hs">{{ comment.user }}</span>
+                                <span class="comment-user-hs">{{ comment.user.profile.nickname }}</span>
 
                                 <div class="comment-right-hs">
                                     <span class="comment-created-at-hs">

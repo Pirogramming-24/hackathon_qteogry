@@ -374,3 +374,7 @@ def question_partial(request, session_id, question_id):
         request=request,
     )
     return HttpResponse(html)
+
+
+
+
