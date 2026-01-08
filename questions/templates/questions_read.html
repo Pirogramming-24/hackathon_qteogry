@@ -6,7 +6,7 @@
   <!-- 질문 메타 정보 -->
   <div class="question-meta-hs">
     <span class="question-user-hs">
-      👤 {{ question.user }}
+      👤 {{ question.user.profile.nickname }}
     </span>
 
     <span class="question-category-hs">
@@ -62,7 +62,7 @@
           <li class="comment-item-hs">
             <div class="comment-meta-hs">
               <span class="comment-user-hs">
-                {{ comment.user }}
+                {{ comment.user.profile.nickname }}
               </span>
               <span class="comment-created-at-hs">
                 {{ comment.created_at|date:"Y.m.d H:i" }}
