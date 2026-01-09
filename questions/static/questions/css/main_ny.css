@@ -1,0 +1,475 @@
+/* [전체 레이아웃 - 다크 모드] */
+body {
+    margin: 25px;
+    padding: 0;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    background-color: #111111; /* 아주 어두운 검정 배경 */
+    color: #FFFFFF; /* 기본 텍스트 흰색 */
+}
+
+/* [헤더 & 탭바] */
+/* .header-container_ny {
+    background-color: #111111;
+    padding-top: 40px;
+    border-bottom: 1px solid #333;
+} */
+ .header-container_ny {
+    max-width: 1300px;     /* 메인과 동일한 최대 너비 */
+    margin: 0 auto;        /* 가운데 정렬 */
+    padding: 40px 20px 0 20px; /* 위쪽 여백 40px, 좌우 여백 20px */
+    box-sizing: border-box;
+    
+    width: 100%;
+}
+.header-top_ny {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    
+    /* [핵심 수정] 위쪽(flex-start)이 아니라 바닥(flex-end)에 맞춤 */
+    /* 이렇게 해야 '탭 메뉴'와 '체크바'가 같은 높이에 놓입니다. */
+    align-items: flex-end; 
+    
+    gap: 20px;
+    margin-bottom: 20px; /* 헤더와 본문 사이 간격 */
+}
+
+.header-left_ny {
+    /* 왼쪽 영역(제목+탭)이 너무 좁아지지 않게 */
+    flex: 1; 
+    min-width: 0; /* 텍스트 넘침 방지 안전장치 */
+}
+
+.header-right_ny {
+    /* 오른쪽 영역 너비 설정 및 내부 정렬 */
+    width: auto; /* 50% 고정보다는 내용물에 맞게(auto) 또는 flex 사용 */
+    flex: 1;     /* 남은 공간 적절히 분배 */
+    display: flex;
+    justify-content: flex-end; /* 체크바를 오른쪽 끝으로 밀기 */
+    padding-bottom: 5px; /* 탭 메뉴 밑줄과 미세 높이 조정 */
+}
+
+/*understanding*/
+.fixed-understanding-check {
+    position: fixed;
+    top: 90px;       /* header 아래 */
+    right: 24px;
+    z-index: 1000;
+}
+/* .understanding-check-bar-hs {
+    background: rgb(167, 167, 167);
+    border: 2px 2px 2px 2px solid #39ff14;
+    color: #39ff14;
+    padding: 14px;
+    border-radius: 0 0 12px 12px;
+
+    width: 100%;
+    background-color: #0b0f0c; 
+
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+
+    gap: 8px;
+    padding: 14px;
+
+    box-shadow: 0 0 18px rgba(121, 226, 0, 0.15);
+} */
+
+.understanding-check-bar-hs.empty {
+    opacity: 0.55;
+}
+
+
+
+.empty-text {
+    font-size: 13px;
+    color: #777;
+}
+
+.page-title_ny {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+    font-size: 28px;
+    font-weight: 800; /* 더 굵게 */
+    color: #fff;
+    letter-spacing: -0.5px;
+}
+
+.tab-menu_ny {
+    display: flex;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 15px;
+}
+
+.tab-item_ny {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    background-color: transparent; /* 배경 투명 */
+    color: #888; /* 비활성 텍스트 회색 */
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+    border-bottom: 2px solid transparent; /* 밑줄 효과 준비 */
+}
+
+/* 선택된 탭은 형광 연두색으로 강조 */
+.tab-item_ny.active_ny {
+    color: #65E01D !important;          /* 텍스트 색상 */
+    border-bottom: 2px solid #65E01D !important; /* 밑줄 색상 */
+    font-weight: 800;                   /* 글자 더 굵게 */
+    opacity: 1 !important;              /* 투명도 제거 */
+}
+
+/* 마우스를 올렸을 때도 동일하게 */
+.tab-item_ny:hover {
+    color: #fff; /* 호버 시엔 흰색 */
+    opacity: 1;
+}
+
+/* 선택된 상태에서 마우스 올렸을 때는 여전히 형광색 유지 */
+.tab-item_ny.active_ny:hover {
+    color: #65E01D !important;
+}
+
+/* [메인 컨텐츠 - 2단 그리드] */
+ .main-container_ny {
+    max-width: 1300px;     /* 헤더와 동일한 최대 너비 */
+    margin: 20px auto;     /* 위아래 간격, 좌우 자동(가운데) */
+    padding: 0 20px;       /* 좌우 여백 헤더와 동일하게 20px */
+    box-sizing: border-box;
+    
+    /* 기존 그리드 설정 유지 */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 1:1 비율 */
+    gap: 30px;             /* 좌우 컬럼 사이 간격 */
+    
+    /* 높이 설정 (화면 꽉 차게) */
+    height: calc(100vh - 200px); /* 헤더 높이 대략 200px 제외 */
+    min-height: 600px;
+}
+
+/* [왼쪽: 질문 리스트] */
+.question-list_ny {
+    overflow-y: auto;
+    padding-right: 15px;
+    display: flex;
+    flex-direction: column;
+    
+    /* [수정] 카드 사이 간격 늘리기 (3px -> 12px) */
+    /* 첫 번째 카드의 시작 위치는 변하지 않습니다 */
+    gap: 8px; 
+    
+    height: 100%;
+}
+
+/* 스크롤바 커스텀 (다크 모드용) */
+.question-list_ny::-webkit-scrollbar {
+    width: 8px;
+}
+.question-list_ny::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+.question-list_ny::-webkit-scrollbar-track {
+    background-color: #222;
+}
+
+.question-card_ny {
+    background: #1E1E1E; /* 카드 배경: 짙은 회색 */
+    border: 1px solid #333; /* 테두리 추가 */
+    border-radius: 12px;
+    padding: 25px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.question-card_ny:hover {
+    transform: translateY(-3px);
+    border-color: #65E01D; /* 호버 시 형광 테두리 */
+}
+
+.card-header_ny {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.badge_ny {
+    padding: 4px 10px;
+    border-radius: 20px; /* 둥근 뱃지 */
+    font-size: 11px;
+    font-weight: bold;
+    background: transparent;
+    border: 1px solid;
+}
+
+/* 뱃지 색상도 네온 스타일로 변경 */
+.badge-concept_ny { color: #55DDFF; border-color: #55DDFF; } /* 하늘색 */
+.badge-error_ny { color: #FF6B6B; border-color: #FF6B6B; } /* 붉은색 */
+.badge-etc_ny { color: #BBB; border-color: #BBB; } /* 회색 */
+
+.card-content_ny {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 25px;
+    line-height: 1.5;
+    color: #EEE;
+}
+
+.card-footer_ny {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #777;
+    border-top: 1px solid #333;
+    padding-top: 15px;
+}
+
+/* [오른쪽: 질문 작성 폼] */
+.write-section_ny {
+    background: #1E1E1E;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 30px;
+    height: fit-content;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.form-title_ny {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #65E01D; /* 형광 연두 */
+}
+
+/* 1. 입력창 레이아웃 잡기 */
+.form-group_ny {
+    margin-bottom: 20px;
+}
+
+.form-group_ny label {
+    display: block;
+    color: #CCC;         /* 라벨 색상 (연한 회색) */
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* 2. 입력 필드 (텍스트, 선택박스, 긴글) 디자인 */
+.form-group_ny input[type="text"],
+.form-group_ny select,
+.form-group_ny textarea {
+    width: 100%;             /* 가로 꽉 차게 */
+    padding: 12px;           /* 내부 여백 */
+    background-color: #2C2C2C; /* 배경: 약간 밝은 회색 */
+    border: 1px solid #444;    /* 테두리: 어두운 회색 */
+    border-radius: 6px;        /* 둥근 모서리 */
+    color: #FFF;               /* 글자색: 흰색 */
+    font-size: 15px;
+    box-sizing: border-box;    /* 패딩 포함 크기 계산 */
+    outline: none;             /* 기본 파란 테두리 제거 */
+    transition: all 0.2s ease;
+}
+
+/* 입력창 클릭했을 때 (포커스) */
+.form-group_ny input[type="text"]:focus,
+.form-group_ny select:focus,
+.form-group_ny textarea:focus {
+    border-color: #65E01D;     /* 형광 연두색 테두리 */
+    background-color: #333;    /* 배경 살짝 변경 */
+    box-shadow: 0 0 8px rgba(101, 224, 29, 0.2); /* 은은한 형광 빛 */
+}
+
+/* 3. 파일 업로드 인풋 스타일 */
+.form-group_ny input[type="file"] {
+    background-color: transparent;
+    color: #CCC;
+    padding: 10px 0;
+}
+
+/* 4. textarea 높이 확보 */
+.form-group_ny textarea {
+    min-height: 200px; /* 내용 입력칸은 길게 */
+    resize: vertical;  /* 세로로만 늘리기 가능 */
+}
+
+/* .form-group_ny {
+    margin-bottom: 20px;
+}
+
+.form-group_ny label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #CCC;
+} */
+
+/* 입력창 스타일 (다크 모드) */
+.input-title_ny, .input-category_ny, .input-content_ny {
+    width: 100%;
+    padding: 14px;
+    background-color: #2C2C2C; /* 입력창 배경 더 밝게 */
+    border: 1px solid #444;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 15px;
+    color: #FFF; /* 입력 텍스트 흰색 */
+    transition: border-color 0.2s;
+}
+
+.input-title_ny:focus, .input-category_ny:focus, .input-content_ny:focus {
+    outline: none;
+    border-color: #65E01D; /* 포커스 시 형광색 */
+}
+
+.input-content_ny {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.input-image_ny {
+    width: 100%;
+    padding: 10px;
+    background: #2C2C2C;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #CCC;
+}
+
+.submit-btn_ny {
+    width: 100%;
+    padding: 16px;
+    background-color: #65E01D; /* 형광 연두 버튼 */
+    color: #111; /* 텍스트는 검정으로 대비 */
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.2s;
+}
+
+.submit-btn_ny:hover {
+    background-color: #52C015; /* 살짝 어두운 연두 */
+    transform: translateY(-2px);
+}
+
+/* [글쓰기 플로팅 버튼 - 왼쪽 구석 고정 수정본] */
+.floating-btn_ny {
+    position: fixed; /* 화면 스크롤 상관없이 고정 */
+    bottom: 30px;    /* 바닥에서 30px 위로 */
+    right: 30px;      /* 왼쪽 벽에서 30px 떨어짐 */
+    
+    width: 60px;
+    height: 60px;
+    background-color: #65E01D; /* 형광 연두 */
+    border-radius: 50%; /* 완전 원형 */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    box-shadow: 0 4px 15px rgba(101, 224, 29, 0.4); /* 형광 그림자 */
+    transition: transform 0.2s, background-color 0.2s;
+    z-index: 9999; /* 제일 위에 뜨도록 숫자 높게 설정 */
+}
+
+.floating-btn_ny:hover {
+    background-color: #52C015;
+    transform: translateY(-3px) scale(1.05); /* 마우스 올리면 살짝 커짐 */
+    box-shadow: 0 6px 20px rgba(101, 224, 29, 0.6);
+}
+
+.like-btn_ny:hover {
+    color: #65E01D !important;            /* 글자색도 형광 연두색으로 */
+    transition: all 0.3s ease;            /* 부드러운 전환 효과 */
+}
+
+.question-card_ny.status-ANSWERED {
+    background-color: #1a1a1a;   /* 배경을 더 어둡게 */
+    border: 1px solid #444;      /* 테두리 회색으로 */
+    opacity: 0.6;                /* 전체적으로 흐릿하게 (완료된 느낌) */
+}
+
+.question-card_ny.status-ANSWERED:hover {
+    opacity: 1; /* 마우스 올리면 다시 선명하게 */
+    border-color: #65E01D;
+}
+
+/* 2. 상태 변경 드롭다운 (상세 뷰) */
+.status-select_ny {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+}
+
+.status-select_ny:focus {
+    border-color: #65E01D; /* 포커스 시 형광 연두 */
+}
+
+.comment-delete-btn{
+    color: red;
+}
+
+.comment-delete-btn:hover{
+    cursor: pointer;
+}
+
+.comment-meta-hs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.comment-right-hs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.comment-created-at-hs{
+}
+
+.comment-delete-btn {
+  background: #ff6b6b;
+  padding: 5px;
+  border: none;
+  border-radius: 2px;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.comment-delete-btn:hover {
+  text-decoration: underline;
+  color: black;
+}
+.back-btn_ny {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    color: #fff; /* 기본 색상: 어두운 회색 */
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.back-btn_ny:hover {
+    color: #65E01D; /* 호버 시: 형광 연두색 */
+    transform: translateX(-3px); /* 왼쪽으로 살짝 움직이는 애니메이션 */
+}

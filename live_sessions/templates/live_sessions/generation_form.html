@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>기수 추가</title>
+  <link rel="stylesheet" href="{% static 'live_sessions/live_sessions.css' %}">
+</head>
+<body>
+
+<div class="page-wrapper form-page">
+  <div class="form-card">
+    <h1 class="form-title">기수 추가</h1>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <div class="field">
+        <label for="{{ form.name.id_for_label }}">기수 이름</label>
+        {{ form.name }}
+        {{ form.name.errors }}
+      </div>
+
+      <div class="form-actions">
+        <a href="{% url 'live_sessions:session_list' %}" class="btn btn-outline">
+          ← 돌아가기
+        </a>
+        <button type="submit" class="btn">
+          저장
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

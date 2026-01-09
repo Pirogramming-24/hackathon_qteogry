@@ -1,0 +1,52 @@
+
+{% if understanding_check %}
+<div class="understanding-check-bar-hs">
+
+  <div class="check-action-hs">
+    <a href="{% url 'questions:understanding_check_upload' %}" class="check-upload-btn-hs">
+      새로운 이해도 check 올리기
+    </a>
+  </div>
+
+  <br>
+
+  <div class="check-content-hs">
+    🧠 {{ understanding_check.content }}
+  </div>
+
+  <br>
+
+  <div class="check-progress-hs">
+    
+
+    <div class="progress-bar-bg">
+      <span id="count-text">
+        {{ response_count }} / {{ total_count }}
+      </span>
+      <div
+        id="progress-bar"
+        class="progress-bar-fill"
+        style="width: {{ progress }}%;"
+      ></div>
+    </div>
+  </div>
+
+  <div class="check-yes-hs">
+    <button
+      type="button"
+      id="yes-btn"
+      data-id="{{ understanding_check.id }}"
+      data-url="{% url 'questions:understanding_check_respond' %}"
+      data-csrf="{{ csrf_token }}"
+    >
+      네
+    </button>
+
+  </div>
+
+
+  <br>
+
+</div>
+{% endif %}
+

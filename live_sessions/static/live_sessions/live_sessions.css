@@ -1,0 +1,274 @@
+/* ===========================
+   공통: 전체 다크 레이아웃
+   =========================== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    background-color: #111111;
+    color: #FFFFFF;
+}
+
+/* 페이지 공통 래퍼 */
+.page-wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 16px 48px;
+    box-sizing: border-box;
+}
+
+/* ===========================
+   공통 버튼 스타일
+   =========================== */
+.btn {
+    display: inline-block;
+    border-radius: 999px;
+    border: 1px solid #65E01D;
+    background: #65E01D;
+    color: #111;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.btn:hover {
+    background-color: #52C015;
+    border-color: #52C015;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(101, 224, 29, 0.45);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #65E01D;
+}
+
+/* 작은 버튼 (헤더용) */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+/* ===========================
+   폼 페이지 (기수 / 세션 생성)
+   =========================== */
+.form-page {
+    max-width: 480px;
+    margin: 40px auto;
+}
+
+.form-card {
+    background: #1E1E1E;
+    border-radius: 16px;
+    padding: 24px 20px 28px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+    border: 1px solid #333;
+    box-sizing: border-box;
+}
+
+.form-title {
+    margin: 0 0 16px;
+    font-size: 22px;
+    font-weight: 800;
+    color: #65E01D;
+}
+
+/* 각 필드 블록 */
+.field {
+    margin-bottom: 14px;
+}
+
+/* 라벨 공통 */
+.field label {
+    font-size: 14px;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #CCCCCC;
+}
+
+/* 인풋 / 셀렉트 / 텍스트에어리어 공통 */
+.form-card input,
+.form-card select,
+.form-card textarea {
+    width: 100%;
+    padding: 9px 11px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    font-size: 14px;
+    background-color: #222;
+    color: #FFFFFF;
+    box-sizing: border-box;
+}
+
+.form-card input:focus,
+.form-card select:focus,
+.form-card textarea:focus {
+    outline: none;
+    border-color: #65E01D;
+}
+
+/* 버튼 영역 */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+}
+
+/* 에러 메시지 (Django form errorlist) */
+.errorlist {
+    color: #FF6B6B;
+    font-size: 13px;
+    margin: 4px 0;
+    padding-left: 16px;
+}
+
+/* ===========================
+   세션 리스트 페이지
+   =========================== */
+
+/* 헤더 영역 */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.page-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #65E01D;
+}
+
+.page-subtitle {
+    font-size: 13px;
+    color: #AAAAAA;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* 기수 선택 토글 */
+.generation-bar {
+    margin: 8px 0 18px;
+}
+
+.generation-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.generation-chip {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 999px;
+    border: 1px solid #444;
+    background: #1E1E1E;
+    cursor: pointer;
+    text-decoration: none;
+    color: #CCCCCC;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.generation-chip:hover {
+    border-color: #65E01D;
+    color: #FFFFFF;
+}
+
+.generation-chip.active {
+    background: #65E01D;
+    color: #111;
+    border-color: #65E01D;
+}
+
+/* 메인 2단 레이아웃 (진행 / 아카이브) */
+.content-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+/* 세션 카드 */
+.session-card {
+    border-radius: 16px;
+    padding: 12px 16px;
+    background: #1E1E1E;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    margin-bottom: 12px;
+    border: 1px solid #333;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.session-card:hover {
+    transform: translateY(-2px);
+    border-color: #65E01D;
+    box-shadow: 0 6px 16px rgba(101, 224, 29, 0.4);
+}
+
+.session-card .title {
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #FFFFFF;
+}
+
+.session-card .meta {
+    font-size: 12px;
+    color: #AAAAAA;
+}
+
+.session-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* 비어 있을 때 박스 */
+.empty-box {
+    padding: 12px;
+    border-radius: 12px;
+    background: #1E1E1E;
+    border: 1px solid #333;
+    color: #888888;
+    font-size: 13px;
+}
+
+/* 작은 안내 텍스트 */
+.empty-text {
+    font-size: 13px;
+    color: #888888;
+}
+
+/* ===========================
+   반응형 (태블릿 이하)
+   =========================== */
+@media (max-width: 768px) {
+    .page-wrapper {
+        padding: 24px 12px 32px;
+    }
+
+    .content-row {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+}

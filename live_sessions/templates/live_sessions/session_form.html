@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>세션 생성</title>
+  <link rel="stylesheet" href="{% static 'live_sessions/live_sessions.css' %}">
+</head>
+<body>
+  <div class="page-wrapper form-page">
+    <div class="form-card">
+      <h1 class="form-title">세션 생성</h1>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="field">
+          <label for="{{ form.generation.id_for_label }}">기수</label>
+          {{ form.generation }}
+          {{ form.generation.errors }}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.title.id_for_label }}">세션 제목</label>
+          {{ form.title }}
+          {{ form.title.errors }}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.start_at.id_for_label }}">시작 일시</label>
+          {{ form.start_at }}
+          {{ form.start_at.errors }}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.end_at.id_for_label }}">종료 일시</label>
+          {{ form.end_at }}
+          {{ form.end_at.errors }}
+        </div>
+
+        <div class="form-actions">
+          <a href="{% url 'live_sessions:session_list' %}" class="btn btn-outline">
+            ← 돌아가기
+          </a>
+          <button type="submit" class="btn">
+            저장
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
